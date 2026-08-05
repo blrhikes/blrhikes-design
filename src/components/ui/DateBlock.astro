@@ -1,0 +1,12 @@
+---
+/* DateBlock — the torn-off calendar chip. */
+interface Props {
+  mon: string;
+  day: string;
+  dow: string;
+  label?: string;
+}
+const { mon, day, dow, label } = Astro.props;
+---
+
+<div class="dateblock" aria-label={label ?? `${dow} ${day} ${mon}`}><span class="db-mon">{mon}</span><span class="db-day">{day}</span><span class="db-dow">{dow}</span></div>

@@ -1,0 +1,35 @@
+---
+/* The event detail surface. Kraft only for now — the article and the rail
+   render the same components the showcase does. */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import EventCover from "../components/event/EventCover.astro";
+import EventArticle from "../components/event/EventArticle.astro";
+import EventRail from "../components/event/EventRail.astro";
+import { eventLinks } from "../data/nav.js";
+import { cover } from "../data/images.js";
+
+import "../styles/event.css";
+---
+
+<BaseLayout
+  title="Fern Gully Sunrise Hike · BLR Hikes"
+  links={eventLinks}
+  brandHref="/"
+  footer="quiet"
+  footerNote="Event detail surface · kraft only for now · content from the app's dev data"
+>
+  <EventCover
+    photo={cover("297a66e4-5885-427b-b68d-724c0395dac9", 1600)}
+    alt="First light over the fern gullies"
+    eyebrow="Upcoming hike"
+    title="Fern Gully Sunrise Hike"
+    when="Thu, 13 Aug 2026, 5:00 am"
+    where="Emerald Hills, south-west"
+    spots="13 of 20 spots left"
+  />
+
+  <div class="container ev-main">
+    <EventArticle />
+    <EventRail />
+  </div>
+</BaseLayout>

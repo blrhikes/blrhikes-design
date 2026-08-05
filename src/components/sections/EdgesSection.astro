@@ -1,0 +1,25 @@
+---
+/* Edges — the same card through every edge treatment. The surface is a
+   filtered background layer so text stays crisp, and photos are repainted
+   behind a clean image so they never warp. */
+import SectionHead from "../ui/SectionHead.astro";
+import Spec from "../ui/Spec.astro";
+import BigCard from "../cards/BigCard.astro";
+import { edgeCards } from "../../data/trails.js";
+---
+
+<section class="section" id="edges">
+  <div class="container">
+    <SectionHead eyebrow="07 · Edges" title="Torn, and not">
+      The same card through every edge treatment. The surface is a filtered
+      background layer so text stays crisp, and photos are repainted behind
+      a clean image so they never warp. Tune every variable in the
+      <a href="/tear-lab/">tear lab</a>.
+    </SectionHead>
+
+    <Spec>BigCard — edge exhibit</Spec>
+    <div class="bigcard-grid">
+      {edgeCards.map((card) => <BigCard card={card} />)}
+    </div>
+  </div>
+</section>

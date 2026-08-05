@@ -1,0 +1,11 @@
+---
+/* Rating — a star and a number. `onPhoto` switches to the white-on-photo
+   paint, since a photograph has no colour scheme to key off. */
+interface Props {
+  value: string;
+  onPhoto?: boolean;
+}
+const { value, onPhoto } = Astro.props;
+---
+
+<span class:list={["rating", onPhoto && "rating-on-photo"]}><i class="fa-solid fa-star" aria-hidden="true"></i>{value}</span>

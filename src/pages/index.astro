@@ -1,0 +1,34 @@
+---
+/* The showcase: the same set of real components rendered under eleven
+   interchangeable themes. Every band is its own section component. */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageNav from "../components/PageNav.astro";
+import HeroSection from "../components/sections/HeroSection.astro";
+import PaletteSection from "../components/sections/PaletteSection.astro";
+import TypeSection from "../components/sections/TypeSection.astro";
+import ComponentsSection from "../components/sections/ComponentsSection.astro";
+import EventSurfacesSection from "../components/sections/EventSurfacesSection.astro";
+import CarpoolSection from "../components/sections/CarpoolSection.astro";
+import TrailsSection from "../components/sections/TrailsSection.astro";
+import EdgesSection from "../components/sections/EdgesSection.astro";
+import { showcaseLinks } from "../data/nav.js";
+---
+
+<BaseLayout
+  title="BLR Hikes — theme explorations"
+  links={showcaseLinks}
+  themePicker
+  mainId="top"
+  footerNote="Theme explorations · eleven skins over one token contract · content &amp; images from the app’s seed data · themes via the paint-roller, or keys 1–0 and -"
+>
+  <HeroSection />
+  <PaletteSection />
+  <TypeSection />
+  <ComponentsSection />
+  <EventSurfacesSection />
+  <CarpoolSection />
+  <TrailsSection />
+  <EdgesSection />
+
+  <PageNav slot="after" />
+</BaseLayout>

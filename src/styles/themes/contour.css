@@ -1,0 +1,87 @@
+/* ===========================================================================
+   THEME 2 · "Contour" — light
+   ---------------------------------------------------------------------------
+   A Survey-of-India map sheet: cream paper ruled with faint contour lines,
+   deep green ink, condensed uppercase headings, mono everywhere data lives.
+   Rust is the second accent — the colour of a trig-point marker. Everything
+   sits inside hairline rules; nothing floats.
+   =========================================================================== */
+
+[data-theme="contour"] {
+  color-scheme: light;
+
+  --ground: #f2efe2;
+  /* contour lines, drawn once as a data-URI and tiled */
+  --ground-img: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280'%3E%3Cg fill='none' stroke='%232e6b3f' stroke-opacity='0.10'%3E%3Cpath d='M-20 60 Q 60 10 140 60 T 300 60'/%3E%3Cpath d='M-20 100 Q 60 50 140 100 T 300 100'/%3E%3Cpath d='M-20 140 Q 60 90 140 140 T 300 140'/%3E%3Cpath d='M-20 180 Q 60 130 140 180 T 300 180'/%3E%3Cpath d='M-20 220 Q 60 170 140 220 T 300 220'/%3E%3Cpath d='M-20 260 Q 60 210 140 260 T 300 260'/%3E%3C/g%3E%3C/svg%3E");
+
+  --surface: #faf8ef;
+  --surface-2: #ecead9;
+  --surface-raise: #ffffff;
+
+  --ink: #1e2a1c;
+  --ink-soft: #35422f;
+  --ink-faint: #56604b;
+  --ink-hint: #79816b;
+
+  --accent: #2e6b3f;
+  --on-accent: #f4f6e8;
+  --accent-type: #2a5f38;
+  --accent-tint: rgb(46 107 63 / 0.12);
+
+  --ok: #2a5f38;
+  --ok-tint: rgb(46 107 63 / 0.13);
+  --danger: #ab4420;
+  --danger-tint: rgb(171 68 32 / 0.13);
+
+  --line: rgb(30 42 28 / 0.28);
+  --line-soft: rgb(30 42 28 / 0.13);
+
+  --card-radius: 2px;
+  --ctl-radius: 2px;
+  --pill-radius: 2px;
+  --card-border: 1px solid var(--line);
+  --card-shadow: none;
+  --pop-shadow: none;
+  --cut: opacity(1);
+
+  --font-display: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  --font-body: "IBM Plex Sans Condensed", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 600;
+  --display-case: uppercase;
+  --display-track: 0.015em;
+  --w-medium: 500;
+  --w-strong: 600;
+  --label-case: uppercase;
+  --label-track: 0.14em;
+}
+
+/* Sheet furniture: corner register marks on cards, like a plate frame. */
+[data-theme="contour"] .card {
+  position: relative;
+}
+
+[data-theme="contour"] .card::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid var(--line-soft);
+  pointer-events: none;
+}
+
+/* Dashed rules where the sheet is annotated rather than printed. */
+[data-theme="contour"] .trail-stats,
+[data-theme="contour"] .type-row {
+  border-style: dashed;
+}
+
+/* The survey stamp: eyebrows get a leading trig mark. */
+[data-theme="contour"] .eyebrow::before {
+  content: "△ ";
+  color: var(--danger);
+}
+
+/* Hairline double rule under the topbar, like a map margin. */
+[data-theme="contour"] .topbar {
+  border-bottom: 3px double var(--line);
+}

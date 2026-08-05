@@ -1,0 +1,23 @@
+---
+/* PageNav — floating, collapsible, scroll-spied. Sits clear of the sticky
+   topbar in the opposite corner so neither ever covers the other. */
+import { pageNavItems } from "../data/nav.js";
+---
+
+<nav class="pagenav" id="pagenav" aria-label="On this page">
+  <button class="pagenav-toggle" id="pagenav-toggle" aria-expanded="false" aria-controls="pagenav-list">
+    <i class="fa-solid fa-list-ul" aria-hidden="true"></i>
+    <span class="pagenav-toggle-label">On this page</span>
+  </button>
+  <ol class="pagenav-list" id="pagenav-list" hidden>
+    {pageNavItems.map((item) => (
+      <li><a href={item.href}><span class="pagenav-n">{item.n}</span>{item.label}</a></li>
+    ))}
+    <li class="pagenav-away">
+      <a href="/event/"><span class="pagenav-n"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></span>Event page</a>
+    </li>
+    <li class="pagenav-away">
+      <a href="/tear-lab/"><span class="pagenav-n"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></span>Tear lab</a>
+    </li>
+  </ol>
+</nav>

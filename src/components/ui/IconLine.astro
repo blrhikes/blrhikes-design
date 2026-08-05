@@ -1,0 +1,13 @@
+---
+/* IconLine — one line of meta with a leading icon. `regular` picks the
+   outline weight (the clock), everything else is solid. */
+interface Props {
+  icon: string;
+  regular?: boolean;
+  as?: "p" | "span";
+  class?: string;
+}
+const { icon, regular, as: Tag = "p", class: klass } = Astro.props;
+---
+
+<Tag class:list={["iconline", klass]}><i class={`fa-${regular ? "regular" : "solid"} fa-${icon}`} aria-hidden="true"></i> <slot /></Tag>

@@ -1,0 +1,18 @@
+---
+/* The event page's icon'd list. `variant` picks the included/not-included
+   paint; each item is [icon, text, note?]. */
+interface Props {
+  variant?: "yes" | "no";
+  items: [string, string, string?][];
+}
+const { variant, items } = Astro.props;
+---
+
+<ul class:list={["ev-list", variant && `ev-list--${variant}`]}>
+  {items.map(([icon, text, note]) => (
+    <li>
+      <i class={`fa-solid fa-${icon}`} aria-hidden="true"></i>
+      <span>{text}{note && <span class="note"> — {note}</span>}</span>
+    </li>
+  ))}
+</ul>

@@ -1,0 +1,31 @@
+# OS files
+.DS_Store
+**/.DS_Store
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Local agent tooling — the design-os slash commands and skills. They drive
+# the workflow on this machine; they are not part of the project.
+.claude/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Astro
+.astro/

@@ -1,0 +1,142 @@
+/* ===========================================================================
+   THEME 4 · "Poster" — light
+   ---------------------------------------------------------------------------
+   Hand-painted Indian bus-ticket / matinee-poster energy: warm cream ground,
+   vermillion and marigold, Anton's condensed shout over Karla. Event cards
+   are tickets with a perforated stub edge; the hero rides a sunburst.
+   =========================================================================== */
+
+[data-theme="poster"] {
+  color-scheme: light;
+
+  --ground: #f8e8c4;
+  --ground-img: none;
+
+  --surface: #fdf6e5;
+  --surface-2: #f3e3bb;
+  --surface-raise: #fffdf6;
+
+  --ink: #29211a;
+  --ink-soft: #453a2e;
+  --ink-faint: #6b5c48;
+  --ink-hint: #94826a;
+
+  --accent: #d13f1e;
+  --on-accent: #fdf3df;
+  --accent-type: #b93317;
+  --accent-tint: rgb(209 63 30 / 0.13);
+
+  --ok: #256d38;
+  --ok-tint: rgb(37 109 56 / 0.14);
+  --danger: #b93317;
+  --danger-tint: rgb(185 51 23 / 0.13);
+
+  --line: rgb(41 33 26 / 0.3);
+  --line-soft: rgb(41 33 26 / 0.14);
+
+  --card-radius: 0.4rem;
+  --ctl-radius: 0.3rem;
+  --pill-radius: 0.3rem;
+  --card-border: 2px solid var(--ink);
+  --card-shadow: 4px 4px 0 rgb(41 33 26 / 0.9);
+  --pop-shadow: 3px 3px 0 rgb(41 33 26 / 0.9);
+  --cut: opacity(1);
+
+  --font-display: "Anton", "Arial Narrow", sans-serif;
+  --font-body: "Karla", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 400;
+  --display-case: uppercase;
+  --display-track: 0.01em;
+  --w-medium: 600;
+  --w-strong: 700;
+  --label-case: uppercase;
+  --label-track: 0.12em;
+}
+
+/* Anton needs air — open the leading a touch. */
+[data-theme="poster"] .display-1,
+[data-theme="poster"] .display-2 {
+  line-height: 1.08;
+}
+
+/* The sunburst behind the hero art, painted in marigold. */
+[data-theme="poster"] .hero-art {
+  position: relative;
+  isolation: isolate;
+}
+
+[data-theme="poster"] .hero-art::before {
+  content: "";
+  position: absolute;
+  inset: -12% -6%;
+  z-index: -1;
+  background: repeating-conic-gradient(
+    from 0deg at 70% 28%,
+    rgb(240 160 7 / 0.28) 0deg 9deg,
+    transparent 9deg 18deg
+  );
+  border-radius: 50%;
+  mask-image: radial-gradient(closest-side, #000 55%, transparent 78%);
+}
+
+/* Buttons press like rubber stamps. */
+[data-theme="poster"] .btn-primary,
+[data-theme="poster"] .btn-secondary {
+  border: 2px solid var(--ink);
+}
+
+[data-theme="poster"] .btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+/* Event cards are tickets: a perforated stub line after the date block. */
+[data-theme="poster"] .event-card {
+  position: relative;
+}
+
+[data-theme="poster"] .event-date {
+  border: none;
+  border-right: 2px dashed var(--line);
+  border-radius: 0;
+  background: transparent;
+  padding-right: 1rem;
+}
+
+[data-theme="poster"] .event-day {
+  color: var(--accent-type);
+}
+
+/* Punch holes at both ends of the perforation. */
+[data-theme="poster"] .event-card::before,
+[data-theme="poster"] .event-card::after {
+  content: "";
+  position: absolute;
+  left: calc(1.1rem + 3.4rem + 0.55rem);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--ground);
+  border: 2px solid var(--ink);
+  transform: translateX(-50%);
+}
+
+[data-theme="poster"] .event-card::before {
+  top: -9px;
+}
+
+[data-theme="poster"] .event-card::after {
+  bottom: -9px;
+}
+
+/* The marigold underline — poster lettering gets a painted stroke. */
+[data-theme="poster"] .section-head .display-2 {
+  display: inline-block;
+  background-image: linear-gradient(rgb(240 160 7 / 0.55), rgb(240 160 7 / 0.55));
+  background-repeat: no-repeat;
+  background-size: 100% 0.28em;
+  background-position: 0 88%;
+  padding-inline: 0.08em;
+  margin-inline: -0.08em;
+}

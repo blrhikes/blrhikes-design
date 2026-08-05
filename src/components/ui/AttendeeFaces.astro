@@ -1,0 +1,33 @@
+---
+/* AttendeeFaces — the overlapping initials stack. The count reads first, the
+   "+N" disc carries the remainder, and each face sits in its own
+   .face-shadow so the octagon clip can cast a shadow of the clipped shape.
+   `as="span"` is for the stacks that sit inline inside a .cluster. */
+interface Props {
+  count: string;
+  more?: string;
+  faces: string[];
+  size?: "sm";
+  as?: "p" | "span";
+  class?: string;
+  label?: string;
+  style?: string;
+}
+const {
+  count,
+  more,
+  faces,
+  size,
+  as: Tag = "p",
+  class: klass,
+  label,
+  style,
+} = Astro.props;
+const shadow = ["face-shadow", size === "sm" && "face-sm"].filter(Boolean).join(" ");
+---
+
+<Tag class:list={["face-stack", klass]} aria-label={label ?? count} style={style}>
+  {count && <span class="going">{count}</span>}
+  {more && <span class={shadow}><span class="face face-more">{more}</span></span>}
+  {faces.map((f) => <span class={shadow}><span class="face">{f}</span></span>)}
+</Tag>

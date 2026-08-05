@@ -1,0 +1,13 @@
+---
+/* SeatRow — filled and free seats in a car, as a row of blocks. */
+interface Props {
+  filled: number;
+  total: number;
+}
+const { filled, total } = Astro.props;
+const seats = Array.from({ length: total }, (_, i) => i < filled);
+---
+
+<div class="seats" role="img" aria-label={`${filled} of ${total} seats filled`}>{seats.map((taken) => (
+  <span class:list={["seat", !taken && "seat-free"]}></span>
+))}</div>

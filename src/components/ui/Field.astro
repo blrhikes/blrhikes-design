@@ -1,0 +1,15 @@
+---
+/* Field — label + control + optional error, the form row every surface uses. */
+interface Props {
+  id: string;
+  label: string;
+  error?: string;
+}
+const { id, label, error } = Astro.props;
+---
+
+<div class="field">
+  <label for={id}>{label}</label>
+  <slot />
+  {error && <p class="field-err" id={`${id}-err`}>{error}</p>}
+</div>

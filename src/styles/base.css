@@ -1,0 +1,2364 @@
+/* ===========================================================================
+   BLR Hikes — theme explorations · base sheet
+   ---------------------------------------------------------------------------
+   Everything here paints from the token contract below. No colour, radius,
+   shadow or typeface is hardcoded past this comment — a theme is one file in
+   css/themes/ that re-points the tokens under [data-theme="…"], and each theme
+   commits to a single scheme (light OR dark; no paired modes yet).
+
+   THE CONTRACT — every theme must set all of these:
+
+     scheme        color-scheme (light | dark)
+     ground        --ground --ground-img
+     surfaces      --surface --surface-2 --surface-raise
+     ink ramp      --ink --ink-soft --ink-faint --ink-hint
+     accent        --accent (fill) --on-accent (type on fill)
+                   --accent-type (accent AS TYPE, ≥4.5:1 on ground)
+                   --accent-tint
+     semantics     --ok --ok-tint --danger --danger-tint
+     lines         --line --line-soft
+     structure     --card-radius --ctl-radius --pill-radius
+                   --card-border --card-shadow --pop-shadow --cut
+     type          --font-display --font-body --font-mono
+                   --display-weight --display-case --display-track
+                   --w-medium --w-strong
+                   --label-case --label-track
+   =========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--ground);
+  background-image: var(--ground-img);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.55;
+  font-size: 1rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.container {
+  max-width: 68rem;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+}
+
+/* ------------------------------------------------------------------ type -- */
+
+.display-1,
+.display-2 {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  text-transform: var(--display-case);
+  letter-spacing: var(--display-track);
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.display-1 {
+  font-size: clamp(2.6rem, 7vw, 4.6rem);
+}
+
+.display-2 {
+  font-size: clamp(1.7rem, 3.5vw, 2.5rem);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: var(--w-strong);
+  text-transform: var(--display-case);
+  letter-spacing: var(--display-track);
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+.fine {
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: var(--label-case);
+  letter-spacing: var(--label-track);
+  color: var(--accent-type);
+  font-weight: var(--w-medium);
+}
+
+.lede {
+  font-size: 1.1rem;
+  color: var(--ink-soft);
+  max-width: 34rem;
+}
+
+/* --------------------------------------------------------------- topbar -- */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--ground) 82%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+
+.topbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-weight: var(--w-strong);
+  text-transform: var(--display-case);
+  letter-spacing: var(--display-track);
+  font-size: 1.3rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.brand span {
+  color: var(--accent-type);
+}
+
+/* ---- theme picker (mxb.dev-style): a paint-roller toggle in the header
+   opens a panel of theme buttons, each showing its name over a row of
+   overlapping colour dots. ---- */
+
+.tp-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: var(--ctl-radius);
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition:
+    border-color 120ms,
+    background-color 120ms,
+    color 120ms;
+}
+
+.tp-toggle:hover,
+.tp-toggle[aria-expanded="true"] {
+  background: var(--surface-2);
+  color: var(--ink);
+  border-color: var(--accent-type);
+}
+
+.tp-toggle:focus-visible {
+  outline: 2px solid var(--accent-type);
+  outline-offset: 2px;
+}
+
+.themepicker {
+  border-top: 1px solid var(--line-soft);
+}
+
+.themepicker:not([hidden]) {
+  animation: tp-open 220ms ease;
+}
+
+@keyframes tp-open {
+  from {
+    opacity: 0;
+    translate: 0 -0.4rem;
+  }
+}
+
+.tp-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-block: 0.9rem;
+}
+
+.tp-option {
+  display: grid;
+  gap: 0.45rem;
+  justify-items: start;
+  padding: 0.55rem 0.8rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: var(--ctl-radius);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition:
+    border-color 120ms,
+    background-color 120ms;
+}
+
+.tp-option:hover {
+  border-color: var(--ink-faint);
+  color: var(--ink);
+}
+
+.tp-option[aria-pressed="true"] {
+  border-color: var(--accent-type);
+  background: var(--accent-tint);
+  color: var(--ink);
+}
+
+.tp-option:focus-visible {
+  outline: 2px solid var(--accent-type);
+  outline-offset: 2px;
+}
+
+.tp-name {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.tp-name kbd {
+  font-family: inherit;
+  font-size: 0.85em;
+  color: var(--ink-hint);
+}
+
+.tp-palette {
+  display: inline-flex;
+}
+
+.tp-dot {
+  width: 1.15em;
+  height: 1.15em;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--surface-raise);
+}
+
+.tp-dot + .tp-dot {
+  margin-left: -0.35em;
+}
+
+/* ---- component spec labels: names each design-system part in place ---- */
+
+.spec {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-hint);
+  margin-bottom: 0.7rem;
+}
+
+.spec::before {
+  content: "◆";
+  color: var(--accent-type);
+  font-size: 0.6em;
+}
+
+.spec-on-photo {
+  position: absolute;
+  top: 0.9rem;
+  left: 1rem;
+  z-index: 1;
+  color: rgb(255 255 255 / 0.8);
+  margin: 0;
+  /* it sits above the scrim now, on bare photograph */
+  text-shadow: 0 1px 6px rgb(0 0 0 / 0.55);
+}
+
+.spec-on-photo::before {
+  color: rgb(255 255 255 / 0.75);
+}
+
+/* ----------------------------------------------------------------- hero -- */
+
+.hero {
+  padding-block: clamp(3rem, 8vw, 6rem) clamp(2rem, 6vw, 4rem);
+  overflow: clip;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: center;
+}
+
+@media (max-width: 46rem) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hero-copy > * + * {
+  margin-top: 1.1rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.6rem;
+}
+
+.hero-next {
+  font-size: 0.9rem;
+  color: var(--ink-faint);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.hero-next strong {
+  color: var(--ink);
+  font-weight: var(--w-medium);
+}
+
+/* themed ridgeline illustration — inherits the palette */
+.ridges {
+  width: 100%;
+  height: auto;
+}
+
+.ridges .sun {
+  fill: var(--accent);
+}
+
+.ridges .r1 {
+  fill: var(--ink);
+  opacity: 0.22;
+}
+
+.ridges .r2 {
+  fill: var(--ink);
+  opacity: 0.45;
+}
+
+.ridges .r3 {
+  fill: var(--ink);
+  opacity: 0.8;
+}
+
+/* ------------------------------------------------------------- sections -- */
+
+.section {
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+  border-top: 1px solid var(--line-soft);
+}
+
+.section-head {
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  max-width: 40rem;
+}
+
+.section-head > * + * {
+  margin-top: 0.6rem;
+}
+
+.section-note {
+  color: var(--ink-faint);
+}
+
+/* ----------------------------------------------------------------- card -- */
+
+.card {
+  position: relative;
+  border-radius: var(--card-radius);
+  padding: 1.5rem;
+}
+
+/* The surface is its own layer, mirroring the app's `.card-bg`: a theme can
+   distort the paper's edge (kraft's tear) without rippling the content, which
+   sits above and stays crisp. */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--surface);
+  border: var(--card-border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  filter: var(--cut);
+}
+
+/* ------------------------------------------------------------- swatches -- */
+
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: 0.9rem;
+}
+
+.swatch {
+  border-radius: var(--ctl-radius);
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.swatch::before {
+  content: "";
+  display: block;
+  height: 4.5rem;
+  background: var(--sw);
+}
+
+.swatch figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  padding: 0.4rem 0.6rem;
+  background: var(--surface);
+  color: var(--ink-faint);
+  border-top: 1px solid var(--line-soft);
+}
+
+/* ------------------------------------------------------------ type card -- */
+
+.type-card {
+  display: grid;
+  gap: 1.1rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.type-row {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: baseline;
+  border-top: 1px solid var(--line-soft);
+  padding-top: 1.1rem;
+}
+
+.type-row:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+@media (max-width: 40rem) {
+  .type-row {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}
+
+.type-spec {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-hint);
+}
+
+.body-demo {
+  max-width: 38rem;
+}
+
+/* -------------------------------------------------------------- buttons -- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--ctl-radius);
+  border: 1px solid transparent;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: var(--w-medium);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 120ms,
+    background-color 120ms,
+    border-color 120ms,
+    box-shadow 120ms;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent-type);
+  outline-offset: 2px;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: var(--pop-shadow);
+}
+
+.btn-primary:hover {
+  background: color-mix(in srgb, var(--accent) 88%, var(--ink));
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.btn-secondary:hover {
+  background: var(--surface-2);
+  border-color: var(--ink-faint);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--accent-type);
+}
+
+.btn-ghost:hover {
+  background: var(--accent-tint);
+}
+
+.btn-danger {
+  background: var(--danger-tint);
+  color: var(--danger);
+}
+
+.btn-danger:hover {
+  background: color-mix(in srgb, var(--danger) 22%, transparent);
+}
+
+.btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+/* ---------------------------------------------------------------- pills -- */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.65rem;
+  border-radius: var(--pill-radius);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: var(--w-medium);
+  letter-spacing: 0.05em;
+  text-transform: var(--label-case);
+  background: var(--surface-2);
+  color: var(--ink-faint);
+  border: 1px solid var(--line-soft);
+}
+
+.pill-live {
+  background: var(--accent-tint);
+  color: var(--accent-type);
+  border-color: color-mix(in srgb, var(--accent-type) 35%, transparent);
+}
+
+.pill-full {
+  background: var(--danger-tint);
+  color: var(--danger);
+  border-color: color-mix(in srgb, var(--danger) 35%, transparent);
+}
+
+.pill-ok {
+  background: var(--ok-tint);
+  color: var(--ok);
+  border-color: color-mix(in srgb, var(--ok) 35%, transparent);
+}
+
+.pill-member {
+  background: var(--surface-2);
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+/* PillLead — the one pill that carries a person, so it takes the person's
+   shape: the face's octagon, stretched. A 45° chamfer rather than the disc's
+   rounded one, because a pill's height is fixed and its width is not, and the
+   rounded joins would foreshorten at every content length.
+
+   Filled and borderless, like the faces: clip-path cuts the border off the
+   four diagonals and leaves it on the four straights, which reads as a broken
+   outline rather than a bevel. */
+/* The face is edge to edge: no padding on the trailing side and none on the
+   block axis, so the disc IS the pill's height and its right edge IS the
+   pill's. --chamfer is 0.364 × the face size, the same ratio the octagon path
+   cuts its own corners at, so the two bevels nest instead of double-cutting. */
+.pill-lead {
+  --face-size: 1.6rem;
+  --chamfer: 0.58rem;
+  gap: 0.5rem;
+  padding: 0 0 0 0.85rem;
+  border: none;
+  border-radius: 0;
+  clip-path: polygon(
+    var(--chamfer) 0,
+    calc(100% - var(--chamfer)) 0,
+    100% var(--chamfer),
+    100% calc(100% - var(--chamfer)),
+    calc(100% - var(--chamfer)) 100%,
+    var(--chamfer) 100%,
+    0 calc(100% - var(--chamfer)),
+    0 var(--chamfer)
+  );
+}
+
+/* No lift of its own — the pill is already the surface it would lift off. */
+.pill-lead .face-shadow {
+  filter: none;
+}
+
+.pill-lead .face {
+  font-size: 0.55rem;
+}
+
+/* ----------------------------------------------------------- components -- */
+
+.comp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.comp-card > * + * {
+  margin-top: 1rem;
+}
+
+.comp-title {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: var(--w-medium);
+  text-transform: var(--label-case);
+  letter-spacing: var(--label-track);
+  color: var(--ink-hint);
+}
+
+/* ----------------------------------------------------------------- form -- */
+
+.field {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.field label {
+  font-size: 0.85rem;
+  font-weight: var(--w-medium);
+  color: var(--ink-soft);
+}
+
+.field input,
+.field select {
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: var(--surface-raise);
+  border: 1px solid var(--line);
+  border-radius: var(--ctl-radius);
+  padding: 0.55rem 0.75rem;
+  width: 100%;
+  transition:
+    border-color 120ms,
+    box-shadow 120ms;
+}
+
+.field input::placeholder {
+  color: var(--ink-hint);
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--accent-type);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+
+.field input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+.field-err {
+  font-size: 0.8rem;
+  color: var(--danger);
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.check input {
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: var(--accent);
+}
+
+/* --------------------------------------------------------------- notice -- */
+
+/* No outline and no rounding — a notice is a marked passage, not a box. The
+   fill carries the tone on its own; the punched hole in the leading gutter is
+   the only thing marking the edge. */
+.notice {
+  position: relative;
+  border: none;
+  border-radius: 0;
+  background: var(--surface-2);
+  padding: 0.8rem 1rem 0.8rem 2.4rem;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+/* A punched hole in the leading gutter — filled with the CONTAINER's surface,
+   not the notice's, so it reads as a hole through the strip to the card
+   beneath. The inset shadow is the paper's cut thickness. */
+.notice::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0.75rem;
+  top: 50%;
+  translate: 0 -50%;
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: inset 0 1.5px 2.5px rgb(0 0 0 / 0.3);
+}
+
+/* Notice-HoleTop — the punch moved out of the text's way entirely: it sits
+   above the copy, which reclaims the full width instead of running beside a
+   gutter. Reads as a sheet filed on a spike rather than a strip on a ring. */
+.notice-hole-top {
+  padding: 2.2rem 1rem 0.9rem;
+}
+
+.notice-hole-top::before {
+  top: 0.75rem;
+  inset-inline-start: 0.95rem;
+  translate: none;
+}
+
+/* Notice-HoleTopLeft — the corner punch: still in the leading gutter, so it is
+   left of the text, but raised to sit level with the first line rather than
+   floating at the block's centre. The gutter tightens too — a top-aligned hole
+   reads as attached to the copy, so it wants to be nearer it than a centred
+   one, which needs the distance to look deliberate. */
+.notice-hole-tl {
+  padding-inline-start: 1.9rem;
+}
+
+.notice-hole-tl::before {
+  top: 0.85rem;
+  inset-inline-start: 0.55rem;
+  translate: none;
+}
+
+.notice strong {
+  color: var(--ink);
+  font-weight: var(--w-medium);
+}
+
+.notice-danger {
+  background: var(--danger-tint);
+}
+
+/* --------------------------------------------------------------- events -- */
+
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 1.25rem;
+}
+
+.event-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1.1rem;
+}
+
+.event-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.55rem 0.7rem;
+  background: var(--surface-2);
+  border-radius: var(--ctl-radius);
+  border: 1px solid var(--line-soft);
+  align-self: start;
+  min-width: 3.4rem;
+}
+
+.event-day {
+  font-family: var(--font-display);
+  font-weight: var(--w-strong);
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.event-mon {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  margin-top: 0.2rem;
+}
+
+.event-body > * + * {
+  margin-top: 0.45rem;
+}
+
+.event-toprow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.event-time {
+  color: var(--ink-faint);
+}
+
+.event-title {
+  margin-top: 0.55rem;
+}
+
+.meter {
+  height: 0.4rem;
+  background: var(--surface-2);
+  border-radius: var(--pill-radius);
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  margin-top: 0.75rem;
+}
+
+.meter-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: inherit;
+}
+
+.meter-note {
+  margin-top: 0.3rem;
+}
+
+.event-footrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+}
+
+.price {
+  font-family: var(--font-display);
+  font-weight: var(--w-strong);
+  font-size: 1.15rem;
+}
+
+.price-member {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: var(--ok);
+}
+
+/* ---------------------------------------------------------------- stats -- */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+.stat {
+  background: var(--surface);
+  padding: 1.4rem 1.25rem;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.stat-n {
+  font-family: var(--font-display);
+  font-weight: var(--w-strong);
+  font-size: 1.9rem;
+  line-height: 1.1;
+  color: var(--accent-type);
+}
+
+.stat-l {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: var(--label-case);
+  letter-spacing: var(--label-track);
+  color: var(--ink-faint);
+}
+
+/* --------------------------------------------------------------- trails -- */
+
+.trail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.trail-card > * + * {
+  margin-top: 0.55rem;
+}
+
+/* Trail covers are 4:3 — taller than the 16:10 an event cover runs, since a
+   trail photo is a place (hill, cave, tree line) and wants the vertical. */
+.trail-grid .photo-card .photo {
+  aspect-ratio: 4 / 3;
+}
+
+.trail-stats {
+  display: flex;
+  gap: 1.4rem;
+  padding-block: 0.7rem;
+  border-block: 1px solid var(--line-soft);
+  margin-top: 0.9rem;
+}
+
+.trail-stats div {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.trail-stats dt {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-hint);
+}
+
+.trail-stats dd {
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.trail-foot {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+
+/* ---------------------------------------------------------------- table -- */
+
+.table-card > * + * {
+  margin-top: 0.9rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table th {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: var(--w-medium);
+  text-transform: var(--label-case);
+  letter-spacing: var(--label-track);
+  color: var(--ink-hint);
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.table td {
+  padding: 0.6rem;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--ink-soft);
+}
+
+.table td:first-child {
+  color: var(--ink);
+  font-weight: var(--w-medium);
+}
+
+.table .num {
+  text-align: right;
+}
+
+/* --------------------------------------------------------------- footer -- */
+
+.footer {
+  border-top: 1px solid var(--line);
+  padding-block: 2rem;
+  margin-top: 2rem;
+}
+
+.footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.brand-foot {
+  font-family: var(--font-display);
+  font-weight: var(--w-strong);
+  text-transform: var(--display-case);
+  letter-spacing: var(--display-track);
+  font-size: 1.1rem;
+}
+
+/* ------------------------------------------------------------- topbar nav -- */
+
+.nav-links {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: var(--label-case);
+  color: var(--ink-faint);
+  text-decoration: none;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-links a:hover {
+  color: var(--ink);
+}
+
+.nav-links a[aria-current="page"] {
+  color: var(--accent-type);
+  border-bottom-color: var(--accent-type);
+}
+
+/* ------------------------------------------------------------ photo hero -- */
+/* Type over a photograph stays white in every theme: a photograph has no
+   colour scheme. The scrim is therefore a fixed dark wash, not a token. */
+
+.cover {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  /* The width has to be stated, not left to `auto`: with a definite ratio,
+     the max-height below would otherwise transfer back through the ratio and
+     shrink the BAND, leaving it narrower than the page and hard against the
+     left edge. Stated, only the height gives — the photo crops instead. */
+  width: 100%;
+  min-height: 20rem;
+  /* don't let a wide viewport push the cover past one screen */
+  max-height: 88vh;
+  display: flex;
+  align-items: flex-end;
+  background-size: cover;
+  background-position: center;
+  overflow: clip;
+}
+
+/* The wash sits only under the type at the bottom; the rest of the
+   photograph stays clean. */
+.cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgb(12 12 12 / 0.85),
+    rgb(12 12 12 / 0.45) 16%,
+    transparent 38%
+  );
+}
+
+/* The photograph is already full-bleed; the type on it runs the full width
+   too, rather than pulling back into the 68rem measure the rest of the page
+   keeps. Only the edge padding stays, so nothing touches the screen edge. */
+.cover-inner {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  padding-block: 2rem 2.25rem;
+  color: #fff;
+}
+
+.cover-inner .display-1 {
+  font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+}
+
+.cover-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.1rem;
+  align-items: center;
+  margin-top: 0.9rem;
+  font-size: 0.9rem;
+  color: rgb(255 255 255 / 0.85);
+}
+
+.cover-meta .mono {
+  color: rgb(255 255 255 / 0.75);
+}
+
+.cover-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.9rem;
+}
+
+.cover-eyebrow .mono {
+  color: rgb(255 255 255 / 0.75);
+}
+
+/* ---------------------------------------------------------- detail layout -- */
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(16rem, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 50rem) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.prose > * + * {
+  margin-top: 0.85rem;
+}
+
+.prose p {
+  color: var(--ink-soft);
+}
+
+.prose h3 {
+  font-family: var(--font-display);
+  font-weight: var(--w-strong);
+  text-transform: var(--display-case);
+  letter-spacing: var(--display-track);
+  font-size: 1.15rem;
+  margin-top: 1.4rem;
+}
+
+.checklist {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.checklist li {
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.checklist li::before {
+  content: "";
+  flex: none;
+  width: 0.55em;
+  height: 0.55em;
+  border: 1.5px solid var(--accent-type);
+  border-radius: 2px;
+  transform: translateY(-0.05em);
+}
+
+.aside-card {
+  position: sticky;
+  top: 4.5rem;
+}
+
+/* For the card that already sits inside a sticky rail — sticking twice does
+   nothing but confuse the scroll. `relative`, NOT `static`: .card::before is
+   the paper, absolutely positioned against its card, and un-positioning the
+   card hands that layer to the nearest positioned ancestor instead — which
+   stretches one card's paper over the whole rail. */
+.aside-card--static {
+  position: relative;
+  top: auto;
+}
+
+.aside-card > * + * {
+  margin-top: 0.8rem;
+}
+
+.price-big {
+  font-family: var(--font-display);
+  font-weight: var(--w-strong);
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.price-big .mono {
+  font-size: 0.75rem;
+  color: var(--ink-hint);
+}
+
+.aside-rows {
+  display: grid;
+  gap: 0.4rem;
+  border-block: 1px solid var(--line-soft);
+  padding-block: 0.8rem;
+}
+
+.aside-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.aside-row dd {
+  color: var(--ink);
+  font-weight: var(--w-medium);
+  text-align: right;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* ---------------------------------------------------------- carpool form -- */
+
+.carpool-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 50rem) {
+  .carpool-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.carpool-form > * + * {
+  margin-top: 1rem;
+}
+
+.mode-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+@media (max-width: 34rem) {
+  .mode-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mode-card {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--ctl-radius);
+  cursor: pointer;
+  transition:
+    border-color 120ms,
+    background-color 120ms;
+}
+
+.mode-card:hover {
+  background: var(--surface-2);
+}
+
+.mode-card input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mode-card strong {
+  font-size: 0.9rem;
+  font-weight: var(--w-medium);
+  color: var(--ink);
+}
+
+.mode-card span {
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+}
+
+.mode-card:has(input:checked) {
+  border-color: var(--accent-type);
+  background: var(--accent-tint);
+}
+
+.mode-card:has(input:focus-visible) {
+  outline: 2px solid var(--accent-type);
+  outline-offset: 2px;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+}
+
+@media (max-width: 34rem) {
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field textarea {
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: var(--surface-raise);
+  border: 1px solid var(--line);
+  border-radius: var(--ctl-radius);
+  padding: 0.55rem 0.75rem;
+  width: 100%;
+  resize: vertical;
+}
+
+.field textarea:focus {
+  outline: none;
+  border-color: var(--accent-type);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+
+/* -------------------------------------------------------- carpool manifest -- */
+
+.manifest > * + * {
+  margin-top: 0.9rem;
+}
+
+.vehicle {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--ctl-radius);
+  padding: 0.8rem 0.9rem;
+  background: var(--surface-2);
+}
+
+.vehicle-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.vehicle-head strong {
+  font-weight: var(--w-medium);
+}
+
+.seats {
+  display: flex;
+  gap: 0.3rem;
+  margin-top: 0.55rem;
+}
+
+.seat {
+  width: 1rem;
+  height: 1.3rem;
+  border-radius: 0.25rem 0.25rem 0.45rem 0.45rem;
+  background: var(--accent);
+  opacity: 0.9;
+}
+
+.seat-free {
+  background: transparent;
+  border: 1.5px dashed var(--ink-hint);
+  opacity: 0.8;
+}
+
+.vehicle-riders {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+}
+
+.pickup-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.pickup-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--line-soft);
+  padding-bottom: 0.45rem;
+}
+
+.pickup-list .mono {
+  color: var(--ink-faint);
+}
+
+/* --------------------------------------------------------- highlight tags -- */
+/* What a trail HAS (cave, forest, quarry lake…), as opposed to what it IS
+   (easy, full, members). Quiet by weight, not by line style, so they never
+   compete with the status pills; the icon carries the accent.
+
+   The row is one line deep: anything that would wrap is hidden and counted
+   into a trailing +N chip (js/htags.js), so a trail with eight highlights
+   costs a card the same height as one with two. */
+
+.htags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  overflow: hidden;
+}
+
+.htag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-faint);
+  border: 1px solid var(--line);
+  border-radius: var(--pill-radius);
+  padding: 0.2rem 0.7rem;
+  white-space: nowrap;
+}
+
+.htag i {
+  color: var(--accent-type);
+  font-size: 1em;
+}
+
+/* The overflow count is a tag about the tags — same shell, no icon, and the
+   accent tint so it reads as a control rather than another highlight. */
+.htag-more {
+  color: var(--accent-type);
+  background: var(--accent-tint);
+  border-color: transparent;
+}
+
+/* JS-hidden overflow tags. [hidden] alone loses to .htag's display. */
+.htag[hidden] {
+  display: none;
+}
+
+/* ------------------------------------------------------------ photo cards -- */
+
+.photo-card {
+  padding: 0;
+  overflow: clip;
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-card .photo {
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  object-fit: cover;
+}
+
+.photo-body {
+  padding: 1rem 1.1rem 1.5rem;
+  display: grid;
+  gap: 0.45rem;
+  flex: 1;
+  align-content: start;
+}
+
+.photo-toprow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rating {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent-type);
+  letter-spacing: 0.05em;
+}
+
+/* ----------------------------------------------------------- inline icons -- */
+/* Font Awesome <i> glyphs, sized and coloured by their context. */
+
+.iconline {
+  display: flex;
+  gap: 0.45rem;
+  align-items: baseline;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.iconline i {
+  color: var(--accent-type);
+  font-size: 0.9em;
+  flex: none;
+}
+
+.pill i {
+  font-size: 0.85em;
+  margin-right: 0.35em;
+}
+
+.feat-date i {
+  margin-right: 0.3em;
+}
+
+.vehicle-head i {
+  font-size: 0.85em;
+  color: var(--ink-faint);
+  margin-right: 0.3em;
+}
+
+.rating i {
+  font-size: 0.8em;
+  margin-right: 0.25em;
+}
+
+.ticket-chev i {
+  font-size: 0.9rem;
+}
+
+/* ---------------------------------------------------------------- faces -- */
+/* Overlapping attendee discs: initials unless a photo exists, "+n" for the
+   rest. A number is a group's size; a row of faces is a group of people. */
+
+/* The disc is a rounded octagon (#face-octagon), not a circle — the app's
+   shape, ported from blrhikes-app `.oct` / theme.css §8.
+
+   Two elements per face, and the split is not decorative: the octagon is a
+   `clip-path`, and anything painted outside that path — a `box-shadow`, most
+   obviously — is clipped away with it. The shadow that lifts a disc off the
+   card and separates it from the one it overlaps therefore has to be a
+   `drop-shadow()` on a WRAPPER, which filters the already-clipped result and
+   so traces the octagon's real silhouette. */
+
+/* The row is built BACKWARDS in the markup — the label first, then "+n", then
+   the faces in reverse — and `row-reverse` puts it back the right way round on
+   screen. That is what makes the FIRST face sit on top of the second with no
+   `z-index` anywhere: siblings paint in document order, so the only way to
+   lift a disc is to move it later in the DOM. Reversing both at once leaves
+   the visual order untouched and the painting order inverted.
+
+   Consequence: the last .face-shadow in the DOM is the LEFTMOST one, which is
+   why the margin exception below is :last-child. */
+.face-stack {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.face-stack > .face-shadow {
+  margin-left: -0.45rem;
+}
+
+.face-stack > .face-shadow:last-child {
+  margin-left: 0;
+}
+
+.face-shadow {
+  display: block;
+  width: var(--face-size, 1.75rem);
+  height: var(--face-size, 1.75rem);
+  flex: none;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.35));
+}
+
+/* A filled disc with the letter knocked out of it — not an outlined chip.
+   --ink-faint over --surface inverts correctly after dark, where ink-faint is
+   the light token and surface the dark one. */
+.face {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--face-size, 1.75rem);
+  height: var(--face-size, 1.75rem);
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: var(--w-medium);
+  line-height: 1;
+  color: var(--surface);
+  background: var(--ink-faint);
+  clip-path: url(#face-octagon);
+  overflow: hidden;
+}
+
+/* Inside a wrapper the wrapper owns the size; standalone (.ledby) it doesn't. */
+.face-shadow > .face {
+  width: 100%;
+  height: 100%;
+}
+
+/* The photo covers the initials rather than replacing them, so a missing
+   avatar falls through to the letter underneath instead of a blank disc. */
+.face img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The overflow count is the one that isn't a person, so it's the one that
+   isn't ink — it reads as a label rather than a face. */
+.face-more {
+  background: var(--accent-tint);
+  color: var(--accent-type);
+  font-size: 0.58rem;
+}
+
+/* Small enough to ride inside a pill or a rider line. Set on the wrapper, so
+   the disc and its shadow shrink together. */
+.face-sm {
+  --face-size: 1.35rem;
+}
+
+.face-sm .face,
+.face.face-sm {
+  font-size: 0.52rem;
+}
+
+/* First DOM child, so row-reverse lands it on the right of the discs. */
+.going {
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  margin-left: 0.5rem;
+}
+
+/* One face, riding in a line of 0.82rem type — the app's Face size="sm". */
+.ledby {
+  --face-size: 1.35rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+}
+
+.ledby .face {
+  font-size: 0.52rem;
+}
+
+/* ---------------------------------------------------- rich photo cards -- */
+/* The app's EventCard anatomy: title + date over the cover's bottom behind a
+   fixed dark wash (a photograph has no colour scheme, so this type is white
+   in every theme), capacity tag pinned to the photo, tag row, icon meta,
+   clamped blurb, and a footer rule pinned to the card's bottom. */
+
+.photo-wrap {
+  position: relative;
+}
+
+.photo-title {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  padding: 2.2rem 1.1rem 0.75rem;
+  color: #fff;
+  isolation: isolate;
+}
+
+/* The wash is its own layer under the type, so a theme can treat the wash
+   (tear its edge, in kraft) without touching the text above it. */
+.photo-title::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgb(10 10 10 / 0.8), rgb(10 10 10 / 0.2) 70%, transparent);
+}
+
+.photo-title .title {
+  color: #fff;
+}
+
+.photo-title .photo-date {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: rgb(255 255 255 / 0.85);
+  margin-top: 0.2rem;
+  letter-spacing: 0.04em;
+}
+
+.photo-badge {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+}
+
+.clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-foot {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  border-top: 1px solid var(--line-soft);
+  padding-top: 0.8rem;
+}
+
+.card-foot .actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* ------------------------------------------------------------- date block -- */
+/* The app's DateBlock: a calendar leaf. Month in the accent, an oversized
+   day, the weekday spelled under it — the when of an event at a glance. */
+
+.dateblock {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 3.4rem;
+  padding: 0.45rem 0.6rem 0.4rem;
+  background: var(--surface-raise);
+  border: 1px solid var(--line);
+  border-radius: var(--ctl-radius);
+  line-height: 1;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.db-mon {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent-type);
+}
+
+.db-day {
+  font-family: var(--font-display);
+  font-weight: var(--w-strong);
+  font-size: 2rem;
+  color: var(--ink);
+  margin-top: 0.2rem;
+}
+
+.db-dow {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+  margin-top: 0.3rem;
+}
+
+/* Pinned to a cover photo's corner, opposite the capacity badge. */
+.photo-dateblock {
+  position: absolute;
+  top: 0.7rem;
+  left: 0.7rem;
+}
+
+/* ---------------------------------------------------------- featured card -- */
+
+.feat-card {
+  padding: 0;
+  overflow: clip;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 46rem) {
+  .feat-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* The cover is a 4:3 frame, and the body beside it is a grid sibling, so the
+   two flanks always end on the same line. The row can still grow past 4:3 if
+   the body genuinely needs more room — content is never clipped to keep the
+   ratio. */
+/* `aspect-ratio` sizes the row; `min-height: 100%` makes the cover fill it.
+   Without the second line the ratio wins over the grid's stretch and the
+   cover ends a couple of pixels short of the body beside it. */
+.feat-card .photo-wrap {
+  aspect-ratio: 4 / 3;
+  min-height: 100%;
+}
+
+.feat-card .photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.feat-body {
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.feat-head {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+}
+
+.feat-head > div > * + * {
+  margin-top: 0.4rem;
+}
+
+.feat-title {
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  line-height: 1.05;
+}
+
+/* -------------------------------------------------------- TrailCardWide -- */
+/* The trail library's other density: two per row instead of three. Same
+   anatomy and same axis as TrailCard — cover on top, body under it — the
+   wider column just buys a fourth stat, an unclamped blurb and the link
+   rail. A theme that dresses .photo-card dresses this too, unchanged. */
+
+/* Taller cards need more air between rows than between columns, or the rows
+   read as one continuous block. */
+.trail-grid--wide {
+  grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr));
+  gap: 2.5rem 1.25rem;
+}
+
+/* ----------------------------------------------------- TrailCardOverlay -- */
+/* The third density: the name rides ON the cover instead of under it, with
+   the trail's fixed facts — grade, direction, area — as pills stacked above
+   it. Nothing here is theme-coloured: type over a photograph is white in
+   every theme, because a photograph has no colour scheme. The body keeps
+   only what the photo cannot say — the numbers and what the trail has. */
+
+.trail-card-overlay .photo-title {
+  padding-top: 3.5rem;
+}
+
+.trail-card-overlay .photo-title .title {
+  font-size: 1.35rem;
+  line-height: 1.15;
+}
+
+/* Wide + overlay: the cover is twice as wide, so the name can carry the
+   display size it would have in a section head rather than a card. */
+.trail-card-wide.trail-card-overlay .photo-title {
+  padding: 4.5rem 1.4rem 1rem;
+}
+
+.trail-card-wide.trail-card-overlay .photo-title .title {
+  font-size: clamp(1.5rem, 2.6vw, 1.9rem);
+}
+
+.photo-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.55rem;
+}
+
+/* A pill over a photo can't use the theme's surface tokens — it would sink
+   into whatever the picture happens to be. Frosted white on the wash. */
+.pill-on-photo {
+  background: rgb(255 255 255 / 0.16);
+  border-color: rgb(255 255 255 / 0.5);
+  color: #fff;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.pill-on-photo i {
+  color: #fff;
+}
+
+/* The rating badge sits on the cover's top corner, above the wash, so it
+   carries its own dark backing rather than borrowing the gradient's. */
+.rating-on-photo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #fff;
+  background: rgb(10 10 10 / 0.55);
+  border-radius: var(--pill-radius);
+  padding: 0.2rem 0.6rem;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Flex, not the grid .photo-body uses, so the link rail can be pinned to the
+   card's bottom with margin-top:auto however tall the blurb runs. */
+.trail-card-wide .trail-links { --foot: 1.35rem; }
+
+.trail-card-wide .photo-body {
+  padding: 1.1rem 1.25rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+/* The three ways out of a trail card and into the field: where the walking
+   starts, the map sheet, the track itself. Quiet by default — they are
+   utilities, not the card's call to action. */
+/* Three equal columns across the card, split by dotted rules — a rail of
+   equals, not a sentence of links. */
+/* --foot is the body's own bottom padding; the row reclaims it with a negative
+   margin and hands it back to the links as padding, so the dividers reach the
+   bottom of the card while the labels stay put. */
+.trail-links {
+  --foot: 1.5rem;
+  /* Mixed off --ink rather than --line so it darkens with every theme,
+     light or dark, instead of hard-coding a value that only suits kraft. */
+  --rule: color-mix(in srgb, var(--ink) 45%, transparent);
+  margin-top: auto;
+  margin-bottom: calc(-1 * var(--foot));
+  border-top: 1px solid var(--line-soft);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.trail-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  text-decoration: none;
+  /* The row's breathing room lives on the links, not the container, so the
+     dividers run the full height of the row — top rule to bottom edge. */
+  padding-block: 0.85rem var(--foot);
+}
+
+/* The divider belongs to the gap, so it never sits on an outer edge. Drawn as
+   a gradient rather than `dotted`, which packs its dots one gap-width apart
+   with no way to open them up. */
+.trail-link + .trail-link::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 2px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--rule) 0 5px,
+    transparent 5px 12px
+  );
+}
+
+.trail-link i {
+  color: var(--accent-type);
+  font-size: 1.15em;
+}
+
+.trail-link:hover,
+.trail-link:focus-visible {
+  color: var(--accent-type);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Four stats fit across the wider body; they wrap rather than squeeze. */
+.trail-card-wide .trail-stats {
+  flex-wrap: wrap;
+  gap: 0.9rem 1.2rem;
+}
+
+
+/* ------------------------------------------------------------- big cards -- */
+/* The edge exhibit: two oversized photo cards, one forcing the paper tear,
+   one forcing a straight edge — same surface, same theme, only the edge
+   treatment differs. `--torn` opts into the displacement filter in EVERY
+   theme; `--flat` opts out even in kraft. */
+
+.bigcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(24rem, 100%), 1fr));
+  gap: 2rem;
+  align-items: stretch;
+}
+
+.bigcard {
+  padding: 0;
+  overflow: clip;
+  display: flex;
+  flex-direction: column;
+}
+
+.bigcard .photo {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  object-fit: cover;
+}
+
+.bigcard-body {
+  padding: clamp(2rem, 4vw, 2.5rem);
+  display: grid;
+  gap: 0.7rem;
+  align-content: start;
+  flex: 1;
+}
+
+.bigcard-title {
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  line-height: 1.08;
+}
+
+.bigcard--torn {
+  --cut: url(#cut-hero);
+  overflow: visible;
+  border-radius: 0;
+}
+
+.bigcard--torn::before {
+  border-radius: 0;
+}
+
+/* Where the photo sits at the card's top, the torn top edge belongs to the
+   image backing ALONE: the surface layer is clipped down out of the top so
+   two filtered layers never disagree there and no surface colour can peek
+   out from behind the image. */
+/* Negative insets everywhere we are NOT cutting: clip-path clips AFTER
+   the filter, so a 0 inset would shear the outward fray dead straight. */
+.bigcard--torn::before {
+  clip-path: inset(40px -80px -80px -80px);
+}
+
+/* Torn-photo split (see kraft.css): unfiltered img clipped slightly smaller,
+   the same image repainted behind it through the filter — the fringe tears,
+   the photo never warps. */
+.bigcard--torn .photo-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--photo);
+  background-size: cover;
+  background-position: center;
+  filter: var(--cut);
+  clip-path: inset(-80px -24px 55% -24px);
+}
+
+/* The photo's own bottom tear — finer than the card's edge (see kraft.css). */
+.bigcard--torn .photo-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--photo);
+  background-size: cover;
+  background-position: center;
+  filter: url(#cut-photo);
+  clip-path: inset(45% -24px -80px -24px);
+}
+
+.bigcard--torn .photo {
+  position: relative;
+  clip-path: inset(28px 4px 12px 4px);
+}
+
+.bigcard--flat {
+  --cut: opacity(1);
+}
+
+/* Variant: torn top and bottom only — the sides are completely straight.
+   Its filters displace purely vertically (no horizontal pass at all), and
+   the clean image keeps zero side clip so nothing interrupts the line. */
+.bigcard--torn-tb {
+  --cut: url(#cut-tb);
+}
+
+.bigcard--torn-tb .photo-wrap::after {
+  filter: url(#cut-photo-tb);
+}
+
+.bigcard--torn-tb .photo {
+  clip-path: inset(24px 0 12px 0);
+}
+
+/* Full-width variant: spans the whole grid row, wide-format cover. */
+.bigcard--full {
+  grid-column: 1 / -1;
+}
+
+.bigcard--full .photo {
+  aspect-ratio: 21 / 9;
+}
+
+/* ---------------------------------------------------------- ticket rows -- */
+/* Dense event rows that still feel like events: a date stub on a perforation,
+   the details on the counterfoil. For lists that need no photo. */
+
+.ticket-list {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.ticket-row {
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+}
+
+.ticket-stub {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.05rem;
+  padding: 1.3rem 1rem;
+  min-width: 5.2rem;
+  border-right: 2px dashed var(--line);
+  font-family: var(--font-mono);
+}
+
+.ticket-stub .mon {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+}
+
+.ticket-stub .day {
+  font-family: var(--font-display);
+  font-weight: var(--w-strong);
+  font-size: 1.5rem;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.ticket-stub .dow {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+  margin-top: 0.1rem;
+}
+
+.ticket-stub .time {
+  font-size: 0.62rem;
+  color: var(--ink-hint);
+  margin-top: 0.15rem;
+}
+
+.ticket-body {
+  flex: 1;
+  min-width: 0;
+  padding: 1.3rem 1.1rem;
+  display: grid;
+  gap: 0.35rem;
+  align-content: center;
+}
+
+.ticket-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.ticket-chev {
+  display: flex;
+  align-items: center;
+  padding-right: 1rem;
+  color: var(--ink-hint);
+}
+
+/* -------------------------------------------------------------- pagenav -- */
+/* PageNav — a floating "on this page" jump list. Collapsed it is one pill in
+   the bottom-right corner; expanded it is the section list with the section
+   you are currently in marked. Painted from the same tokens as the rest, so
+   every theme dresses it without knowing it exists. */
+
+.pagenav {
+  position: fixed;
+  right: clamp(0.75rem, 2.5vw, 1.5rem);
+  bottom: clamp(0.75rem, 2.5vw, 1.5rem);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  max-height: calc(100vh - 6rem);
+}
+
+.pagenav-toggle {
+  order: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: var(--label-case);
+  letter-spacing: var(--label-track);
+  color: var(--on-accent);
+  background: var(--accent);
+  border: none;
+  border-radius: var(--pill-radius);
+  padding: 0.6rem 0.95rem;
+  cursor: pointer;
+  box-shadow: var(--pop-shadow);
+}
+
+.pagenav-toggle i {
+  font-size: 0.95rem;
+}
+
+.pagenav-list {
+  order: 1;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0.4rem;
+  min-width: 13rem;
+  background: var(--surface-raise);
+  border: 1px solid var(--line);
+  border-radius: var(--ctl-radius);
+  box-shadow: var(--pop-shadow);
+}
+
+.pagenav-list a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: calc(var(--ctl-radius) / 1.5);
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.pagenav-n {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ink-hint);
+  min-width: 1.4em;
+}
+
+.pagenav-list a:hover,
+.pagenav-list a:focus-visible {
+  background: var(--accent-tint);
+  color: var(--ink);
+}
+
+/* Where you are now — the marker is weight and a rule, not a fill, so it
+   reads the same in a theme that has no tinted surfaces. */
+.pagenav-list a[aria-current="true"] {
+  color: var(--accent-type);
+  font-weight: var(--w-strong);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.pagenav-away {
+  border-top: 1px solid var(--line-soft);
+  margin-top: 0.3rem;
+  padding-top: 0.3rem;
+}
+
+/* Corner-tight on phones: the pill drops its label and becomes the icon. */
+@media (max-width: 30rem) {
+  .pagenav-toggle-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .pagenav-list {
+    min-width: 11rem;
+  }
+}
+
+/* --------------------------------------------------------------- motion -- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

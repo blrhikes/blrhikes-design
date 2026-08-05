@@ -1,0 +1,105 @@
+---
+/* RegistrationCard — everything you need to decide and sign up, in one
+   surface: the day, the price, the facts, who is leading, who is going, how
+   full it is, and the button. One shape, rendered identically by the
+   showcase's event section and by the real event page's rail — only the
+   content and the `sticky` flag differ. */
+import Meter from "../ui/Meter.astro";
+import AttendeeFaces from "../ui/AttendeeFaces.astro";
+import DateBlock from "../ui/DateBlock.astro";
+import Btn from "../ui/Btn.astro";
+
+interface Props {
+  /* The day, as the DateBlock beside the price — the card's first fact. */
+  date?: { mon: string; day: string; dow: string; label?: string };
+  price: string;
+  unit?: string;
+  memberNote?: string;
+  rows?: [string, string][];
+  lead?: { initials: string; text: string };
+  going?: { count: string; more?: string; faces: string[] };
+  meter?: { taken: number; total: number; note: string };
+  cta: string;
+  ctaIcon?: string;
+  fine?: string;
+  /* Sticks to the viewport by default; pass false where the card already
+     sits inside a sticky rail. */
+  sticky?: boolean;
+  class?: string;
+}
+const {
+  date,
+  price,
+  unit,
+  memberNote,
+  rows,
+  lead,
+  going,
+  meter,
+  cta,
+  ctaIcon,
+  fine,
+  sticky = true,
+  class: klass,
+} = Astro.props;
+---
+
+<aside class:list={["card", "aside-card", !sticky && "aside-card--static", klass]}>
+  <div class="rc-head">
+    {date && <DateBlock {...date} />}
+    <div class="rc-price">
+      <p class="price-big">{price}{unit && <> <span class="mono">{unit}</span></>}</p>
+      {memberNote && <p class="fine" set:html={memberNote} />}
+    </div>
+  </div>
+
+  {rows && (
+    <dl class="aside-rows">
+      {rows.map(([label, value]) => (
+        <div class="aside-row"><dt>{label}</dt><dd>{value}</dd></div>
+      ))}
+    </dl>
+  )}
+
+  {(lead || going) && (
+    <div class="rc-people">
+      {lead && <p class="ledby">{lead.text} <span class="face">{lead.initials}</span></p>}
+      {going && <AttendeeFaces as="span" {...going} />}
+    </div>
+  )}
+
+  {meter && (
+    <>
+      <Meter taken={meter.taken} total={meter.total} />
+      <p class="fine meter-note">{meter.note}</p>
+    </>
+  )}
+
+  <Btn variant="primary" block>{cta}{ctaIcon && <> <i class={`fa-solid fa-${ctaIcon}`} aria-hidden="true" /></>}</Btn>
+  {fine && <p class="fine">{fine}</p>}
+</aside>
+
+<style>
+  /* Layout only, painted from the token contract — nothing here is a colour
+     or a face a theme would want to override. */
+  .rc-head {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .rc-price > * + * {
+    margin-top: 0.2rem;
+  }
+
+  /* Who is leading and who is going. Both are inline-flex chips, so they
+     share a line when there is room and stack when there is not — without
+     the gap they run straight into each other. */
+  .rc-people {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem 0.9rem;
+  }
+
+</style>

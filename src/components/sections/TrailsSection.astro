@@ -1,0 +1,72 @@
+---
+/* The trail library: the three-up card, the wide card, the overlay variant,
+   then the stat band and the registrations table. */
+import SectionHead from "../ui/SectionHead.astro";
+import Spec from "../ui/Spec.astro";
+import Pill from "../ui/Pill.astro";
+import TrailCard from "../cards/TrailCard.astro";
+import TrailCardWide from "../cards/TrailCardWide.astro";
+import TrailCardOverlay from "../cards/TrailCardOverlay.astro";
+import { trailCards, trailCardsWide, trailCardsOverlay } from "../../data/trails.js";
+
+const stats = [
+  ["214", "members"],
+  ["63", "hikes done"],
+  ["1,480", "km walked"],
+  ["0", "people left behind"],
+];
+
+const registrations = [
+  ["Ananya R", "Skandagiri Sunrise Hike", { text: "Paid ✓", variant: "ok" }, "₹999"],
+  ["Vikram S", "Skandagiri Sunrise Hike", { text: "Pending" }, "₹1,200"],
+  ["Meera K", "Granite Gauntlet Night Trek", { text: "Paid ✓", variant: "ok" }, "₹950"],
+  ["Arjun N", "Savandurga Full Moon Walk", { text: "Waitlist", variant: "full" }, "—"],
+];
+---
+
+<section class="section" id="trails">
+  <div class="container">
+    <SectionHead eyebrow="06 · Trails" title="The trail library" />
+
+    <Spec>TrailCard · HighlightTag · Rating</Spec>
+    <div class="trail-grid">
+      {trailCards.map((trail) => <TrailCard trail={trail} />)}
+    </div>
+
+    <Spec gap>TrailCardWide-TornEnds · HighlightTag — the rip runs along the top and bottom</Spec>
+    <div class="trail-grid trail-grid--wide">
+      {trailCardsWide.map((trail) => <TrailCardWide trail={trail} />)}
+    </div>
+
+    <Spec gap>TrailCardOverlay · HighlightTag — name and facts on the cover, two per row</Spec>
+    <div class="trail-grid trail-grid--wide">
+      {trailCardsOverlay.map((trail) => <TrailCardOverlay trail={trail} />)}
+    </div>
+
+    <Spec gap>StatBand</Spec>
+    <div class="stats">
+      {stats.map(([n, l]) => (
+        <div class="stat"><span class="stat-n">{n}</span><span class="stat-l">{l}</span></div>
+      ))}
+    </div>
+
+    <Spec gap>Table — recent registrations</Spec>
+    <div class="card table-card">
+      <table class="table">
+        <thead>
+          <tr><th>Name</th><th>Event</th><th>Status</th><th class="num">Amount</th></tr>
+        </thead>
+        <tbody>
+          {registrations.map(([name, event, status, amount]) => (
+            <tr>
+              <td>{name}</td>
+              <td>{event}</td>
+              <td><Pill variant={status.variant}>{status.text}</Pill></td>
+              <td class="num mono">{amount}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

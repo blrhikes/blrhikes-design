@@ -1,0 +1,31 @@
+---
+/* The sticky top bar. `themePicker` adds the paint-roller toggle and the
+   panel — only the showcase carries it; the event page and the lab are
+   kraft-only surfaces. */
+import ThemePicker from "./ThemePicker.astro";
+
+interface Props {
+  links: { href: string; label: string; current?: boolean }[];
+  brandHref?: string;
+  themePicker?: boolean;
+}
+const { links, brandHref = "#top", themePicker } = Astro.props;
+---
+
+<header class="topbar">
+  <div class="container topbar-row">
+    <a class="brand" href={brandHref}>BLR<span> Hikes</span></a>
+    <nav class="nav-links">
+      {links.map((l) => (
+        <a href={l.href} aria-current={l.current ? "page" : undefined}>{l.label}</a>
+      ))}
+    </nav>
+    {themePicker && (
+      <button class="tp-toggle" id="theme-toggle" aria-expanded="false" aria-controls="themepicker">
+        <i class="fa-solid fa-paint-roller" aria-hidden="true"></i>
+        Theme
+      </button>
+    )}
+  </div>
+  {themePicker && <ThemePicker />}
+</header>

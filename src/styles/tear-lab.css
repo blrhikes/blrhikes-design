@@ -1,0 +1,81 @@
+/* The tear lab's own layout and the rules that point the preview cards at
+   the LIVE filters below. Page-scoped: nothing here belongs to the design
+   system, it exists so the sliders have something to drive. */
+
+/* ---- lab layout ---- */
+.lab {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(21rem, 26rem);
+  gap: 2.5rem;
+  align-items: start;
+}
+@media (max-width: 60rem) {
+  .lab { grid-template-columns: 1fr; }
+}
+.lab-preview {
+  position: sticky;
+  top: 4.5rem;
+  display: grid;
+  gap: 3rem;
+}
+@media (max-width: 60rem) {
+  .lab-preview { position: static; }
+}
+.controls { display: grid; gap: 1.5rem; }
+.ctl-group { display: grid; gap: 0.9rem; }
+.ctl { display: grid; gap: 0.15rem; }
+.ctl-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  color: var(--ink-faint);
+}
+.ctl-row output { color: var(--accent-type); font-weight: 500; }
+.ctl input[type="range"] { width: 100%; accent-color: var(--accent); margin: 0; }
+.ctl select {
+  font: inherit; font-family: var(--font-mono); font-size: 0.75rem;
+  background: var(--surface-raise); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--ctl-radius);
+  padding: 0.25rem 0.4rem;
+}
+.ctl-check {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-faint);
+}
+.ctl-check input { accent-color: var(--accent); }
+.presets { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.out pre {
+  background: var(--surface-2);
+  border: 1px solid var(--line-soft);
+  padding: 0.9rem;
+  font-size: 0.66rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  max-height: 20rem;
+  font-family: var(--font-mono);
+}
+
+/* ---- wire the preview cards to the LIVE lab filters ----
+   Higher specificity than kraft.css's rules, and the geometry reads lab
+   CSS variables set from the sliders. */
+[data-theme="kraft"] .lab-preview .photo-card { --cut: url(#lab-cut); }
+[data-theme="kraft"] .lab-preview .plain-demo .card { --cut: url(#lab-cut); }
+
+[data-theme="kraft"] .lab-preview .photo-card::before {
+  clip-path: inset(var(--g-surface-top) -80px -80px -80px);
+}
+[data-theme="kraft"] .lab-preview .photo-card .photo-wrap::before {
+  clip-path: inset(-80px -24px calc(100% - var(--g-split)) -24px);
+}
+[data-theme="kraft"] .lab-preview .photo-card .photo-wrap::after {
+  filter: url(#lab-photo);
+  clip-path: inset(calc(var(--g-split) - 10%) -24px -80px -24px);
+}
+[data-theme="kraft"] .lab-preview .photo-card .photo {
+  clip-path: inset(var(--g-clip-top) var(--g-clip-side) var(--g-clip-bottom) var(--g-clip-side));
+}
+[data-theme="kraft"] .lab-preview .photo-title::before { filter: url(#lab-photo); }

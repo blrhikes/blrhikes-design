@@ -1,0 +1,135 @@
+/* ===========================================================================
+   THEME 5 · "Hi-Vis" — dark
+   ---------------------------------------------------------------------------
+   Trail-marker utility at night: near-black ground, blaze-orange accent, the
+   grid visible like reflective tape. Archivo stretched wide for headings,
+   Chivo Mono for every label. Hard edges, hard shadows, zero softness —
+   the aesthetic of gear that has to be found by torchlight.
+   =========================================================================== */
+
+[data-theme="hivis"] {
+  color-scheme: dark;
+
+  --ground: #141414;
+  --ground-img:
+    linear-gradient(rgb(244 244 242 / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(244 244 242 / 0.045) 1px, transparent 1px);
+
+  --surface: #1d1d1d;
+  --surface-2: #262626;
+  --surface-raise: #111111;
+
+  --ink: #f4f4f2;
+  --ink-soft: #cfcfcb;
+  --ink-faint: #9c9c96;
+  --ink-hint: #6e6e68;
+
+  --accent: #ff5b04;
+  --on-accent: #140800;
+  --accent-type: #ff7a33;
+  --accent-tint: rgb(255 91 4 / 0.16);
+
+  --ok: #8ee08a;
+  --ok-tint: rgb(142 224 138 / 0.14);
+  --danger: #ff6b5e;
+  --danger-tint: rgb(255 107 94 / 0.15);
+
+  --line: rgb(244 244 242 / 0.28);
+  --line-soft: rgb(244 244 242 / 0.12);
+
+  --card-radius: 0;
+  --ctl-radius: 0;
+  --pill-radius: 0;
+  --card-border: 1px solid var(--line);
+  --card-shadow: 6px 6px 0 rgb(255 91 4 / 0.22);
+  --pop-shadow: 4px 4px 0 rgb(255 91 4 / 0.55);
+  --cut: opacity(1);
+
+  --font-display: "Archivo", system-ui, sans-serif;
+  --font-body: "Archivo", system-ui, sans-serif;
+  --font-mono: "Chivo Mono", ui-monospace, monospace;
+  --display-weight: 750;
+  --display-case: uppercase;
+  --display-track: 0.005em;
+  --w-medium: 500;
+  --w-strong: 700;
+  --label-case: uppercase;
+  --label-track: 0.16em;
+}
+
+/* The survey grid, sized and pinned. */
+[data-theme="hivis"] body {
+  background-size: 44px 44px;
+  background-attachment: fixed;
+}
+
+/* Headings stretch wide — Archivo's width axis doing the shouting. */
+[data-theme="hivis"] .display-1,
+[data-theme="hivis"] .display-2,
+[data-theme="hivis"] .brand,
+[data-theme="hivis"] .brand-foot {
+  font-stretch: 118%;
+}
+
+/* Blaze marks: the painted rectangle that marks a trail. */
+[data-theme="hivis"] .eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 0.8em;
+  height: 0.5em;
+  background: var(--accent);
+  margin-right: 0.55em;
+  vertical-align: baseline;
+}
+
+/* Hazard-stripe rule under the topbar. */
+[data-theme="hivis"] .topbar {
+  border-bottom: none;
+}
+
+[data-theme="hivis"] .topbar::after {
+  content: "";
+  display: block;
+  height: 5px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--accent) 0 12px,
+    var(--surface-raise) 12px 24px
+  );
+}
+
+/* Buttons are stencilled labels. */
+[data-theme="hivis"] .btn {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+[data-theme="hivis"] .btn-secondary {
+  border-width: 1px;
+  border-color: var(--ink);
+}
+
+[data-theme="hivis"] .btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+/* The sun is a torch: hard ring, no glow. */
+[data-theme="hivis"] .ridges .sun {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 10;
+}
+
+/* Meters read like battery gauges. */
+[data-theme="hivis"] .meter {
+  height: 0.6rem;
+  border: 1px solid var(--line);
+  background: repeating-linear-gradient(
+    90deg,
+    var(--surface-2) 0 6px,
+    var(--surface-raise) 6px 8px
+  );
+}

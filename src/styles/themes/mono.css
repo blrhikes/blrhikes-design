@@ -1,0 +1,91 @@
+/* ===========================================================================
+   THEME 10 · "Mono" — light
+   ---------------------------------------------------------------------------
+   Grayscale, monospace, nothing else. Every type slot is IBM Plex Mono and
+   every colour is a gray — the wireframe the other themes are judged
+   against. Square corners, hairline rules, no shadows, no texture. Status
+   still reads without hue: "ok" and "danger" differ by depth of gray, and
+   the pills carry their meaning in their borders.
+   =========================================================================== */
+
+[data-theme="mono"] {
+  color-scheme: light;
+
+  --ground: #fafafa;
+  --ground-img: none;
+
+  --surface: #ffffff;
+  --surface-2: #f0f0f0;
+  --surface-raise: #ffffff;
+
+  --ink: #161616;
+  --ink-soft: #333333;
+  --ink-faint: #5c5c5c;
+  --ink-hint: #8f8f8f;
+
+  --accent: #161616;
+  --on-accent: #fafafa;
+  --accent-type: #161616;
+  --accent-tint: rgb(0 0 0 / 0.06);
+
+  --ok: #2e2e2e;
+  --ok-tint: rgb(0 0 0 / 0.05);
+  --danger: #1a1a1a;
+  --danger-tint: rgb(0 0 0 / 0.09);
+
+  --line: rgb(0 0 0 / 0.28);
+  --line-soft: rgb(0 0 0 / 0.12);
+
+  --card-radius: 0;
+  --ctl-radius: 0;
+  --pill-radius: 0;
+  --card-border: 1px solid var(--line);
+  --card-shadow: none;
+  --pop-shadow: none;
+  --cut: opacity(1);
+
+  --font-display: "IBM Plex Mono", ui-monospace, monospace;
+  --font-body: "IBM Plex Mono", ui-monospace, monospace;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 500;
+  --display-case: none;
+  --display-track: -0.02em;
+  --w-medium: 500;
+  --w-strong: 500;
+  --label-case: uppercase;
+  --label-track: 0.08em;
+}
+
+/* Mono display runs wide; pull the big sizes in a step. */
+[data-theme="mono"] .display-1 {
+  font-size: clamp(2rem, 5.5vw, 3.4rem);
+}
+
+[data-theme="mono"] .display-2 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+/* Without colour, status pills speak through their borders. */
+[data-theme="mono"] .pill {
+  border-color: var(--line);
+}
+
+[data-theme="mono"] .pill-full {
+  border-style: dashed;
+}
+
+[data-theme="mono"] .pill-ok {
+  border-width: 2px;
+}
+
+/* Danger notices get a doubled rule instead of a red one. */
+[data-theme="mono"] .notice-danger {
+  border-inline-start: 4px double var(--ink);
+}
+
+/* The sun is an outline; the hills stay ink-on-paper. */
+[data-theme="mono"] .ridges .sun {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 3;
+}

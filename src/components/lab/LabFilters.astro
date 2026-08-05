@@ -1,0 +1,21 @@
+---
+/* LIVE filters — every attribute here is driven by the sliders, so unlike
+   PaperFilters these are the lab's own copies rather than the shared set. */
+---
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="lab-cut" x="-10%" y="-30%" width="120%" height="160%">
+    <feTurbulence id="c1t" type="turbulence" baseFrequency="0.04" numOctaves="4" seed="0" result="n1"/>
+    <feDisplacementMap id="c1d" in="SourceGraphic" in2="n1" scale="3" xChannelSelector="R" yChannelSelector="G" result="d1"/>
+    <feTurbulence id="c2t" type="fractalNoise" baseFrequency="0.015 0.002" numOctaves="3" seed="9" result="n2"/>
+    <feComponentTransfer in="n2" result="n2f"><feFuncR id="c2fx" type="linear" slope="0" intercept="0.5"/></feComponentTransfer>
+    <feDisplacementMap id="c2d" in="d1" in2="n2f" scale="38" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="lab-photo" x="-10%" y="-30%" width="120%" height="160%">
+    <feTurbulence id="p1t" type="turbulence" baseFrequency="0.04" numOctaves="4" seed="11" result="n1"/>
+    <feDisplacementMap id="p1d" in="SourceGraphic" in2="n1" scale="2" xChannelSelector="R" yChannelSelector="G" result="d1"/>
+    <feTurbulence id="p2t" type="fractalNoise" baseFrequency="0.03 0.002" numOctaves="3" seed="47" result="n2"/>
+    <feComponentTransfer in="n2" result="n2f"><feFuncR id="p2fx" type="linear" slope="0" intercept="0.5"/></feComponentTransfer>
+    <feDisplacementMap id="p2d" in="d1" in2="n2f" scale="10" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>

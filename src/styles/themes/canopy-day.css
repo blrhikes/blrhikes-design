@@ -1,0 +1,102 @@
+/* ===========================================================================
+   THEME 11 · "Canopy Day" — light
+   ---------------------------------------------------------------------------
+   The same forest, before dusk: Canopy's palette flipped to a light scheme.
+   #D8E9A8 softens into the ground, #191A19 returns to being ink, #1E5128
+   carries the accent (8:1 as type on this ground), and #4E9F3D stays the
+   living green — meters, pools of light, the sun through the leaves. Same
+   Lora over Mulish, same structure; Canopy's natural daytime twin, and the
+   obvious other half if the pair ever merges into one light+dark theme.
+   =========================================================================== */
+
+[data-theme="canopy-day"] {
+  color-scheme: light;
+
+  --ground: #eef4da;
+  /* the dapple in daylight: leaf-green pools instead of dark ones */
+  --ground-img:
+    radial-gradient(40rem 24rem at 80% -6rem, rgb(78 159 61 / 0.14), transparent 70%),
+    radial-gradient(34rem 22rem at 10% 40rem, rgb(216 233 168 / 0.55), transparent 70%),
+    radial-gradient(30rem 20rem at 60% 90%, rgb(30 81 40 / 0.07), transparent 65%);
+
+  --surface: #f9fcef;
+  --surface-2: rgb(78 159 61 / 0.14);
+  --surface-raise: #ffffff;
+
+  --ink: #191a19;
+  --ink-soft: #2e3a2b;
+  --ink-faint: #4c5c46;
+  --ink-hint: #75846c;
+
+  --accent: #1e5128;
+  --on-accent: #eef4da;
+  --accent-type: #1e5128; /* 8:1 on the ground */
+  --accent-tint: rgb(30 81 40 / 0.12);
+
+  --ok: #2c6e35;
+  --ok-tint: rgb(44 110 53 / 0.13);
+  --danger: #a84632;
+  --danger-tint: rgb(168 70 50 / 0.13);
+
+  --line: rgb(25 26 25 / 0.22);
+  --line-soft: rgb(25 26 25 / 0.1);
+
+  --card-radius: 0.75rem;
+  --ctl-radius: 0.5rem;
+  --pill-radius: 999px;
+  --card-border: 1px solid rgb(30 81 40 / 0.18);
+  --card-shadow: 0 8px 22px -12px rgb(30 81 40 / 0.35);
+  --pop-shadow: none;
+  --cut: opacity(1);
+
+  /* --- typography: Canopy's, verbatim ------------------------------------- */
+  --font-display: "Lora", Georgia, serif;
+  --font-body: "Mulish", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 500;
+  --display-case: none;
+  --display-track: 0;
+  --w-medium: 500;
+  --w-strong: 600;
+  --label-case: uppercase;
+  --label-track: 0.12em;
+}
+
+/* Keep the dapple still while the page scrolls, like its dark twin. */
+[data-theme="canopy-day"] body {
+  background-attachment: fixed;
+}
+
+/* The sun through leaves: the living green, softly haloed. */
+[data-theme="canopy-day"] .ridges .sun {
+  fill: #4e9f3d;
+  filter: drop-shadow(0 0 12px rgb(78 159 61 / 0.45));
+}
+
+/* The hills wear the palette outright: pale leaf → living green → understorey. */
+[data-theme="canopy-day"] .ridges .r1 {
+  fill: #d8e9a8;
+  opacity: 1;
+}
+
+[data-theme="canopy-day"] .ridges .r2 {
+  fill: #4e9f3d;
+  opacity: 1;
+}
+
+[data-theme="canopy-day"] .ridges .r3 {
+  fill: #1e5128;
+  opacity: 1;
+}
+
+/* Same gradient as Canopy's meters, run left-to-light. */
+[data-theme="canopy-day"] .meter-fill {
+  background: linear-gradient(90deg, #4e9f3d, #1e5128);
+}
+
+/* Live things sit in leaf-light. */
+[data-theme="canopy-day"] .pill-live {
+  background: #d8e9a8;
+  color: #1e5128;
+  border-color: rgb(78 159 61 / 0.7);
+}

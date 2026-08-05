@@ -1,0 +1,14 @@
+---
+/* One block of the event article: an icon'd heading and whatever follows. */
+interface Props {
+  icon: string;
+  regular?: boolean;
+  title: string;
+}
+const { icon, regular, title } = Astro.props;
+---
+
+<section>
+  <h2 class="ev-sec-title"><i class={`fa-${regular ? "regular" : "solid"} fa-${icon}`} aria-hidden="true"></i> {title}</h2>
+  <slot />
+</section>

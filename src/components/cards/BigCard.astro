@@ -1,0 +1,35 @@
+---
+/* BigCard — the edge exhibit. Same card, one edge treatment each: torn on
+   every side, flat, or torn along the ends with the sides left straight.
+   Tune every variable behind these in the tear lab. */
+import PhotoWrap from "../ui/PhotoWrap.astro";
+import IconLine from "../ui/IconLine.astro";
+import TrailStats from "../ui/TrailStats.astro";
+import HighlightTags from "../ui/HighlightTags.astro";
+
+interface Props {
+  card: any;
+}
+const { card } = Astro.props;
+const flat = card.edge === "flat";
+---
+
+<article
+  class:list={[
+    "card",
+    "bigcard",
+    flat ? "bigcard--flat" : "bigcard--torn",
+    card.edge === "torn-tb" && "bigcard--torn-tb",
+    card.full && "bigcard--full",
+  ]}
+>
+  <PhotoWrap photo={card.photo} alt={card.alt} backing={!flat} />
+  <div class="bigcard-body">
+    <p class="comp-title" set:html={card.caption} />
+    <h3 class="title bigcard-title">{card.name}</h3>
+    <IconLine icon="location-dot">{card.where}</IconLine>
+    <p class="fine">{card.blurb}</p>
+    <HighlightTags tags={card.tags} />
+    <TrailStats stats={card.stats} />
+  </div>
+</article>

@@ -1,0 +1,15 @@
+---
+/* TrailLinks — trek start, map and the GPX download. */
+interface Props {
+  start: string;
+  map: string;
+  slug: string;
+}
+const { start, map, slug } = Astro.props;
+---
+
+<div class="trail-links">
+  <a class="trail-link" href={`https://www.google.com/maps/search/?api=1&query=${start}`}><i class="fa-solid fa-person-hiking" aria-hidden="true"></i>Trek start</a>
+  <a class="trail-link" href={map}><i class="fa-solid fa-map" aria-hidden="true"></i>Map</a>
+  <a class="trail-link" href={`/gpx/${slug}.gpx`} download><i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>GPX</a>
+</div>

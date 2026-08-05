@@ -1,0 +1,108 @@
+---
+/* One event, every surface: the photo cover, the detail split, the two
+   prominent cards, the two-up EventCards and the dense ticket rows. Each of
+   these is a top-level band rather than one nested block, so the cover can
+   run full bleed between two contained sections. */
+import SectionHead from "../ui/SectionHead.astro";
+import Spec from "../ui/Spec.astro";
+import Notice from "../ui/Notice.astro";
+import RegistrationCard from "../cards/RegistrationCard.astro";
+import EventCardProminent from "../cards/EventCardProminent.astro";
+import EventCard from "../cards/EventCard.astro";
+import EventTicket from "../cards/EventTicket.astro";
+import { skandagiri, graniteGauntlet, eventCards, eventTickets } from "../../data/events.js";
+---
+
+<section class="section" id="events" style="padding-bottom:1.5rem">
+  <div class="container">
+    <SectionHead eyebrow="04 · Event surfaces" title="One event, every surface" flush>
+      The Skandagiri Sunrise Hike from the seed data, rendered through the
+      full set of event components.
+    </SectionHead>
+  </div>
+</section>
+
+<section class="cover" style={`background-image:url('${skandagiri.photo}')`}>
+  <Spec onPhoto>PhotoCover</Spec>
+  <div class="container cover-inner">
+    <p class="cover-eyebrow">
+      <span class="pill pill-live">Live</span>
+      <span class="mono">{skandagiri.id} · Hike</span>
+    </p>
+    <h1 class="display-1">{skandagiri.name}</h1>
+    <p class="cover-meta">
+      <span class="mono">{skandagiri.when}</span>
+      <span>{skandagiri.where}</span>
+      <span class="mono">{skandagiri.price}</span>
+    </p>
+  </div>
+</section>
+
+<section class="section" style="border-top:none">
+  <div class="container detail-grid">
+    <div>
+      <Spec>Prose · Checklist · Notice</Spec>
+      <div class="prose">
+        <p>
+          Classic pre-dawn climb to catch the sunrise above the clouds. We start
+          from the base at 4:30 am sharp — carpools leave Bengaluru around 3 am.
+        </p>
+        <p>
+          Breakfast on the way back is on us. Permits are arranged by the crew;
+          the cost is included in the ticket.
+        </p>
+        <h3>What to bring</h3>
+        <ul class="checklist">
+          <li>Headlamp or torch (mandatory)</li>
+          <li>2L water, light snacks</li>
+          <li>Warm layer for the summit wind</li>
+          <li>Shoes with grip — the last stretch is rocky</li>
+        </ul>
+        <Notice variant="danger">
+          <strong>Skandagiri needs a forest permit.</strong> Registrations close
+          48 hours before the hike so we can file the list with the department.
+        </Notice>
+      </div>
+    </div>
+
+    <div>
+      <Spec>RegistrationCard · Meter</Spec>
+      <RegistrationCard
+        date={{ mon: "Aug", day: "08", dow: "Sat", label: "Sat 8 Aug" }}
+        price="₹1,200"
+        unit="/ person"
+        memberNote="Members pay <strong>₹999</strong>"
+        rows={[
+          ["Start", "04:30 at the base"],
+          ["End", "11:00 at the base"],
+        ]}
+        lead={{ initials: "SH", text: "Led by Shreshth" }}
+        going={{ count: "19 going", more: "+15", faces: ["DH", "RH", "SR", "RA"] }}
+        meter={{ taken: 19, total: 25, note: "19 / 25 registered · 6 left" }}
+        cta="Register — ₹1,200"
+      />
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <Spec>EventCardProminent-TornEnds · DateBlock — the rip runs along the top and bottom</Spec>
+    <EventCardProminent event={graniteGauntlet} tear="ends" />
+
+    <Spec gap>EventCardProminent-TornSides · DateBlock — the rip runs down the left and right</Spec>
+    <EventCardProminent event={graniteGauntlet} tear="sides" />
+
+    <Spec gap>EventCard · DateBlock · AttendeeFaces</Spec>
+    <div class="event-grid">
+      {eventCards.map((event) => <EventCard event={event} />)}
+    </div>
+
+    <div style="margin-top:2rem">
+      <Spec>EventTicket — dense rows, no photo</Spec>
+      <div class="ticket-list">
+        {eventTickets.map((ticket) => <EventTicket ticket={ticket} />)}
+      </div>
+    </div>
+  </div>
+</section>

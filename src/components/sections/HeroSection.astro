@@ -1,0 +1,37 @@
+---
+/* The hero. The ridge art is three stacked paths and a sun — flat shapes a
+   theme can re-point without touching the markup. */
+import Btn from "../ui/Btn.astro";
+import { defaultTheme, themes } from "../../data/themes.js";
+const label = themes.find((t) => t.id === defaultTheme).label;
+---
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow theme-name">Theme — <span data-theme-label>{label}</span></p>
+      <h1 class="display-1">Walk out<br />of the city.</h1>
+      <p class="lede">
+        Small-group hikes around Bengaluru — sunrise summits, night treks and
+        lake days, planned end to end. Carpools from the city, permits sorted,
+        breakfast on the way back.
+      </p>
+      <div class="hero-actions">
+        <Btn variant="primary" href="#events">See upcoming hikes</Btn>
+        <Btn variant="secondary" href="#trails">Browse trails</Btn>
+      </div>
+      <p class="hero-next">
+        <span class="pill pill-live">Live</span>
+        Next out: <strong>Skandagiri Sunrise Hike</strong> · Sat 8 Aug · 6 spots left
+      </p>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 520 340" class="ridges">
+        <circle class="sun" cx="368" cy="92" r="46" />
+        <path class="r1" d="M0 210 L70 150 L128 196 L210 108 L300 200 L368 148 L452 214 L520 176 L520 340 L0 340 Z" />
+        <path class="r2" d="M0 258 L90 206 L170 252 L268 178 L354 250 L448 204 L520 244 L520 340 L0 340 Z" />
+        <path class="r3" d="M0 306 L110 262 L214 300 L330 246 L430 296 L520 268 L520 340 L0 340 Z" />
+      </svg>
+    </div>
+  </div>
+</section>

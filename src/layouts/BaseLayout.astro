@@ -1,0 +1,99 @@
+---
+/* Every page: the token contract, all eleven themes, the paper filters and
+   the top bar. Mirrors the app's design-system rule — components paint from a
+   token contract, a theme is one file that re-points the tokens — so this
+   layout imports base.css first and the themes after it, and nothing in
+   base.css knows themes exist. */
+import PaperFilters from "../components/PaperFilters.astro";
+import TopBar from "../components/TopBar.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { defaultTheme, storageKey } from "../data/themes.js";
+
+import "../styles/base.css";
+import "../styles/themes/kraft.css";
+import "../styles/themes/contour.css";
+import "../styles/themes/monsoon.css";
+import "../styles/themes/poster.css";
+import "../styles/themes/hivis.css";
+import "../styles/themes/solstice-day.css";
+import "../styles/themes/solstice-night.css";
+import "../styles/themes/bluebird.css";
+import "../styles/themes/canopy.css";
+import "../styles/themes/mono.css";
+import "../styles/themes/canopy-day.css";
+
+interface Props {
+  title: string;
+  links: { href: string; label: string; current?: boolean }[];
+  brandHref?: string;
+  themePicker?: boolean;
+  mainId?: string;
+  footer?: "band" | "quiet" | "none";
+  footerNote?: string;
+}
+const {
+  title,
+  links,
+  brandHref,
+  themePicker,
+  mainId,
+  footer = "band",
+  footerNote,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-theme={defaultTheme}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+
+    <!-- Applied before first paint so there is no theme flash. -->
+    <script is:inline define:vars={{ storageKey }}>
+      try {
+        var t = localStorage.getItem(storageKey);
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&family=DM+Sans:opsz,wght@9..40,400..500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&family=Mulish:wght@400..600&family=Anton&family=Karla:ital,wght@0,400..700;1,400&family=Archivo:ital,wdth,wght@0,62..125,400..800;1,62..125,400..700&family=Chivo+Mono:wght@400;500&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Sans:ital,wght@0,400..600&family=Lora:ital,wght@0,400..600;1,400..500&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+
+    <slot name="head" />
+  </head>
+  <body>
+    <PaperFilters />
+    <slot name="filters" />
+
+    <TopBar links={links} brandHref={brandHref} themePicker={themePicker} />
+
+    <main id={mainId}>
+      <slot />
+    </main>
+
+    {footer !== "none" && (
+      <SiteFooter variant={footer}>
+        <Fragment set:html={footerNote} />
+      </SiteFooter>
+    )}
+
+    <slot name="after" />
+
+    {/* Astro hoists and bundles these once; each module no-ops on the pages
+        whose markup it does not find. */}
+    <script>
+      import "../scripts/theme.js";
+      import "../scripts/pagenav.js";
+      import "../scripts/htags.js";
+    </script>
+  </body>
+</html>

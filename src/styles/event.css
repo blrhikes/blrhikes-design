@@ -1,0 +1,267 @@
+/* ---------------------------------------------------------------------
+   Page-scoped only. Everything here is layout for THIS page — the event
+   detail surface — painted entirely from the token contract. No colours,
+   no fonts, nothing a theme would need to override. Kraft is the only
+   theme wired up for now; the tear rules at the bottom are the only
+   [data-theme] block, and every other theme would simply skip them.
+
+   The rail's register/crew/going card is not here: that is the shared
+   RegistrationCard component, which carries its own layout.
+   --------------------------------------------------------------------- */
+
+/* ---- the cover, full bleed, running under the top bar ---- */
+/* Same split the cards use: the clean <img> is never filtered, it is
+   clipped a little short at the bottom, and the SAME image is repainted
+   behind it through #cut-photo so the ragged edge is backing pixels. */
+.ev-cover {
+  position: relative;
+  isolation: isolate;
+  margin-top: calc(-1 * var(--topbar-h, 3.5rem));
+  padding-top: var(--topbar-h, 3.5rem);
+  min-height: clamp(20rem, 46vw, 30rem);
+  display: flex;
+  align-items: flex-end;
+}
+
+.ev-cover .photo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  clip-path: inset(0 0 14px 0);
+}
+
+.ev-cover-backing {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-image: var(--photo);
+  background-size: cover;
+  background-position: center;
+}
+
+/* The cover is a flex container, so its .container child is a flex item and
+   sizes to its CONTENT, not to 100% — and .container's `margin-inline: auto`
+   then centres that shrunken box, indenting the title away from the article
+   below. Stated width, and the measure lines up with the rest of the page. */
+.ev-cover > .container {
+  width: 100%;
+}
+
+/* The wash is its own layer under the type — a theme can tear its edge
+   without touching the text above it. */
+.ev-cover-copy {
+  position: relative;
+  padding-block: clamp(3rem, 9vw, 6rem) clamp(1.5rem, 4vw, 2.5rem);
+  color: #fff;
+  isolation: isolate;
+}
+
+.ev-cover-copy::before {
+  content: "";
+  position: absolute;
+  inset: -1px -50vw -1px;
+  z-index: -1;
+  background: linear-gradient(to top, rgb(10 10 10 / 0.85), rgb(10 10 10 / 0.35) 55%, transparent);
+}
+
+.ev-cover-copy > * + * { margin-top: 0.7rem; }
+.ev-cover-copy .eyebrow { color: rgb(255 255 255 / 0.8); }
+.ev-cover-copy .display-1 { color: #fff; max-width: 18ch; }
+
+.ev-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.85);
+  text-decoration: none;
+}
+
+.ev-back:hover { color: #fff; text-decoration: underline; }
+
+.ev-when {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1rem;
+  font-size: 1rem;
+  color: rgb(255 255 255 / 0.9);
+}
+
+/* ---- the two columns ---- */
+.ev-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 22rem;
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  align-items: start;
+  padding-block: clamp(2rem, 5vw, 3.5rem);
+}
+
+@media (max-width: 62rem) {
+  .ev-main { grid-template-columns: 1fr; }
+}
+
+/* Wider than .card's default 1.5rem: this is a column of prose, not a tile. */
+.ev-article { padding: clamp(1.5rem, 3.5vw, 2.75rem); }
+
+.ev-article > * + * { margin-top: clamp(1.75rem, 3.5vw, 2.75rem); }
+
+/* base.css styles no bare <a> — every link on the system page carries a
+   class. Prose links are this page's own case, so they're dressed here. */
+.ev-article a {
+  color: var(--accent-type);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.ev-article a:hover { text-decoration-thickness: 2px; }
+
+.ev-sec-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: 1.25rem;
+  margin-bottom: 0.9rem;
+}
+
+.ev-sec-title i { color: var(--accent-type); font-size: 0.85em; }
+
+/* A run of times against a run of events — the times are the spine, so
+   they get the mono column and the copy wraps against it. */
+.ev-plan { display: grid; gap: 0.7rem; }
+
+.ev-plan > div {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: baseline;
+}
+
+.ev-plan dt {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent-type);
+  letter-spacing: 0.02em;
+}
+
+.ev-plan dd { color: var(--ink-soft); }
+
+.ev-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+/* Ticked and crossed lists — the mark carries the tone, the type doesn't. */
+.ev-list { list-style: none; padding: 0; display: grid; gap: 0.5rem; }
+
+.ev-list li {
+  display: grid;
+  grid-template-columns: 1.1rem minmax(0, 1fr);
+  gap: 0.6rem;
+  align-items: baseline;
+  color: var(--ink-soft);
+}
+
+.ev-list i { color: var(--ink-hint); font-size: 0.85em; }
+.ev-list--yes i { color: var(--ok); }
+.ev-list--no i { color: var(--danger); }
+.ev-list .note { color: var(--ink-hint); font-size: 0.85em; }
+
+/* Policies and FAQ: closed by default, because they are the answers to
+   questions you only ask if you have them. */
+.ev-fold {
+  border-top: 1px solid var(--line-soft);
+  padding-block: 0.85rem;
+}
+
+.ev-fold:last-of-type { border-bottom: 1px solid var(--line-soft); }
+
+.ev-fold > summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: var(--w-medium);
+  color: var(--ink);
+  list-style: none;
+}
+
+.ev-fold > summary::-webkit-details-marker { display: none; }
+
+.ev-fold > summary::after {
+  content: "\f078";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  margin-inline-start: auto;
+  font-size: 0.7rem;
+  color: var(--ink-hint);
+  transition: rotate 0.15s;
+}
+
+.ev-fold[open] > summary::after { rotate: 180deg; }
+.ev-fold > summary i { color: var(--accent-type); font-size: 0.85em; }
+.ev-fold > div { margin-top: 0.7rem; color: var(--ink-soft); font-size: 0.92rem; }
+
+/* ---- the rail ---- */
+.ev-aside {
+  display: grid;
+  gap: 1.75rem;
+  position: sticky;
+  top: calc(var(--topbar-h, 3.5rem) + 1rem);
+}
+
+@media (max-width: 62rem) {
+  .ev-aside { position: static; }
+}
+
+.ev-rail-title {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: var(--label-track);
+  color: var(--ink-hint);
+}
+
+/* The rail's TrailCard is the ordinary component, one up instead of three:
+   .trail-grid is what gives it the 4:3 cover, so it keeps the wrapper even
+   with a single child. */
+.ev-trail .trail-grid { margin-bottom: 0; gap: 1rem; }
+
+.ev-links { list-style: none; padding: 0; display: grid; gap: 0.6rem; margin-top: 0.8rem; }
+
+.ev-links a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.ev-links a:hover { color: var(--accent-type); text-decoration: underline; text-underline-offset: 3px; }
+.ev-links i { color: var(--accent-type); font-size: 0.85em; }
+
+/* ---- kraft only: the cover's bottom edge tears like every other photo -- */
+[data-theme="kraft"] .ev-cover-backing { filter: url(#cut-photo); }
+
+[data-theme="kraft"] .ev-cover .photo { clip-path: inset(0 0 16px 0); }
+
+[data-theme="kraft"] .ev-cover-copy::before { filter: url(#cut-photo-wide); }
+
+/* The one notice in the article body wants air above it. */
+.ev-safety-note { margin-top: 1rem; }
+
+/* The rail's trail heading sits outside a card, so it carries its own gaps:
+   more above than the rail's grid gap gives, to break cleanly from the
+   registration card rather than read as its caption. */
+.ev-rail-title--gap { margin-top: 1.25rem; margin-bottom: 0.8rem; }

@@ -1,0 +1,36 @@
+---
+/* The event cover, full bleed, running under the top bar. Same split the
+   cards use: the clean <img> is never filtered, and the SAME image is
+   repainted behind it so the ragged bottom edge is backing pixels. */
+import Pill from "../ui/Pill.astro";
+
+interface Props {
+  photo: string;
+  alt: string;
+  eyebrow: string;
+  title: string;
+  when: string;
+  where: string;
+  spots: string;
+}
+const { photo, alt, eyebrow, title, when, where, spots } = Astro.props;
+---
+
+<header class="ev-cover" style={`--photo:url('${photo}')`}>
+  <div class="ev-cover-backing" aria-hidden="true"></div>
+  <img class="photo" src={photo} alt={alt} />
+  <div class="container">
+    <div class="ev-cover-copy">
+      <a class="ev-back" href="/"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> All events</a>
+      <p class="eyebrow">{eyebrow}</p>
+      <h1 class="display-1">{title}</h1>
+      <p class="ev-when">
+        <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> {when}</span>
+        <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> {where}</span>
+      </p>
+      <!-- pill-on-photo, not pill-live: the theme's accent tokens are dark
+           ink on a light tint, which vanishes on a photograph. -->
+      <p><Pill variant="on-photo">{spots}</Pill></p>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,25 @@
+---
+/* VehicleCard — one car in the carpool manifest: who is driving, where from,
+   the seats it has and who is in them. */
+import SeatRow from "../ui/SeatRow.astro";
+import AttendeeFaces from "../ui/AttendeeFaces.astro";
+
+interface Props {
+  driver: string;
+  from: string;
+  filled: number;
+  seats: number;
+  riders: string;
+  faces: string[];
+}
+const { driver, from, filled, seats, riders, faces } = Astro.props;
+---
+
+<div class="vehicle">
+  <div class="vehicle-head">
+    <strong><i class="fa-solid fa-car-side" aria-hidden="true"></i> {driver}</strong>
+    <span class="mono">{from} · {seats} seats</span>
+  </div>
+  <SeatRow filled={filled} total={seats} />
+  <AttendeeFaces class="vehicle-riders" count={riders} faces={faces} size="sm" label={riders} />
+</div>

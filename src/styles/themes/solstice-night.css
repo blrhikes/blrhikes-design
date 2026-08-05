@@ -1,0 +1,85 @@
+/* ===========================================================================
+   THEME 7 · "Solstice Night" — dark
+   ---------------------------------------------------------------------------
+   From design.codeuncode.com/blrhikes-design-system-solstice, dark mode:
+   deep purple-black ground (#1A1625) under a star-field of purple and pink
+   glows, purple (#69247C) surfaces at low alpha, pink (#DA498D) as the CTA
+   fill, and soft amber (#FAC67A) carrying the accent type and hairlines —
+   the source paints nearly all its accent text in that amber.
+   Typography is Kraft's, unchanged.
+   =========================================================================== */
+
+[data-theme="solstice-night"] {
+  color-scheme: dark;
+
+  --ground: #1a1625;
+  /* the page's star-field glows + its dark grain, layered */
+  --ground-img:
+    radial-gradient(circle at top right, rgb(121 68 154 / 0.13), transparent 80%),
+    radial-gradient(circle at 20% 80%, rgb(218 73 141 / 0.15), transparent 50%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+
+  --surface: rgb(105 36 124 / 0.2);
+  --surface-2: rgb(105 36 124 / 0.34);
+  --surface-raise: #221b30;
+
+  --ink: #f3eef7;
+  --ink-soft: #d5cce0;
+  --ink-faint: #a896bd;
+  --ink-hint: #7d6b93;
+
+  --accent: #da498d;
+  --on-accent: #26101b; /* 4.5:1 on the pink fill */
+  --accent-type: #fac67a; /* 10.8:1 on the ground */
+  --accent-tint: rgb(250 198 122 / 0.14);
+
+  --ok: #9fd98b;
+  --ok-tint: rgb(159 217 139 / 0.14);
+  --danger: #f2707a;
+  --danger-tint: rgb(242 112 122 / 0.15);
+
+  /* amber hairlines — the source borders almost everything in accent/20 */
+  --line: rgb(250 198 122 / 0.2);
+  --line-soft: rgb(250 198 122 / 0.09);
+
+  --card-radius: 1rem;
+  --ctl-radius: 0.5rem;
+  --pill-radius: 999px;
+  --card-border: 1px solid rgb(250 198 122 / 0.16);
+  --card-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.55);
+  --pop-shadow: 0 0 20px rgb(218 73 141 / 0.35);
+  --cut: opacity(1);
+
+  /* --- typography: Kraft's, verbatim -------------------------------------- */
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 500;
+  --display-case: none;
+  --display-track: 0;
+  --w-medium: 500;
+  --w-strong: 500;
+  --label-case: uppercase;
+  --label-track: 0.08em;
+}
+
+/* Pin the star-field so the glows hold still while the page scrolls. */
+[data-theme="solstice-night"] body {
+  background-attachment: fixed;
+}
+
+/* The midwinter sun: amber, low, haloed. */
+[data-theme="solstice-night"] .ridges .sun {
+  fill: #fac67a;
+  filter: drop-shadow(0 0 16px rgb(250 198 122 / 0.6));
+}
+
+/* Numerals glow like the source's amber headings. */
+[data-theme="solstice-night"] .stat-n {
+  text-shadow: 0 0 14px rgb(250 198 122 / 0.35);
+}
+
+/* Pink is the fill voice; the meter carries it like the CTAs do. */
+[data-theme="solstice-night"] .meter-fill {
+  background: linear-gradient(90deg, #69247c, #da498d);
+}

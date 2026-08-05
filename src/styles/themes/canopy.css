@@ -1,0 +1,86 @@
+/* ===========================================================================
+   THEME 9 · "Canopy" — dark
+   ---------------------------------------------------------------------------
+   Under the forest at night. Four given colours by job: #191A19 is the
+   ground, #1E5128 the deep understorey (surfaces, washes), #4E9F3D the
+   living green (accent fill and type — 5.1:1 on the ground), and #D8E9A8
+   the light through the leaves: highlights, the sun, the numerals.
+   Lora's bookish serif over Mulish — a naturalist's journal after dark.
+   =========================================================================== */
+
+[data-theme="canopy"] {
+  color-scheme: dark;
+
+  --ground: #191a19;
+  /* dappled light: soft green pools, barely there */
+  --ground-img:
+    radial-gradient(40rem 24rem at 80% -6rem, rgb(30 81 40 / 0.4), transparent 70%),
+    radial-gradient(34rem 22rem at 10% 40rem, rgb(30 81 40 / 0.3), transparent 70%),
+    radial-gradient(30rem 20rem at 60% 90%, rgb(216 233 168 / 0.05), transparent 65%);
+
+  --surface: rgb(30 81 40 / 0.24);
+  --surface-2: rgb(30 81 40 / 0.42);
+  --surface-raise: #1f2a1f;
+
+  --ink: #eaf2e2;
+  --ink-soft: #c8d6bc;
+  --ink-faint: #97a98c;
+  --ink-hint: #6d7d64;
+
+  --accent: #4e9f3d;
+  --on-accent: #0c1509; /* 5.3:1 on the green fill */
+  --accent-type: #4e9f3d; /* 5.1:1 on the ground */
+  --accent-tint: rgb(78 159 61 / 0.16);
+
+  --ok: #8fce7f;
+  --ok-tint: rgb(143 206 127 / 0.14);
+  --danger: #e0705c;
+  --danger-tint: rgb(224 112 92 / 0.15);
+
+  --line: rgb(216 233 168 / 0.16);
+  --line-soft: rgb(216 233 168 / 0.08);
+
+  --card-radius: 0.75rem;
+  --ctl-radius: 0.5rem;
+  --pill-radius: 999px;
+  --card-border: 1px solid rgb(216 233 168 / 0.12);
+  --card-shadow: 0 16px 36px -16px rgb(0 0 0 / 0.6);
+  --pop-shadow: 0 0 18px rgb(78 159 61 / 0.35);
+  --cut: opacity(1);
+
+  --font-display: "Lora", Georgia, serif;
+  --font-body: "Mulish", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 500;
+  --display-case: none;
+  --display-track: 0;
+  --w-medium: 500;
+  --w-strong: 600;
+  --label-case: uppercase;
+  --label-track: 0.12em;
+}
+
+/* Keep the dapple still while the page scrolls. */
+[data-theme="canopy"] body {
+  background-attachment: fixed;
+}
+
+/* The moon through leaves: pale, softly haloed. */
+[data-theme="canopy"] .ridges .sun {
+  fill: #d8e9a8;
+  filter: drop-shadow(0 0 14px rgb(216 233 168 / 0.5));
+}
+
+/* The understorey-to-leaf gradient carries the meters. */
+[data-theme="canopy"] .meter-fill {
+  background: linear-gradient(90deg, #1e5128, #4e9f3d);
+}
+
+/* Pale leaf-light on the numerals, like the source colour's job. */
+[data-theme="canopy"] .stat-n {
+  color: #d8e9a8;
+}
+
+[data-theme="canopy"] .rating {
+  color: #d8e9a8;
+}

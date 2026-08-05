@@ -1,0 +1,24 @@
+---
+/* The page foot. The showcase uses the .footer band; the event page uses the
+   quieter .site-foot. */
+interface Props {
+  variant?: "band" | "quiet";
+}
+const { variant = "band" } = Astro.props;
+---
+
+{variant === "band" ? (
+  <footer class="footer">
+    <div class="container footer-row">
+      <p class="brand-foot">BLR Hikes</p>
+      <p class="fine"><slot /></p>
+    </div>
+  </footer>
+) : (
+  <footer class="site-foot">
+    <div class="container">
+      <p class="brand-foot">BLR Hikes</p>
+      <p class="fine"><slot /></p>
+    </div>
+  </footer>
+)}

@@ -1,0 +1,12 @@
+---
+/* Pill — the status/type chip. `variant` maps to the pill-* modifier the
+   theme paints; `icon` is a Font Awesome solid name. */
+interface Props {
+  variant?: "live" | "full" | "member" | "ok" | "on-photo";
+  icon?: string;
+  class?: string;
+}
+const { variant, icon, class: klass } = Astro.props;
+const cls = ["pill", variant && `pill-${variant}`, klass].filter(Boolean).join(" ");
+---
+<span class={cls}>{icon && <i class={`fa-solid fa-${icon}`} aria-hidden="true" />}<slot /></span>

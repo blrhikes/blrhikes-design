@@ -1,0 +1,23 @@
+---
+/* ThemePicker — an mxb.dev-style panel: every theme is a button showing its
+   name over the four colours that fingerprint it. theme.js wires the clicks,
+   the keyboard shortcuts and localStorage. */
+import { themes, defaultTheme } from "../data/themes.js";
+---
+
+<div class="themepicker" id="themepicker" hidden>
+  <div class="container tp-list" role="group" aria-label="Colour themes">
+    {themes.map((t) => (
+      <button
+        class="tp-option"
+        data-theme-opt={t.id}
+        aria-pressed={String(t.id === defaultTheme)}
+      >
+        <span class="tp-name">{t.label} <kbd>{t.key}</kbd></span>
+        <span class="tp-palette">
+          {t.dots.map((d) => <span class="tp-dot" style={`background:${d}`}></span>)}
+        </span>
+      </button>
+    ))}
+  </div>
+</div>

@@ -1,0 +1,33 @@
+---
+/* Btn — renders an <a> when given an href, a <button> otherwise. */
+interface Props {
+  variant?: "primary" | "secondary" | "ghost" | "danger";
+  size?: "sm";
+  block?: boolean;
+  href?: string;
+  disabled?: boolean;
+  type?: "button" | "submit";
+  class?: string;
+  [key: string]: unknown;
+}
+const {
+  variant = "primary",
+  size,
+  block,
+  href,
+  disabled,
+  type,
+  class: klass,
+  ...rest
+} = Astro.props;
+const Tag = href ? "a" : "button";
+const cls = [
+  "btn",
+  `btn-${variant}`,
+  size === "sm" && "btn-sm",
+  block && "btn-block",
+  klass,
+].filter(Boolean).join(" ");
+---
+
+<Tag class={cls} href={href} disabled={disabled} type={href ? undefined : type} {...rest}><slot /></Tag>

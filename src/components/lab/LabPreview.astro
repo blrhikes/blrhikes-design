@@ -1,0 +1,52 @@
+---
+/* What the sliders are tuning: one photo card and one plain card, so the
+   edge can be read both against a photograph and on its own. The geometry
+   variables are set here and overwritten live by tear-lab.js. */
+import PhotoWrap from "../ui/PhotoWrap.astro";
+import Pill from "../ui/Pill.astro";
+import IconLine from "../ui/IconLine.astro";
+import Btn from "../ui/Btn.astro";
+import { cover } from "../../data/images.js";
+
+const geometry =
+  "--g-clip-top:24px;--g-clip-bottom:12px;--g-clip-side:3px;--g-surface-top:40px;--g-split:55%";
+---
+
+<div class="lab-preview" id="preview" style={geometry}>
+  <div>
+    <article class="card photo-card">
+      <PhotoWrap photo={cover("4c6abe3c-722c-4025-99aa-5f7ce9409841")} eager>
+        <div class="photo-title">
+          <h3 class="title">Savandurga Full Moon Walk</h3>
+          <p class="photo-date">5:30 pm start</p>
+        </div>
+        <span class="photo-badge"><Pill variant="full">Full</Pill></span>
+      </PhotoWrap>
+      <div class="photo-body">
+        <div class="cluster">
+          <Pill icon="mountain-sun">Hike</Pill>
+          <Pill>₹850</Pill>
+          <Pill variant="ok">₹700 members</Pill>
+        </div>
+        <IconLine icon="location-dot">Savandurga, Magadi</IconLine>
+        <p class="fine clamp-2">
+          Asia’s largest monolith by moonlight — a slow, quiet climb up
+          the open rock with the city glowing on the horizon.
+        </p>
+        <div class="card-foot">
+          <IconLine icon="clock" regular as="span">5:30 pm start</IconLine>
+          <span class="actions"><Btn variant="secondary" size="sm" href="#">Join waitlist</Btn></span>
+        </div>
+      </div>
+    </article>
+  </div>
+  <div class="plain-demo">
+    <article class="card">
+      <h3 class="comp-title">Plain card, same edge</h3>
+      <p class="fine" style="margin-top:.6rem">
+        No photo — just the surface layer through the card filter, so
+        you can read the edge on its own.
+      </p>
+    </article>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+---
+/* The control rail. Only the group shells and the presets are markup — every
+   slider inside them is built by tear-lab.js from its DEFS table, so adding a
+   knob means adding one row there, not one row here. */
+import Btn from "../ui/Btn.astro";
+
+const groups = [
+  ["grp-c1", "Card edge · pass 1 — fine cut (all sides)"],
+  ["grp-c2", "Card edge · pass 2 — big vertical rip (top/bottom)"],
+  ["grp-p1", "Photo bottom edge · pass 1 — fine cut"],
+  ["grp-p2", "Photo bottom edge · pass 2 — vertical rip"],
+  ["grp-geo", "Geometry — clips &amp; layers"],
+];
+---
+
+<div class="controls">
+  <div class="card ctl-group">
+    <h3 class="comp-title">Presets</h3>
+    <div class="presets">
+      <Btn variant="secondary" size="sm" data-preset="app">App (subtle)</Btn>
+      <Btn variant="secondary" size="sm" data-preset="current">Current design</Btn>
+      <Btn variant="secondary" size="sm" data-preset="wild">Wild</Btn>
+      <Btn variant="secondary" size="sm" id="reset">Reset saved</Btn>
+    </div>
+    <p class="fine" id="saved-note">Settings are saved in this browser as you drag.</p>
+  </div>
+
+  {groups.map(([id, title]) => (
+    <div class="card ctl-group" id={id}>
+      <h3 class="comp-title" set:html={title} />
+    </div>
+  ))}
+
+  <div class="card ctl-group out">
+    <h3 class="comp-title">Result — paste into the pages</h3>
+    <pre id="out"></pre>
+    <Btn variant="primary" size="sm" id="copy">Copy snippet</Btn>
+  </div>
+</div>

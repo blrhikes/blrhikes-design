@@ -1,0 +1,13 @@
+---
+/* HighlightTag row — what a trail has. Always one line deep: htags.js
+   measures the row and folds the overflow into a trailing "+N" chip, so the
+   markup here just lists every tag. Each tag is a [icon, label] pair. */
+interface Props {
+  tags: [string, string][];
+}
+const { tags } = Astro.props;
+---
+
+<div class="htags">{tags.map(([icon, label]) => (
+  <span class="htag"><i class={`fa-solid fa-${icon}`} aria-hidden="true"></i>{label}</span>
+))}</div>

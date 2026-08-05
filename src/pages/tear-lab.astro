@@ -1,0 +1,39 @@
+---
+/* Live sliders for every torn-paper variable, plus a paste-back snippet.
+   Kraft only — the tear is a kraft flourish, so there is nothing to switch. */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHead from "../components/ui/SectionHead.astro";
+import LabFilters from "../components/lab/LabFilters.astro";
+import LabPreview from "../components/lab/LabPreview.astro";
+import LabControls from "../components/lab/LabControls.astro";
+import { labLinks } from "../data/nav.js";
+
+import "../styles/tear-lab.css";
+---
+
+<BaseLayout
+  title="Tear lab · BLR Hikes theme explorations"
+  links={labLinks}
+  brandHref="/"
+  footer="none"
+>
+  <LabFilters slot="filters" />
+
+  <section class="section" style="border-top:none">
+    <div class="container">
+      <SectionHead eyebrow="Lab · kraft tear" title="Tune the tear">
+        Every variable behind the torn-paper effect, live. The snippet at the
+        bottom updates as you drag — paste it back into the real pages.
+      </SectionHead>
+
+      <div class="lab">
+        <LabPreview />
+        <LabControls />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import "../scripts/tear-lab.js";
+</script>

@@ -1,0 +1,48 @@
+---
+/* EventCardProminent — the lead event: wide cover, DateBlock beside the
+   title, attendees and price in the foot. `tear: "sides"` swaps the rip from
+   the top/bottom ends to the left/right sides (the -TornSides variant). */
+import PhotoWrap from "../ui/PhotoWrap.astro";
+import DateBlock from "../ui/DateBlock.astro";
+import Pill from "../ui/Pill.astro";
+import IconLine from "../ui/IconLine.astro";
+import AttendeeFaces from "../ui/AttendeeFaces.astro";
+import Btn from "../ui/Btn.astro";
+
+interface Props {
+  event: any;
+  tear?: "ends" | "sides";
+}
+const { event, tear = "ends" } = Astro.props;
+---
+
+<article class:list={["card", "feat-card", tear === "sides" && "torn-lr"]}>
+  <PhotoWrap photo={event.photo}>
+    <span class="photo-badge"><Pill variant={event.badge.variant}>{event.badge.text}</Pill></span>
+  </PhotoWrap>
+  <div class="feat-body">
+    <div class="feat-head">
+      <DateBlock {...event.date} label={event.dateLabel} />
+      <div>
+        <h3 class="title feat-title">{event.name}</h3>
+        <IconLine icon="clock" regular>{event.time}</IconLine>
+      </div>
+    </div>
+    <IconLine icon="location-dot">{event.where}</IconLine>
+    <p class="fine clamp-2">{event.blurb}</p>
+    <div class="cluster">
+      <Pill icon={event.kind.icon}>{event.kind.text}</Pill>
+      <Pill variant="member" class="pill-lead"
+        >Led by {event.lead.name}<span class="face-shadow"><span class="face">{event.lead.initials}</span></span></Pill
+      >
+      <AttendeeFaces as="span" {...event.going} />
+    </div>
+    <div class="card-foot">
+      <p class="price">{event.price}</p>
+      <span class="actions">
+        <Btn variant="secondary" size="sm" href="/event/">Details</Btn>
+        <Btn variant="primary" size="sm" href="#">Register</Btn>
+      </span>
+    </div>
+  </div>
+</article>

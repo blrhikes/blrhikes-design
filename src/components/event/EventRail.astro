@@ -1,0 +1,57 @@
+---
+/* The event page's sticky rail.
+
+   The price, the lead and who is going are one RegistrationCard — the very
+   card the showcase's event section renders, same parts in the same order.
+   The trail below it is the ordinary TrailCard, one up instead of three: the
+   rail is the component's narrowest home, which is exactly the density it
+   was drawn for. */
+import RegistrationCard from "../cards/RegistrationCard.astro";
+import TrailCard from "../cards/TrailCard.astro";
+import { emeraldFallsCircuit } from "../../data/trails.js";
+
+const links: [string, string][] = [
+  ["suitcase-rolling", "Gear checklist — grab something to carry"],
+  ["pen-to-square", "Tell us how you're getting there"],
+  ["car-side", "My ride"],
+  ["clipboard-list", "Full transport plan"],
+];
+---
+
+<aside class="ev-aside">
+  <RegistrationCard
+    date={{ mon: "Aug", day: "13", dow: "Thu", label: "Thu 13 Aug" }}
+    price="₹900"
+    unit="/ person"
+    memberNote="Members pay <strong>₹750</strong>"
+    rows={[
+      ["Start", "05:00 at the blue gate"],
+      ["End", "~10:00, back in the city"],
+    ]}
+    lead={{ initials: "AS", text: "Led by Ava Sharma" }}
+    going={{ count: "3 going", faces: ["CD", "EL", "DO"] }}
+    meter={{ taken: 7, total: 20, note: "7 / 20 registered · 13 left" }}
+    cta="Register"
+    ctaIcon="arrow-right"
+    sticky={false}
+  />
+
+  <div class="ev-trail">
+    <p class="ev-rail-title ev-rail-title--gap">We’re going here:</p>
+    <div class="trail-grid">
+      <TrailCard trail={emeraldFallsCircuit} />
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="ev-rail-title">Already registered?</p>
+    <ul class="ev-links">
+      {links.map(([icon, text]) => (
+        <li><a href="#"><i class={`fa-solid fa-${icon}`} aria-hidden="true"></i> {text}</a></li>
+      ))}
+      <li>
+        <a href="#"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp group <i class="fa-solid fa-up-right-from-square" aria-hidden="true"></i></a>
+      </li>
+    </ul>
+  </div>
+</aside>

@@ -1,0 +1,100 @@
+/* ===========================================================================
+   THEME 6 · "Solstice Day" — light
+   ---------------------------------------------------------------------------
+   From design.codeuncode.com/blrhikes-design-system-solstice, light mode:
+   pale-cream ground (#FEFAE0) under fine grain, olive (#626F47) doing the
+   work — type, fills, hairlines at low alpha — sage (#A4B465) one step
+   behind, and golden #FFCF50 as the highlight that makes it a solstice.
+   Typography is Kraft's, unchanged: Fraunces over DM Sans, weight capped
+   at 500, hierarchy from size, colour and space.
+   =========================================================================== */
+
+[data-theme="solstice-day"] {
+  color-scheme: light;
+
+  --ground: #fefae0;
+  /* the page's own grain: feTurbulence noise at 5% */
+  --ground-img: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+
+  --surface: rgb(98 111 71 / 0.07);
+  --surface-2: rgb(164 180 101 / 0.22);
+  --surface-raise: #fffdf0;
+
+  --ink: #333a22;
+  --ink-soft: #49532f;
+  --ink-faint: #626f47;
+  --ink-hint: #8a9367;
+
+  --accent: #626f47;
+  --on-accent: #fefae0;
+  --accent-type: #626f47; /* 5.2:1 on the cream ground */
+  --accent-tint: rgb(164 180 101 / 0.28);
+
+  --ok: #4c7a3d;
+  --ok-tint: rgb(76 122 61 / 0.14);
+  --danger: #ae4b32;
+  --danger-tint: rgb(174 75 50 / 0.13);
+
+  --line: rgb(98 111 71 / 0.28);
+  --line-soft: rgb(98 111 71 / 0.13);
+
+  --card-radius: 1rem;
+  --ctl-radius: 0.5rem;
+  --pill-radius: 999px;
+  --card-border: 1px solid rgb(98 111 71 / 0.18);
+  --card-shadow: 0 6px 20px -10px rgb(98 111 71 / 0.35);
+  --pop-shadow: none;
+  --cut: opacity(1);
+
+  /* --- typography: Kraft's, verbatim -------------------------------------- */
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 500;
+  --display-case: none;
+  --display-track: 0;
+  --w-medium: 500;
+  --w-strong: 500;
+  --label-case: uppercase;
+  --label-track: 0.08em;
+}
+
+/* The solstice sun: golden, and the one thing allowed to be loud. */
+[data-theme="solstice-day"] .ridges .sun {
+  fill: #ffcf50;
+}
+
+/* Gold as the highlight colour, the way the source uses light-accent:
+   borders and washes, never text. */
+[data-theme="solstice-day"] .meter-fill {
+  background: #ffcf50;
+}
+
+[data-theme="solstice-day"] .notice {
+  border-inline-start-color: #ffcf50;
+  background: rgb(255 207 80 / 0.16);
+}
+
+[data-theme="solstice-day"] .pill-live {
+  background: rgb(255 207 80 / 0.3);
+  color: #5c4a10;
+  border-color: rgb(255 207 80 / 0.9);
+}
+
+/* A thin golden hour on the horizon of the hero art. */
+[data-theme="solstice-day"] .hero-art {
+  position: relative;
+  isolation: isolate;
+}
+
+[data-theme="solstice-day"] .hero-art::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    24rem 14rem at 70% 30%,
+    rgb(255 207 80 / 0.35),
+    transparent 70%
+  );
+}

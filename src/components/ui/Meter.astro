@@ -1,0 +1,13 @@
+---
+/* Meter — how full an event is. */
+interface Props {
+  taken: number;
+  total: number;
+}
+const { taken, total } = Astro.props;
+const pct = Math.round((taken / total) * 100);
+---
+
+<div class="meter" role="img" aria-label={`${taken} of ${total} spots taken`}>
+  <div class="meter-fill" style={`width:${pct}%`}></div>
+</div>

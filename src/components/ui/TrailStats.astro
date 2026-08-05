@@ -1,0 +1,11 @@
+---
+/* TrailStats — the mono facts strip. Each stat is a [label, value] pair. */
+interface Props {
+  stats: [string, string][];
+}
+const { stats } = Astro.props;
+---
+
+<dl class="trail-stats mono">{stats.map(([label, value]) => (
+  <div><dt>{label}</dt><dd>{value}</dd></div>
+))}</dl>

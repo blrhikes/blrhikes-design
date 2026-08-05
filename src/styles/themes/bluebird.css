@@ -1,0 +1,108 @@
+/* ===========================================================================
+   THEME 8 · "Bluebird" — light
+   ---------------------------------------------------------------------------
+   A bluebird day: the hiker's word for a cloudless morning after rain.
+   Four given colours — golden #FFC349, indigo #525EA7, sky #5FACD3, pale
+   cyan #97DDE9 — assigned by job: indigo is the ink and the CTA, the two
+   blues layer the sky and the hills, and the yellow is the sun: highlights
+   only, never text (it can't clear contrast on a light ground).
+   Bricolage Grotesque over Instrument Sans; round, soft, open-air.
+   =========================================================================== */
+
+[data-theme="bluebird"] {
+  color-scheme: light;
+
+  --ground: #f4fbfd;
+  --ground-img:
+    radial-gradient(46rem 22rem at 85% -4rem, rgb(151 221 233 / 0.45), transparent 70%),
+    radial-gradient(38rem 20rem at 8% 30rem, rgb(151 221 233 / 0.3), transparent 70%),
+    linear-gradient(180deg, #e3f4fa, #f6fbfd 32rem);
+
+  --surface: #ffffff;
+  --surface-2: rgb(151 221 233 / 0.28);
+  --surface-raise: #ffffff;
+
+  --ink: #1f2547;
+  --ink-soft: #394069;
+  --ink-faint: #5a6089;
+  --ink-hint: #838aae;
+
+  --accent: #525ea7;
+  --on-accent: #ffffff; /* 5.9:1 on the indigo fill */
+  --accent-type: #4d58a1; /* ≥6:1 on the ground */
+  --accent-tint: rgb(82 94 167 / 0.12);
+
+  --ok: #2e7d5c;
+  --ok-tint: rgb(46 125 92 / 0.13);
+  --danger: #c94f43;
+  --danger-tint: rgb(201 79 67 / 0.13);
+
+  --line: rgb(82 94 167 / 0.22);
+  --line-soft: rgb(82 94 167 / 0.1);
+
+  --card-radius: 1.25rem;
+  --ctl-radius: 0.65rem;
+  --pill-radius: 999px;
+  --card-border: 1px solid rgb(82 94 167 / 0.14);
+  --card-shadow: 0 10px 26px -14px rgb(82 94 167 / 0.4);
+  --pop-shadow: 0 6px 16px -8px rgb(82 94 167 / 0.55);
+  --cut: opacity(1);
+
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-body: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 700;
+  --display-case: none;
+  --display-track: -0.015em;
+  --w-medium: 500;
+  --w-strong: 600;
+  --label-case: uppercase;
+  --label-track: 0.1em;
+}
+
+/* Hold the sky still while the page scrolls past it. */
+[data-theme="bluebird"] body {
+  background-attachment: fixed;
+}
+
+/* The hero hills wear the palette outright: cyan haze to indigo foreground,
+   under a golden sun. */
+[data-theme="bluebird"] .ridges .sun {
+  fill: #ffc349;
+}
+
+[data-theme="bluebird"] .ridges .r1 {
+  fill: #97dde9;
+  opacity: 1;
+}
+
+[data-theme="bluebird"] .ridges .r2 {
+  fill: #5facd3;
+  opacity: 1;
+}
+
+[data-theme="bluebird"] .ridges .r3 {
+  fill: #525ea7;
+  opacity: 1;
+}
+
+/* Gold is the highlight voice: meters, the Live pill, notice edges. */
+[data-theme="bluebird"] .meter-fill {
+  background: #ffc349;
+}
+
+[data-theme="bluebird"] .pill-live {
+  background: rgb(255 195 73 / 0.32);
+  color: #6d4d05;
+  border-color: rgb(255 195 73 / 0.95);
+}
+
+[data-theme="bluebird"] .notice {
+  border-inline-start-color: #ffc349;
+  background: rgb(255 195 73 / 0.14);
+}
+
+/* Sky-blue hairline under the topbar, like a horizon. */
+[data-theme="bluebird"] .topbar {
+  border-bottom: 2px solid #97dde9;
+}

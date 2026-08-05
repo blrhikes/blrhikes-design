@@ -1,0 +1,15 @@
+---
+/* SectionHead — the numbered eyebrow, the display heading and the note. */
+interface Props {
+  eyebrow: string;
+  title: string;
+  flush?: boolean;
+}
+const { eyebrow, title, flush } = Astro.props;
+---
+
+<header class="section-head" style={flush ? "margin-bottom:0" : undefined}>
+  <p class="eyebrow">{eyebrow}</p>
+  <h2 class="display-2">{title}</h2>
+  {Astro.slots.has("default") && <p class="section-note"><slot /></p>}
+</header>

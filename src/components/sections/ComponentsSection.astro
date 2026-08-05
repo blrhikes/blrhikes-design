@@ -1,0 +1,117 @@
+---
+/* The working parts, each card carrying the component name the app's design
+   system uses. */
+import SectionHead from "../ui/SectionHead.astro";
+import Btn from "../ui/Btn.astro";
+import Pill from "../ui/Pill.astro";
+import HighlightTags from "../ui/HighlightTags.astro";
+import AttendeeFaces from "../ui/AttendeeFaces.astro";
+import SeatRow from "../ui/SeatRow.astro";
+import DateBlock from "../ui/DateBlock.astro";
+import Field from "../ui/Field.astro";
+import Notice from "../ui/Notice.astro";
+
+const going = { count: "19 going", more: "+15", faces: ["DH", "RH", "SR", "RA"] };
+---
+
+<section class="section" id="components">
+  <div class="container">
+    <SectionHead eyebrow="03 · Components" title="The working parts">
+      Every part carries its component name — the same names the app's design
+      system uses.
+    </SectionHead>
+
+    <div class="comp-grid">
+      <div class="card comp-card">
+        <h3 class="comp-title">Btn — buttons</h3>
+        <div class="cluster">
+          <Btn variant="primary">Register — ₹1,200</Btn>
+          <Btn variant="secondary">Save trail</Btn>
+          <Btn variant="ghost">View route →</Btn>
+          <Btn variant="danger">Cancel spot</Btn>
+          <Btn variant="primary" disabled>Sold out</Btn>
+        </div>
+      </div>
+
+      <div class="card comp-card">
+        <h3 class="comp-title">Pill / Tag — status &amp; type</h3>
+        <div class="cluster">
+          <Pill variant="live">Live</Pill>
+          <Pill variant="full">Full</Pill>
+          <Pill variant="member">Members</Pill>
+          <Pill icon="mountain-sun">Hike</Pill>
+          <Pill icon="fish">Hike + Swim</Pill>
+          <Pill>Easy</Pill>
+          <Pill variant="full">Hard</Pill>
+          <Pill variant="ok">Paid ✓</Pill>
+        </div>
+        <h3 class="comp-title">HighlightTag — what a trail has</h3>
+        <HighlightTags
+          tags={[
+            ["dungeon", "Cave"],
+            ["tree", "Forest"],
+            ["water", "Lake"],
+            ["cubes-stacked", "Quarry"],
+          ]}
+        />
+      </div>
+
+      <div class="card comp-card">
+        <h3 class="comp-title">AttendeeFaces · SeatRow · DateBlock</h3>
+        <AttendeeFaces {...going} />
+        <p class="ledby">Led by Shreshth <span class="face">SH</span></p>
+        <SeatRow filled={3} total={5} />
+        <DateBlock mon="Aug" day="08" dow="Sat" label="Sat 8 Aug" />
+      </div>
+
+      <div class="card comp-card comp-form">
+        <h3 class="comp-title">Field · Select · Check — forms</h3>
+        <Field id="f-name" label="Full name">
+          <input id="f-name" type="text" placeholder="As on your ID" />
+        </Field>
+        <Field id="f-email" label="Email" error="That doesn’t look like an email address.">
+          <input
+            id="f-email"
+            type="email"
+            value="hello@example"
+            aria-invalid="true"
+            aria-describedby="f-email-err"
+          />
+        </Field>
+        <Field id="f-pickup" label="Pickup point">
+          <select id="f-pickup">
+            <option>Hebbal flyover</option>
+            <option>Mekhri Circle</option>
+            <option>Yelahanka</option>
+          </select>
+        </Field>
+        <label class="check">
+          <input type="checkbox" checked />
+          <span>I can offer seats in my car</span>
+        </label>
+      </div>
+
+      <div class="card comp-card">
+        <h3 class="comp-title">Notice — info &amp; danger</h3>
+        <Notice>
+          <strong>Carry 2L of water.</strong> There are no shops after the base
+          village — the last stretch is exposed rock.
+        </Notice>
+        <Notice variant="danger">
+          <strong>Skandagiri needs a forest permit.</strong> Registrations close
+          48 hours before the hike so we can file the list.
+        </Notice>
+        <p class="spec" style="margin-top:1rem">Notice-HoleTopLeft</p>
+        <Notice hole="tl">
+          <strong>The pools are optional.</strong> Swim only with others
+          around, and never near the lip of the falls.
+        </Notice>
+        <p class="spec" style="margin-top:1rem">Notice-HoleTop</p>
+        <Notice hole="top">
+          <strong>Registration closes 48 hours before.</strong> We file the
+          list with the forest department the evening before the hike.
+        </Notice>
+      </div>
+    </div>
+  </div>
+</section>

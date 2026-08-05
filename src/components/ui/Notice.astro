@@ -1,0 +1,15 @@
+---
+/* Notice — the boxed aside. `variant` picks the danger paint; `hole` punches
+   the torn-out corner or top edge the kraft theme draws. */
+interface Props {
+  variant?: "danger";
+  hole?: "tl" | "top";
+  class?: string;
+}
+const { variant, hole, class: klass } = Astro.props;
+const holeClass = hole === "tl" ? "notice-hole-tl" : hole === "top" ? "notice-hole-top" : null;
+---
+
+<div class:list={["notice", variant && `notice-${variant}`, holeClass, klass]}>
+  <slot />
+</div>

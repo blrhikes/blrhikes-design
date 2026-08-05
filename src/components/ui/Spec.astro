@@ -1,0 +1,11 @@
+---
+/* Spec — the small label naming the component being shown. Every demo on the
+   page carries one, using the names the app's design system uses. */
+interface Props {
+  onPhoto?: boolean;
+  gap?: boolean;
+}
+const { onPhoto, gap } = Astro.props;
+---
+
+<p class:list={["spec", onPhoto && "spec-on-photo"]} style={gap ? "margin-top:2rem" : undefined}><slot /></p>
