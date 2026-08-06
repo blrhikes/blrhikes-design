@@ -1,13 +1,13 @@
 ---
-/* The trail library: the three-up card, the wide card, the overlay variant,
-   then the stat band and the registrations table. */
+/* The trail library. TrailCardOverlay is the chosen variant (owner,
+   2026-08-06); TrailCard and TrailCardWide, which it was picked over, moved to
+   /archive rather than being deleted — a decision is easier to revisit with
+   the alternatives still standing. */
 import SectionHead from "../ui/SectionHead.astro";
 import Spec from "../ui/Spec.astro";
 import Pill from "../ui/Pill.astro";
-import TrailCard from "../cards/TrailCard.astro";
-import TrailCardWide from "../cards/TrailCardWide.astro";
 import TrailCardOverlay from "../cards/TrailCardOverlay.astro";
-import { trailCards, trailCardsWide, trailCardsOverlay } from "../../data/trails.js";
+import { trailCardsOverlay } from "../../data/trails.js";
 
 const stats = [
   ["214", "members"],
@@ -28,20 +28,15 @@ const registrations = [
   <div class="container">
     <SectionHead eyebrow="06 · Trails" title="The trail library" />
 
-    <Spec>TrailCard · HighlightTag · Rating</Spec>
-    <div class="trail-grid">
-      {trailCards.map((trail) => <TrailCard trail={trail} />)}
-    </div>
-
-    <Spec gap>TrailCardWide-TornEnds · HighlightTag — the rip runs along the top and bottom</Spec>
-    <div class="trail-grid trail-grid--wide">
-      {trailCardsWide.map((trail) => <TrailCardWide trail={trail} />)}
-    </div>
-
-    <Spec gap>TrailCardOverlay · HighlightTag — name and facts on the cover, two per row</Spec>
+    <Spec doc="TrailCardOverlay">TrailCardOverlay · HighlightTag — name and facts on the cover, two per row</Spec>
     <div class="trail-grid trail-grid--wide">
       {trailCardsOverlay.map((trail) => <TrailCardOverlay trail={trail} />)}
     </div>
+
+    <p class="fine" style="margin-top:1.25rem">
+      The variants this was picked over — TrailCard and TrailCardWide — are in
+      the <a href="/archive/">archive</a>.
+    </p>
 
     <Spec gap>StatBand</Spec>
     <div class="stats">

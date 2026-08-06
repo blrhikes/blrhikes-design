@@ -16,7 +16,7 @@ interface Props {
 const { photo, alt, eyebrow, title, when, where, spots } = Astro.props;
 ---
 
-<header class="ev-cover" style={`--photo:url('${photo}')`}>
+<header class="ev-cover flush-top" style={`--photo:url('${photo}')`}>
   <div class="ev-cover-backing" aria-hidden="true"></div>
   <img class="photo" src={photo} alt={alt} />
   <div class="container">

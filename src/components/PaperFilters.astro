@@ -82,9 +82,10 @@
     <feComponentTransfer in="n2" result="n2f"><feFuncG type="linear" slope="0" intercept="0.5"/></feComponentTransfer>
     <feDisplacementMap in="d1" in2="n2f" scale="10" xChannelSelector="R" yChannelSelector="G"/>
   </filter>
-  <!-- AttendeeFaces disc. Not a tear — a theme-independent shape, lifted from
-       the app's #ds-rounded-octagon (blrhikes-app/app/components/ds/paper.tsx).
-       objectBoundingBox units, so it scales to any square. -->
+  <!-- AttendeeFaces disc, lifted from the app's #ds-rounded-octagon
+       (blrhikes-app/app/components/ds/paper.tsx). Kept, unreferenced, since
+       the owner moved the faces to circles on 2026-08-06: it is the app's
+       actual shape, and this is the file it would come back through. -->
   <!-- The wash spans the viewport, so its noise has to run at a longer
        wavelength or the tear reads as a repeating comb at that width. -->
   <filter id="cut-photo-wide" x="-5%" y="-30%" width="110%" height="160%">

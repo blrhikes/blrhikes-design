@@ -1,0 +1,107 @@
+/* ===========================================================================
+   THEME 14 · "Kraft Night" — dark
+   ---------------------------------------------------------------------------
+   Kraft after dark: the same sheet of paper, the same tear, the same Fraunces
+   over DM Sans — lit by a headtorch instead of daylight.
+
+   The move that makes it work is that the paper does NOT become a dark
+   rectangle. It is the same scan, with the white wash Kraft lays over it
+   swapped for a near-black one, so the grain still reads: the texture darkens
+   with the sheet rather than being replaced by a flat colour. That is why
+   --kraft-wash is a token in the first place.
+
+   The accent inverts rather than changes hue. Kraft's emphasis is dark ink on
+   pale paper; here it is pale paper on dark ink — the same relationship, read
+   the other way round, which keeps "paper" as the thing the eye goes to.
+
+   The torn edge comes from ../torn-paper.css.
+   =========================================================================== */
+
+[data-theme="kraft-night"] {
+  color-scheme: dark;
+
+  /* The same kraft-paper scan under a near-black wash instead of a white one.
+     Keep the alpha high or the scan's mid-tones muddy the type above it. */
+  --ground: #17130f;
+  --kraft-wash: 0.86;
+  --ground-img:
+    linear-gradient(rgb(18 15 12 / var(--kraft-wash)), rgb(18 15 12 / var(--kraft-wash))),
+    url("/assets/kraft-paper.jpg");
+
+  /* Cards are lighter than the ground and warm, not neutral — a sheet of
+     paper catching a little light, which is the whole conceit. */
+  --surface: rgb(58 48 38 / 0.72);
+  --surface-2: rgb(46 38 30 / 0.8);
+  --surface-raise: rgb(64 53 42 / 0.95);
+
+  --ink: #f2e9db;
+  --ink-soft: #ddd0bd;
+  --ink-faint: #b7a894;
+  --ink-hint: #8d7f6e;
+
+  /* Inverted from Kraft: pale paper as the fill, the dark ground as the type
+     on it. --accent-type is the same pale tone, which clears 4.5:1 on the
+     ground with room to spare. */
+  --accent: #e8dcc8;
+  --on-accent: #17130f;
+  --accent-type: #e8dcc8;
+  --accent-tint: rgb(232 220 200 / 0.14);
+
+  --ok: #7fc79a;
+  --ok-tint: rgb(127 199 154 / 0.16);
+  --danger: #f08a84;
+  --danger-tint: rgb(240 138 132 / 0.16);
+
+  --line: rgb(242 233 219 / 0.18);
+  --line-soft: rgb(242 233 219 / 0.09);
+
+  /* A torn edge is its own shape; rounding a corner it then rips off is
+     noise — torn cards are square. Flat, as Kraft is: paper on paper. */
+  --card-radius: 0;
+  --ctl-radius: 0.5rem;
+  --pill-radius: 999px;
+  --card-border: none;
+  --card-shadow: none;
+  --pop-shadow: none;
+  --cut: url(#cut-1);
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 500;
+  --display-case: none;
+  --display-track: 0;
+  --w-medium: 500;
+  --w-strong: 500;
+  --label-case: uppercase;
+  --label-track: 0.08em;
+}
+
+/* ---------------------------------------------------------- flourishes -- */
+
+/* Kraft's hand-placed lean, kept — it is the same journal page. */
+[data-theme="kraft-night"] .photo-card:nth-child(2) {
+  rotate: 0.4deg;
+}
+
+[data-theme="kraft-night"] .photo-card:nth-child(3) {
+  rotate: -0.35deg;
+}
+
+/* Night ridges: the hills go dark and the sun becomes the moon, which is the
+   one thing that has to change for a hero that reads as after dark. */
+[data-theme="kraft-night"] .ridges .r1 {
+  fill: #3a3026;
+}
+
+[data-theme="kraft-night"] .ridges .r2 {
+  fill: #2a231b;
+}
+
+[data-theme="kraft-night"] .ridges .r3 {
+  fill: #1c1712;
+}
+
+[data-theme="kraft-night"] .ridges .sun {
+  fill: #e8dcc8;
+}

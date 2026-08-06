@@ -373,14 +373,23 @@ export const edgeCards = [
   },
 ];
 
-/* The one trail the event page links out to, in the rail. */
+/* The trail the event page's hike follows, shown above the article as a
+   TrailCardOverlay — so it carries the overlay's extra fields (compass,
+   place, blurb, and the route links) on top of what a TrailCard needs. */
 export const emeraldFallsCircuit = {
   name: "Emerald Falls Circuit",
-  photo: cover("32fcf612-a3b7-47d5-8548-0e5f62a77b00", 640),
+  slug: "emerald-falls-circuit",
+  photo: cover("32fcf612-a3b7-47d5-8548-0e5f62a77b00", 1200),
   alt: "The lower falls on the Emerald Falls Circuit",
   grade: "Easy",
   rating: "4.6",
   where: "Emerald Hills",
+  compass: "South-west",
+  place: "Emerald Hills",
+  blurb:
+    "A gentle forest loop to a two-tier waterfall, with pools safe enough to swim at the base. Shade most of the way, which is what makes it work as a sunrise hike that runs into the morning.",
+  start: "12.554942,77.383009",
+  map: "https://www.gaiagps.com/map/?loc=14.0/77.3788/12.5535",
   stats: [
     ["Length", "6.2 km"],
     ["Gain", "+240 m"],

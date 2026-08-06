@@ -29,3 +29,6 @@ npm-debug.log*
 
 # Astro
 .astro/
+
+# Cloudflare
+.wrangler/

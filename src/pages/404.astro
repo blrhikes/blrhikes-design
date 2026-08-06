@@ -1,0 +1,31 @@
+---
+/* The not-found page. Cloudflare serves this for any unmatched path
+   (`not_found_handling: "404-page"` in wrangler.jsonc), so it is a real page
+   in the theme rather than the platform's default. */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHead from "../components/ui/SectionHead.astro";
+import Btn from "../components/ui/Btn.astro";
+import { showcaseLinks } from "../data/nav.js";
+---
+
+<BaseLayout
+  title="Not found · BLR Hikes"
+  links={showcaseLinks}
+  brandHref="/"
+  themePicker
+  footerNote="Theme explorations · fifteen skins over one token contract"
+>
+  <section class="section" style="border-top:none">
+    <div class="container">
+      <SectionHead eyebrow="404" title="No trail this way">
+        That page isn’t here. The showcase, the event surface and the tear lab
+        are all one click away.
+      </SectionHead>
+      <div class="hero-actions">
+        <Btn variant="primary" href="/">Back to the showcase</Btn>
+        <Btn variant="secondary" href="/event/">Event page</Btn>
+        <Btn variant="ghost" href="/tear-lab/">Tear lab</Btn>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "blrhikes-design",
+  "compatibility_date": "2026-08-05",
+
+  // The zone blrhikes.in must already be on this Cloudflare account; wrangler
+  // creates the DNS record for the subdomain on first deploy.
+  "routes": [{ "pattern": "design.blrhikes.in", "custom_domain": true }],
+
+  // A static site: no `main`, so this is an assets-only Worker. Nothing runs
+  // on request — Cloudflare serves dist/ straight off the edge. If this ever
+  // needs server logic, add a `main` entry and the assets stay as they are.
+  "assets": {
+    "directory": "./dist",
+
+    // Astro builds directory-style routes (dist/event/index.html), so a
+    // request for /event or /event/ must resolve to that index. "auto-trailing-slash"
+    // does exactly that, and drops the .html from any direct file hit.
+    "html_handling": "auto-trailing-slash",
+
+    // Anything unmatched gets dist/404.html (src/pages/404.astro) with a 404
+    // status, rather than the platform's bare page.
+    "not_found_handling": "404-page"
+  }
+}

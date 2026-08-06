@@ -1,6 +1,7 @@
 ---
-/* Live sliders for every torn-paper variable, plus a paste-back snippet.
-   Kraft only — the tear is a kraft flourish, so there is nothing to switch. */
+/* Live sliders for every torn-paper variable, plus a paste-back snippet. The
+   sliders drive kraft's own filters, so the lab is most use under a theme
+   that wears the tear — but the picker is here like everywhere else. */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SectionHead from "../components/ui/SectionHead.astro";
 import LabFilters from "../components/lab/LabFilters.astro";
@@ -15,6 +16,7 @@ import "../styles/tear-lab.css";
   title="Tear lab · BLR Hikes theme explorations"
   links={labLinks}
   brandHref="/"
+  themePicker
   footer="none"
 >
   <LabFilters slot="filters" />

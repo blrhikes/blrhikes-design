@@ -70,6 +70,33 @@ export const themes = [
     key: "-",
     dots: ["#eef4da", "#d8e9a8", "#1e5128", "#4e9f3d"],
   },
+  {
+    id: "milestone",
+    label: "Milestone",
+    key: "=",
+    dots: ["#f5f5f4", "#facc15", "#1c1917", "#70631a"],
+  },
+  {
+    /* Milestone's palette exactly — same dots on purpose, since the pair
+       differs only in how the cards cast. */
+    id: "milestone-soft",
+    label: "Milestone Soft",
+    key: "[",
+    dots: ["#f5f5f4", "#facc15", "#1c1917", "#70631a"],
+  },
+  {
+    id: "kraft-night",
+    label: "Kraft Night",
+    key: "]",
+    dots: ["#17130f", "#3a3026", "#e8dcc8", "#f2e9db"],
+  },
+  {
+    /* Milestone Soft's palette after dark — the app's own dark mode. */
+    id: "milestone-night",
+    label: "Milestone Night",
+    key: "\\",
+    dots: ["#1c1917", "#292524", "#eab308", "#fafaf9"],
+  },
 ];
 
 export const defaultTheme = "kraft";

@@ -56,6 +56,14 @@ if (toggle && panel) {
     }
   });
 
+  /* Click anywhere off the panel to dismiss it. The toggle is excluded or its
+     own handler would reopen what this just closed. */
+  document.addEventListener("click", (e) => {
+    if (panel.hidden) return;
+    if (panel.contains(e.target) || toggle.contains(e.target)) return;
+    setOpen(false);
+  });
+
   options.forEach((btn) => {
     btn.addEventListener("click", () => apply(btn.dataset.themeOpt));
   });

@@ -1,11 +1,26 @@
 ---
 /* Spec — the small label naming the component being shown. Every demo on the
-   page carries one, using the names the app's design system uses. */
+   page carries one, using the names the app's design system uses.
+
+   `doc` names the component the label is about. If COMPONENTS.md has an entry
+   under that exact heading, the label gets a mark linking to it; if it does
+   not, the mark is simply absent. The check is against the file itself, so
+   the page cannot claim documentation that was never written. */
+import { isDocumented, anchor } from "../../data/documented.js";
+
 interface Props {
   onPhoto?: boolean;
   gap?: boolean;
+  doc?: string;
 }
-const { onPhoto, gap } = Astro.props;
+const { onPhoto, gap, doc } = Astro.props;
+const documented = doc ? isDocumented(doc) : false;
 ---
 
-<p class:list={["spec", onPhoto && "spec-on-photo"]} style={gap ? "margin-top:2rem" : undefined}><slot /></p>
+<p class:list={["spec", onPhoto && "spec-on-photo"]} style={gap ? "margin-top:2rem" : undefined}><slot />{documented && (
+  <a
+    class="spec-doc"
+    href={`https://github.com/shreshthmohan/blrhikes-design/blob/main/COMPONENTS.md${anchor(doc)}`}
+    title={`${doc} has an entry in COMPONENTS.md`}
+  >spec’d</a>
+)}</p>

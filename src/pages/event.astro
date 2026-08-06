@@ -1,9 +1,11 @@
 ---
-/* The event detail surface. Kraft only for now — the article and the rail
-   render the same components the showcase does. */
+/* The event detail surface. The article and the rail render the same
+   components the showcase does, under any theme — the kraft-only rules in
+   event.css are flourishes every other theme simply skips. */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import EventCover from "../components/event/EventCover.astro";
 import EventArticle from "../components/event/EventArticle.astro";
+import EventTrail from "../components/event/EventTrail.astro";
 import EventRail from "../components/event/EventRail.astro";
 import { eventLinks } from "../data/nav.js";
 import { cover } from "../data/images.js";
@@ -15,8 +17,9 @@ import "../styles/event.css";
   title="Fern Gully Sunrise Hike · BLR Hikes"
   links={eventLinks}
   brandHref="/"
+  themePicker
   footer="quiet"
-  footerNote="Event detail surface · kraft only for now · content from the app's dev data"
+  footerNote="Event detail surface · content from the app's dev data · themes via the paint-roller"
 >
   <EventCover
     photo={cover("297a66e4-5885-427b-b68d-724c0395dac9", 1600)}
@@ -29,7 +32,11 @@ import "../styles/event.css";
   />
 
   <div class="container ev-main">
-    <EventArticle />
+    <div class="ev-col">
+      <EventTrail />
+      <EventArticle />
+    </div>
+
     <EventRail />
   </div>
 </BaseLayout>

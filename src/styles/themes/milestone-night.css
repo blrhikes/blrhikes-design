@@ -1,0 +1,124 @@
+/* ===========================================================================
+   THEME 15 · "Milestone Night" — dark
+   ---------------------------------------------------------------------------
+   Milestone Soft after dark, and like its light twin it is transcribed rather
+   than invented: the live site already has a dark mode, and this is what its
+   classes say. stone-900 ground, stone-800 cards, stone-600 rules, the ink
+   ramp running stone-400 → stone-50, and yellow-500 still the one accent
+   (`dark:bg-yellow-500`, `dark:border-yellow-200`, `dark:bg-yellow-900`).
+
+   It follows Milestone Soft rather than Milestone: the hard `4px 4px 0` stamp
+   is a light-mode device. On a dark ground a shadow is nearly invisible — the
+   card is lighter than what is behind it, so there is nothing for a shadow to
+   fall on — which is why the lift here is carried by the surface step instead,
+   and the shadow that remains only deepens the contact edge.
+
+   Typography and the torn edge are Kraft's, as they are for both Milestones.
+   =========================================================================== */
+
+[data-theme="milestone-night"] {
+  color-scheme: dark;
+
+  --ground: #1c1917; /* stone-900 */
+  --ground-img: none;
+
+  /* dark:bg-stone-800 is what the app puts cards on, with stone-700 for the
+     raised step above it. */
+  --surface: #292524; /* stone-800 */
+  --surface-2: #221f1d; /* between 800 and 900 — a recess, not a lift */
+  --surface-raise: #44403c; /* stone-700 */
+
+  /* The app's dark ink ramp, in the order its classes use it. */
+  --ink: #fafaf9; /* stone-50 */
+  --ink-soft: #e7e5e4; /* stone-200 */
+  --ink-faint: #d6d3d1; /* stone-300 */
+  --ink-hint: #a8a29e; /* stone-400 */
+
+  /* yellow-500 is the app's dark-mode fill (dark:bg-yellow-500); stone-900
+     rides on it, as it does in light mode. Unlike light mode the accent needs
+     no separate type colour — yellow-500 clears 4.5:1 against stone-900
+     comfortably, so accent-as-type is the accent itself. */
+  --accent: #eab308; /* yellow-500 */
+  --on-accent: #1c1917; /* stone-900 */
+  --accent-type: #eab308;
+  --accent-tint: rgb(234 179 8 / 0.16);
+
+  /* The app's dark status text: green-400 and red-400, on tints of their own
+     900s (dark:bg-yellow-900 is the pattern it uses for filled states). */
+  --ok: #4ade80;
+  --ok-tint: rgb(74 222 128 / 0.15);
+  --danger: #f87171;
+  --danger-tint: rgb(248 113 113 / 0.15);
+
+  --line: #57534e; /* stone-600 */
+  --line-soft: #44403c; /* stone-700 */
+
+  /* Torn, so square and borderless — same reasoning as the light twin. */
+  --card-radius: 0;
+  --ctl-radius: 0.375rem;
+  --pill-radius: 999px;
+  --card-border: none;
+  --cut: url(#cut-1);
+
+  /* Softer and shallower than the light twin's. A shadow on a dark ground is
+     doing almost nothing visually, so this is a contact shadow only — enough
+     to seat the sheet, not enough to pretend at depth the eye cannot see. */
+  --card-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --pop-shadow: 0 10px 26px -8px rgb(0 0 0 / 0.7);
+
+  /* The torn Notice's paper: the app's own dark set-aside, a yellow-900 tint
+     rather than the light twin's #e2ceaa blockquote paper. */
+  --notice-paper: #3a2f0c;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 500;
+  --display-case: none;
+  --display-track: 0;
+  --w-medium: 500;
+  --w-strong: 500;
+  --label-case: uppercase;
+  --label-track: 0.08em;
+}
+
+/* ---------------------------------------------------------- flourishes -- */
+
+/* Same as Milestone Soft: the CTA does not lift. */
+[data-theme="milestone-night"] .btn-primary {
+  box-shadow: none;
+}
+
+[data-theme="milestone-night"] .btn-primary:hover {
+  background: #facc15; /* yellow-400 — brighter on hover in the dark */
+}
+
+/* The secondary CTA takes Kraft Night's fill, the pale-paper-on-dark move,
+   so the pair keeps the hierarchy Milestone Soft's dark button gives it. */
+[data-theme="milestone-night"] .btn-secondary {
+  background: #e7e5e4; /* stone-200 */
+  color: #1c1917; /* stone-900 */
+  border-color: transparent;
+}
+
+[data-theme="milestone-night"] .btn-secondary:hover {
+  background: #fafaf9; /* stone-50 */
+  border-color: transparent;
+}
+
+/* Night ridges, in stone rather than the light twin's olive-and-lime. */
+[data-theme="milestone-night"] .ridges .r1 {
+  fill: #44403c; /* stone-700 */
+}
+
+[data-theme="milestone-night"] .ridges .r2 {
+  fill: #35302d;
+}
+
+[data-theme="milestone-night"] .ridges .r3 {
+  fill: #262220;
+}
+
+[data-theme="milestone-night"] .ridges .sun {
+  fill: var(--accent);
+}

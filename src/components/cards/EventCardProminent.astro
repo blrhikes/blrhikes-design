@@ -19,6 +19,9 @@ const { event, tear = "ends" } = Astro.props;
 <article class:list={["card", "feat-card", tear === "sides" && "torn-lr"]}>
   <PhotoWrap photo={event.photo}>
     <span class="photo-badge"><Pill variant={event.badge.variant}>{event.badge.text}</Pill></span>
+    {/* The place belongs on the picture: it says where the picture IS, and it
+        frees the body to open on the title. */}
+    <IconLine icon="location-dot" as="p" class="photo-meta">{event.where}</IconLine>
   </PhotoWrap>
   <div class="feat-body">
     <div class="feat-head">
@@ -28,7 +31,6 @@ const { event, tear = "ends" } = Astro.props;
         <IconLine icon="clock" regular>{event.time}</IconLine>
       </div>
     </div>
-    <IconLine icon="location-dot">{event.where}</IconLine>
     <p class="fine clamp-2">{event.blurb}</p>
     <div class="cluster">
       <Pill icon={event.kind.icon}>{event.kind.text}</Pill>

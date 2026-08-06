@@ -1,0 +1,140 @@
+/* ===========================================================================
+   THEME 12 · "Milestone" — light
+   ---------------------------------------------------------------------------
+   The live blrhikes.com palette, lifted straight off the running site rather
+   than designed here: Tailwind's warm **stone** ramp for every neutral, and
+   **yellow-500** as the one accent. Named for the painted stone milestones on
+   a Karnataka highway, which is what the two colours are.
+
+   Where Kraft is "the current app *direction*", this is the current app. It
+   is the control in the experiment — the thing every other theme is a
+   proposal against.
+
+   Milestone Soft wears this palette too — see milestone-soft.css, which is
+   this theme plus a shadow. The token block below is scoped to both.
+
+   The hand-torn card edge and the typography are both Kraft's — the edge
+   shared from ../torn-paper.css, the type set here. So the only thing this
+   theme actually contributes is the colour: the live site's palette on the
+   rebuild's form, which is what makes it a fair comparison rather than a
+   screenshot.
+
+   Sources: tailwind.config.mjs (--olive-green #70631A, the blockquote's
+   #e2ceaa), the stone/yellow classes that dominate src/, and the two hex
+   literals the app hardcodes (#facc15, #1a2e05).
+
+   ⚠ This file declares the palette for BOTH Milestone and Milestone Soft — the
+   two differ in one token, so the second is `./milestone-soft.css` overriding
+   `--card-shadow` rather than a second copy of ninety lines that would drift.
+   Every selector here is scoped to the pair; edit the palette here, and put
+   anything that must differ in the variant file.
+   =========================================================================== */
+
+:is([data-theme="milestone"], [data-theme="milestone-soft"]) {
+  color-scheme: light;
+
+  /* stone-100 — the app's page ground, one step down the ramp from stone-50 so
+     the white card sits ON something rather than merging into it, which is what
+     the cards' drop shadow needs to read. No texture: the live site has none,
+     and inventing one here would misreport it. */
+  --ground: #f5f5f4;
+  --ground-img: none;
+
+  --surface: #ffffff;
+  --surface-2: #e7e5e4; /* stone-200 — steps down with the ground, so the
+                           secondary surface stays distinct from it */
+  --surface-raise: #ffffff;
+
+  /* The stone ramp, which is what the app reaches for at every depth. */
+  --ink: #1c1917; /* stone-900 */
+  --ink-soft: #44403c; /* stone-700 */
+  --ink-faint: #57534e; /* stone-600 */
+  --ink-hint: #78716c; /* stone-500 */
+
+  /* yellow-400 is the fill the app paints buttons and highlights with; on it
+     the type is stone-900, never white — the pair the live site uses.
+     --accent-type has to clear 4.5:1 on --ground as TYPE, and neither yellow
+     400 nor 500 comes close (1.47:1 and 1.84:1), so the accent-as-text slot
+     steps down to yellow-900 — the same hue, at 8.3:1. */
+  --accent: #facc15; /* yellow-400 */
+  --on-accent: #1c1917; /* stone-900 */
+  --accent-type: #713f12; /* yellow-900 */
+  --accent-tint: #fef9c3; /* yellow-100 */
+
+  /* The app's own status pairs: green-800 on green-100, red-800 on red-100. */
+  --ok: #166534;
+  --ok-tint: #dcfce7;
+  --danger: #991b1b;
+  --danger-tint: #fee2e2;
+
+  --line: #d6d3d1; /* stone-300 */
+  --line-soft: #e7e5e4; /* stone-200 */
+
+  /* This theme wears the hand-torn edge (../torn-paper.css), which forces
+     three of these: a torn edge is its own shape, so the corner radius goes
+     to 0 (rounding a corner the filter then rips off is noise), the border
+     goes (a 1px line through a displacement map reads as a wobble, not an
+     edge). Controls keep Tailwind's rounded-md — the tear is on cards, not on
+     buttons and inputs.
+
+     The shadow stays, and it is the live site's hard one: no blur, straight
+     offset, so it reads as torn paper laid on the ground rather than a soft
+     material lift. It rides on `.card::before`, the same layer the tear
+     filters, so the shadow is displaced with the paper and follows the ragged
+     edge instead of outlining the box the tear ripped away.
+
+     (This is the one token Milestone Soft re-points — see milestone-soft.css.) */
+  --card-radius: 0;
+  --ctl-radius: 0.375rem;
+  --pill-radius: 999px;
+  --card-border: none;
+  --card-shadow: 4px 4px 0 0 rgb(0 0 0 / 0.18);
+  --pop-shadow: none;
+  --cut: url(#cut-1);
+
+  /* The torn Notice's paper — the app's blockquote tint, the one warm note in
+     an otherwise stone palette. Read by torn-paper.css. */
+  --notice-paper: #e2ceaa;
+
+  /* Kraft's typography exactly — Fraunces over DM Sans, weights capped at
+     500. The live site's own faces (Che Guevara Golden, IM FePI) are not used
+     here: this theme is the palette on the rebuild's type and edge, the same
+     bargain Solstice Day and Night make. */
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 500;
+  --display-case: none;
+  --display-track: 0;
+  --w-medium: 500;
+  --w-strong: 500;
+  --label-case: uppercase;
+  --label-track: 0.08em;
+}
+
+/* ---------------------------------------------------------- flourishes -- */
+
+/* The live site's one hardcoded dark: lime-950 on the hero, which is where
+   the photo type sits. Reused here for the hero art's deepest ridge. */
+:is([data-theme="milestone"], [data-theme="milestone-soft"]) .ridges .r3 {
+  fill: #1a2e05;
+}
+
+:is([data-theme="milestone"], [data-theme="milestone-soft"]) .ridges .r2 {
+  fill: #70631a; /* the app's --olive-green */
+}
+
+:is([data-theme="milestone"], [data-theme="milestone-soft"]) .ridges .r1 {
+  fill: #a8a29e; /* stone-400 */
+}
+
+:is([data-theme="milestone"], [data-theme="milestone-soft"]) .ridges .sun {
+  fill: var(--accent);
+}
+
+/* The lift moved to the cards: the shadow is the page's way of saying "sheet
+   of paper on a ground", and a button is not a sheet. It sits flat on the card
+   it belongs to, and the yellow does the work. */
+:is([data-theme="milestone"], [data-theme="milestone-soft"]) .btn-primary:hover {
+  background: #eab308; /* yellow-500 */
+}

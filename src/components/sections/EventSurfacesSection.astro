@@ -66,7 +66,7 @@ import { skandagiri, graniteGauntlet, eventCards, eventTickets } from "../../dat
     </div>
 
     <div>
-      <Spec>RegistrationCard · Meter</Spec>
+      <Spec doc="RegistrationCard">RegistrationCard · Meter</Spec>
       <RegistrationCard
         date={{ mon: "Aug", day: "08", dow: "Sat", label: "Sat 8 Aug" }}
         price="₹1,200"
@@ -87,13 +87,13 @@ import { skandagiri, graniteGauntlet, eventCards, eventTickets } from "../../dat
 
 <section class="section">
   <div class="container">
-    <Spec>EventCardProminent-TornEnds · DateBlock — the rip runs along the top and bottom</Spec>
+    <Spec doc="EventCardProminent-TornEnds">EventCardProminent-TornEnds · DateBlock — the rip runs along the top and bottom</Spec>
     <EventCardProminent event={graniteGauntlet} tear="ends" />
 
-    <Spec gap>EventCardProminent-TornSides · DateBlock — the rip runs down the left and right</Spec>
+    <Spec gap doc="EventCardProminent-TornEnds">EventCardProminent-TornSides · DateBlock — the rip runs down the left and right</Spec>
     <EventCardProminent event={graniteGauntlet} tear="sides" />
 
-    <Spec gap>EventCard · DateBlock · AttendeeFaces</Spec>
+    <Spec gap doc="EventCard">EventCard · DateBlock · AttendeeFaces</Spec>
     <div class="event-grid">
       {eventCards.map((event) => <EventCard event={event} />)}
     </div>

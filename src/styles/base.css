@@ -123,16 +123,48 @@ svg {
   max-width: 34rem;
 }
 
+/* Prose links. base.css styles no bare `<a>` on purpose — every link in a
+   component carries a class, and a blanket rule would fight them — but the
+   running copy in a section note or a line of fine print is genuinely prose,
+   and an unclassed link there was falling through to the browser's blue. */
+.section-note a,
+.fine a,
+.lede a {
+  color: var(--accent-type);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.section-note a:hover,
+.fine a:hover,
+.lede a:hover {
+  text-decoration-thickness: 2px;
+}
+
 /* --------------------------------------------------------------- topbar -- */
 
+/* The bar is a gradient that fades out downward, not a band with a hard edge
+   under it — the move the app makes over its photo heroes, generalised. It
+   dissolves into the page instead of sitting on it, so nothing has to line up
+   with a rule that is not there. Themes that want an edge draw their own
+   (Contour's double rule, Bluebird's horizon, Hi-Vis's hazard stripe).
+
+   Opaque at the top and clear at the bottom means the links sit at ~80% cover,
+   which is enough to hold them over whatever scrolls beneath; the blur does
+   the rest. */
 .topbar {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: color-mix(in srgb, var(--ground) 82%, transparent);
+  background: linear-gradient(
+    to bottom,
+    var(--ground) 0%,
+    color-mix(in srgb, var(--ground) 80%, transparent) 55%,
+    transparent 100%
+  );
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line);
 }
 
 .topbar-row {
@@ -195,6 +227,65 @@ svg {
 
 .themepicker {
   border-top: 1px solid var(--line-soft);
+}
+
+/* --- over a photograph ---------------------------------------------------
+   A page that opens with a full-bleed photo marks it `.flush-top`; the bar
+   then leaves the flow and rides on the picture, so the image reaches the very
+   top of the viewport. `:has()` keeps that decision with the page that owns
+   the photo — there is no route list here, and there should not be one: a page
+   gets the treatment by having the thing that justifies it.
+
+   It stops being sticky on those pages, which is the trade. A transparent bar
+   has nothing to stay legible against once the photo has scrolled past, and
+   the fixes are a scroll-driven restyle (no Firefox) or JS. Scrolling away
+   with the photo it belongs to is the honest version. */
+body:has(.flush-top) {
+  position: relative;
+}
+
+body:has(.flush-top) .topbar {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    rgb(0 0 0 / 0.75),
+    rgb(0 0 0 / 0.42) 55%,
+    rgb(0 0 0 / 0.12) 85%,
+    transparent
+  );
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Type over a photograph is white — the one place the system allows it, for
+   the reason it always does: a photograph has no colour scheme, so the dark
+   end of the ink ramp cannot be relied on to sit on it.
+
+   Only while the bar IS the photograph, though. Open the theme panel and the
+   bar goes solid (below), at which point white on the page's own ground would
+   be invisible — hence the :not(:has()) rather than a flat override. */
+body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
+  :is(.brand, .brand span, .nav-links a, .tp-toggle) {
+  color: #fff;
+}
+
+body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden]))) .tp-toggle {
+  border-color: rgb(255 255 255 / 0.45);
+}
+
+body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
+  .nav-links a[aria-current="page"] {
+  border-bottom-color: #fff;
+}
+
+/* With the panel open the bar stops being a thin strip riding over the page
+   and becomes a surface holding controls, so it goes solid for as long as it
+   is open — the fading gradient would leave the chips sitting on whatever
+   happened to be scrolled underneath. */
+.topbar:has(.themepicker:not([hidden])) {
+  background: var(--ground);
 }
 
 .themepicker:not([hidden]) {
@@ -296,6 +387,23 @@ svg {
   font-size: 0.6em;
 }
 
+/* The mark on a label whose component has a written entry in COMPONENTS.md.
+   Quiet by design — it is a footnote about the documentation, not a claim
+   about the component. */
+.spec-doc {
+  padding: 0.05em 0.4em;
+  border: 1px solid var(--line);
+  border-radius: var(--pill-radius);
+  color: var(--ink-hint);
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.spec-doc:hover {
+  color: var(--accent-type);
+  border-color: var(--accent-type);
+}
+
 .spec-on-photo {
   position: absolute;
   top: 0.9rem;
@@ -313,26 +421,110 @@ svg {
 
 /* ----------------------------------------------------------------- hero -- */
 
+/* A full-bleed photograph with the type on a scrim at its foot — the app's
+   PhotoHero (components/ds/home.tsx), in this system's language. It carries
+   `.flush-top`, so the bar rides on the picture and the image starts at the
+   very top of the viewport. */
 .hero {
-  padding-block: clamp(3rem, 8vw, 6rem) clamp(2rem, 6vw, 4rem);
+  position: relative;
+  isolation: isolate;
   overflow: clip;
+  min-height: 25rem;
 }
 
-.hero-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-  gap: clamp(1.5rem, 4vw, 3.5rem);
-  align-items: center;
+/* The photograph is IN FLOW and is what gives the hero its height — the app's
+   model, and the reason its home hero needs no min/max height pair the way the
+   detail pages do. On a phone that is a flat 70vh; from `lg` the height comes
+   from the wide crop's own 2.2:1 ratio, floored so a narrow desktop window
+   cannot squash it into a letterbox. */
+.hero-photo {
+  display: block;
+  width: 100%;
+  height: 70vh;
+  object-fit: cover;
+  object-position: center;
 }
 
-@media (max-width: 46rem) {
-  .hero-grid {
-    grid-template-columns: 1fr;
+@media (min-width: 64rem) {
+  .hero-photo {
+    height: auto;
+    min-height: 33.75rem;
   }
+}
+
+/* The ground behind a cover that is still loading, or missing — the app keeps
+   one for the same reason (`--ds-photo-bg`). Here it is the themed ridgeline,
+   which is why every theme's `.ridges` rules are still worth having: this is
+   what shows before the photograph arrives, and what stays if it never does. */
+.hero-art {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: flex;
+  align-items: flex-end;
+  background: var(--surface-2);
+}
+
+/* Bottom-up on phones, left-to-right from `lg` — the same pair of gradients
+   the app uses, following where the photo has room, so the type has a dark
+   ground wherever it lands. */
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  background: linear-gradient(
+    to top,
+    rgb(0 0 0 / 0.62),
+    rgb(0 0 0 / 0.28) 45%,
+    transparent 78%
+  );
+}
+
+@media (min-width: 64rem) {
+  .hero-scrim {
+    background: linear-gradient(
+      to right,
+      rgb(0 0 0 / 0.72),
+      rgb(0 0 0 / 0.3) 55%,
+      transparent 88%
+    );
+  }
+}
+
+.hero-inner {
+  width: 100%;
+  padding-block: clamp(2.5rem, 6vw, 4rem);
+  padding-top: calc(var(--topbar-h, 3.5rem) + 2rem);
+}
+
+/* Every line in here is white with a drop shadow rather than a token colour:
+   a photograph has no colour scheme, so the dark end of the ink ramp cannot be
+   relied on to sit on it. The shadow is what holds the type over a bright sky
+   — the scrim alone cannot, since the sky is where the scrim is thinnest. */
+.hero-copy {
+  max-width: 34rem;
+  color: #fff;
 }
 
 .hero-copy > * + * {
   margin-top: 1.1rem;
+}
+
+.hero-copy .display-1 {
+  color: #fff;
+  text-shadow: 0 2px 8px rgb(0 0 0 / 0.5);
+}
+
+.hero-copy .lede {
+  color: rgb(255 255 255 / 0.92);
+  max-width: none;
+  text-shadow: 0 1px 4px rgb(0 0 0 / 0.5);
+}
+
+.hero-copy .eyebrow {
+  color: rgb(255 255 255 / 0.85);
+  text-shadow: 0 1px 4px rgb(0 0 0 / 0.5);
 }
 
 .hero-actions {
@@ -342,18 +534,44 @@ svg {
   margin-top: 1.6rem;
 }
 
+/* The claim under the button, on the app's avatar-row shape: faces, then the
+   sentence beside them. */
 .hero-next {
-  font-size: 0.9rem;
-  color: var(--ink-faint);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.7rem;
   flex-wrap: wrap;
+  font-size: 0.9rem;
+  color: rgb(255 255 255 / 0.9);
+  text-shadow: 0 1px 4px rgb(0 0 0 / 0.5);
+  margin-top: 1.5rem;
 }
 
 .hero-next strong {
-  color: var(--ink);
+  color: #fff;
   font-weight: var(--w-medium);
+}
+
+/* On a photograph the button pair cannot lean on the ink ramp — the
+   secondary's dark ink on a transparent fill simply disappears. The primary
+   keeps its themed fill, since it is the one place the palette shows on this
+   hero, and takes a shadow to seat it; the secondary becomes the on-photo
+   outline the pills already use. */
+.hero-actions .btn-primary {
+  box-shadow: 0 2px 16px rgb(0 0 0 / 0.4);
+}
+
+.hero-actions .btn-secondary {
+  color: #fff;
+  background: rgb(255 255 255 / 0.1);
+  border-color: rgb(255 255 255 / 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.hero-actions .btn-secondary:hover {
+  background: rgb(255 255 255 / 0.2);
+  border-color: #fff;
 }
 
 /* themed ridgeline illustration — inherits the palette */
@@ -767,7 +985,8 @@ svg {
 
 /* A punched hole in the leading gutter — filled with the CONTAINER's surface,
    not the notice's, so it reads as a hole through the strip to the card
-   beneath. The inset shadow is the paper's cut thickness. */
+   beneath. The inset shadow is the paper's cut thickness — solid, with no
+   blur: a punched hole has a cut edge, not a soft one. */
 .notice::before {
   content: "";
   position: absolute;
@@ -778,7 +997,7 @@ svg {
   height: 0.85rem;
   border-radius: 50%;
   background: var(--surface);
-  box-shadow: inset 0 1.5px 2.5px rgb(0 0 0 / 0.3);
+  box-shadow: inset 0 1.5px 0 rgb(0 0 0 / 0.3);
 }
 
 /* Notice-HoleTop — the punch moved out of the text's way entirely: it sits
@@ -1073,10 +1292,16 @@ svg {
 
 /* ------------------------------------------------------------- topbar nav -- */
 
+/* `min-width: 0` is what makes the wrap work: a flex item defaults to
+   `min-width: auto` and so refuses to shrink below its content, which on a
+   phone pushed the row — and with it the whole document — wider than the
+   viewport. */
 .nav-links {
   display: flex;
-  gap: 0.9rem;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.9rem;
   align-items: center;
+  min-width: 0;
 }
 
 .nav-links a {
@@ -1592,15 +1817,14 @@ svg {
 /* Overlapping attendee discs: initials unless a photo exists, "+n" for the
    rest. A number is a group's size; a row of faces is a group of people. */
 
-/* The disc is a rounded octagon (#face-octagon), not a circle — the app's
-   shape, ported from blrhikes-app `.oct` / theme.css §8.
+/* The disc is a circle. (It was the app's rounded octagon, `#face-octagon` /
+   theme.css §8, until the owner asked for circles on 2026-08-06.)
 
-   Two elements per face, and the split is not decorative: the octagon is a
-   `clip-path`, and anything painted outside that path — a `box-shadow`, most
-   obviously — is clipped away with it. The shadow that lifts a disc off the
-   card and separates it from the one it overlaps therefore has to be a
-   `drop-shadow()` on a WRAPPER, which filters the already-clipped result and
-   so traces the octagon's real silhouette. */
+   Two elements per face all the same: the lift that separates a disc from the
+   one it overlaps is a `drop-shadow()` on a WRAPPER, so it traces the disc's
+   real silhouette. That mattered absolutely when the shape was a clip-path,
+   which eats a box-shadow; with a border-radius it is merely the tidier of the
+   two, and it keeps the door open if the octagon ever comes back. */
 
 /* The row is built BACKWARDS in the markup — the label first, then "+n", then
    the faces in reverse — and `row-reverse` puts it back the right way round on
@@ -1650,7 +1874,7 @@ svg {
   line-height: 1;
   color: var(--surface);
   background: var(--ink-faint);
-  clip-path: url(#face-octagon);
+  border-radius: 50%;
   overflow: hidden;
 }
 
@@ -1824,6 +2048,28 @@ svg {
   margin-top: 0.3rem;
 }
 
+/* The place, on the photograph's bottom-left corner. White with a shadow, not
+   a token colour — the usual reason: a photograph has no colour scheme. It
+   sits far enough in to clear a torn bottom edge. */
+.photo-meta {
+  position: absolute;
+  left: 1.1rem;
+  bottom: 1.1rem;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-size: 0.85rem;
+  color: #fff;
+  text-shadow: 0 1px 5px rgb(0 0 0 / 0.65);
+}
+
+.photo-meta i {
+  color: #fff;
+  font-size: 0.85em;
+}
+
 /* Pinned to a cover photo's corner, opposite the capacity badge. */
 .photo-dateblock {
   position: absolute;
@@ -1887,6 +2133,12 @@ svg {
 .feat-title {
   font-size: clamp(1.6rem, 3vw, 2.1rem);
   line-height: 1.05;
+}
+
+/* The summary is a change of voice from the facts above it, so it gets more
+   than the body's shared gap. */
+.feat-body > .fine {
+  margin-top: 0.5rem;
 }
 
 /* -------------------------------------------------------- TrailCardWide -- */

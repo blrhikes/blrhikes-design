@@ -1,0 +1,62 @@
+---
+/* The archive: variants that lost, kept where they can still be looked at.
+
+   A design exploration is only worth anything if the discarded options stay
+   legible — "we chose the overlay" means little without the two cards it was
+   chosen over sitting beside it. Deleting them would leave the decision on the
+   page with no evidence behind it.
+
+   These render under every theme, exactly as the showcase does, so an archived
+   variant can still be judged against a new palette. */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHead from "../components/ui/SectionHead.astro";
+import Spec from "../components/ui/Spec.astro";
+import TrailCard from "../components/cards/TrailCard.astro";
+import TrailCardWide from "../components/cards/TrailCardWide.astro";
+import { trailCards, trailCardsWide } from "../data/trails.js";
+import { archiveLinks } from "../data/nav.js";
+---
+
+<BaseLayout
+  title="Archive · BLR Hikes"
+  links={archiveLinks}
+  brandHref="/"
+  themePicker
+  footerNote="Archive · variants set aside, kept renderable · every theme still applies"
+>
+  <section class="section" style="border-top:none">
+    <div class="container">
+      <SectionHead eyebrow="Archive" title="Set aside, not deleted">
+        The trail-card variants <a href="/#trails">TrailCardOverlay</a> was
+        chosen over. They still paint from the same token contract, so they
+        still answer a new theme — which is the only reason to keep a rejected
+        variant renderable rather than in a screenshot.
+      </SectionHead>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <Spec>TrailCard · HighlightTag · Rating — three up, stats only, no prose</Spec>
+      <p class="fine" style="margin-bottom:1.25rem">
+        The densest of the three. Dropped because at three across the cover is
+        too small to carry a place, which is what a trail card is mostly for.
+      </p>
+      <div class="trail-grid">
+        {trailCards.map((trail) => <TrailCard trail={trail} />)}
+      </div>
+
+      <Spec gap doc="TrailCardWide-TornEnds"
+        >TrailCardWide-TornEnds · HighlightTag — two up, name under the cover</Spec
+      >
+      <p class="fine" style="margin-bottom:1.25rem">
+        The closest runner-up: same width as the overlay, but the name sits
+        under the photograph instead of on it, which costs a line of height and
+        reads as a list rather than a set of places.
+      </p>
+      <div class="trail-grid trail-grid--wide">
+        {trailCardsWide.map((trail) => <TrailCardWide trail={trail} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

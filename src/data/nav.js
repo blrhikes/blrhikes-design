@@ -6,6 +6,7 @@ export const showcaseLinks = [
   { href: "/#edges", label: "Edges" },
   { href: "/event/", label: "Event page" },
   { href: "/tear-lab/", label: "Tear lab" },
+  { href: "/archive/", label: "Archive" },
 ];
 
 export const eventLinks = [
@@ -17,6 +18,12 @@ export const eventLinks = [
 export const labLinks = [
   { href: "/", label: "System" },
   { href: "/tear-lab/", label: "Tear lab", current: true },
+];
+
+export const archiveLinks = [
+  { href: "/", label: "System" },
+  { href: "/#trails", label: "Trails" },
+  { href: "/archive/", label: "Archive", current: true },
 ];
 
 export const pageNavItems = [

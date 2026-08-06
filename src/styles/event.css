@@ -1,9 +1,9 @@
 /* ---------------------------------------------------------------------
    Page-scoped only. Everything here is layout for THIS page — the event
    detail surface — painted entirely from the token contract. No colours,
-   no fonts, nothing a theme would need to override. Kraft is the only
-   theme wired up for now; the tear rules at the bottom are the only
-   [data-theme] block, and every other theme would simply skip them.
+   no fonts, nothing a theme would need to override. The tear rules at the
+   bottom are the only [data-theme] block, and a theme that does not wear the
+   tear simply skips them.
 
    The rail's register/crew/going card is not here: that is the shared
    RegistrationCard component, which carries its own layout.
@@ -16,9 +16,19 @@
 .ev-cover {
   position: relative;
   isolation: isolate;
-  margin-top: calc(-1 * var(--topbar-h, 3.5rem));
+  /* The bar is out of the flow on this page (see above), so the cover starts
+     at the viewport top on its own; the padding is what keeps the type clear
+     of the bar riding on it. */
   padding-top: var(--topbar-h, 3.5rem);
-  min-height: clamp(20rem, 46vw, 30rem);
+  /* The app's tall hero (`.flush-hero-tall`), for a page that opens ON its
+     photograph rather than one that opens on a photograph and is really about
+     what sits under it. Measured against the fold (vh) rather than the window
+     width, which is what "how much of the screen does this take" actually
+     means. Deliberately not 100vh — 82 leaves a sliver of what follows
+     visible, so the page does not read as a splash screen that hides the fact
+     it scrolls. The floor keeps it from collapsing on a short landscape
+     phone; the ceiling stops it swallowing a tall desktop window. */
+  min-height: clamp(28rem, 82vh, 46rem);
   display: flex;
   align-items: flex-end;
 }
@@ -112,8 +122,9 @@
 
 .ev-article > * + * { margin-top: clamp(1.75rem, 3.5vw, 2.75rem); }
 
-/* base.css styles no bare <a> — every link on the system page carries a
-   class. Prose links are this page's own case, so they're dressed here. */
+/* The article is long-form prose throughout, so every bare <a> in it takes
+   the link treatment — wider than base.css's rule, which only covers notes,
+   fine print and ledes. */
 .ev-article a {
   color: var(--accent-type);
   text-decoration: underline;
@@ -135,22 +146,34 @@
 
 .ev-sec-title i { color: var(--accent-type); font-size: 0.85em; }
 
-/* A run of times against a run of events — the times are the spine, so
-   they get the mono column and the copy wraps against it. */
-.ev-plan { display: grid; gap: 0.7rem; }
+/* A run of times against a run of events — the times are the spine, so they
+   get the mono column and the copy wraps against it.
+
+   `subgrid` is what lets the column be exactly as wide as the widest time and
+   no wider: each row is its own <div> (a dl needs the wrapper to group its
+   dt/dd), and without subgrid those rows cannot share a track, so the column
+   has to be guessed at a fixed width and the copy sits wherever that leaves
+   it. Handing the rows the parent's tracks makes `max-content` measure every
+   time at once, so the gap beside them is the real one. */
+.ev-plan {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 0.7rem 0.85rem;
+}
 
 .ev-plan > div {
   display: grid;
-  grid-template-columns: 5.5rem minmax(0, 1fr);
-  gap: 0.9rem;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
   align-items: baseline;
 }
 
 .ev-plan dt {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   color: var(--accent-type);
   letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 .ev-plan dd { color: var(--ink-soft); }
@@ -224,7 +247,7 @@
   .ev-aside { position: static; }
 }
 
-.ev-rail-title {
+.ev-block-title {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   text-transform: uppercase;
@@ -232,10 +255,17 @@
   color: var(--ink-hint);
 }
 
-/* The rail's TrailCard is the ordinary component, one up instead of three:
-   .trail-grid is what gives it the 4:3 cover, so it keeps the wrapper even
-   with a single child. */
-.ev-trail .trail-grid { margin-bottom: 0; gap: 1rem; }
+/* The trail leads the article column. .trail-grid is what gives the cover its
+   4:3, so the card keeps its grid wrapper even as the only child. */
+.ev-trail .trail-grid { margin-bottom: 0; }
+
+/* The left column: the trail, then the article. The gap has to clear both
+   torn edges, which is why it is wider than it looks like it needs to be. */
+.ev-col {
+  display: grid;
+  gap: 2.25rem;
+  align-content: start;
+}
 
 .ev-links { list-style: none; padding: 0; display: grid; gap: 0.6rem; margin-top: 0.8rem; }
 
@@ -261,7 +291,6 @@
 /* The one notice in the article body wants air above it. */
 .ev-safety-note { margin-top: 1rem; }
 
-/* The rail's trail heading sits outside a card, so it carries its own gaps:
-   more above than the rail's grid gap gives, to break cleanly from the
-   registration card rather than read as its caption. */
-.ev-rail-title--gap { margin-top: 1.25rem; margin-bottom: 0.8rem; }
+/* A block heading that sits outside a card needs its own gap under it. It
+   leads its column now, so it takes nothing above. */
+.ev-block-title--gap { margin-bottom: 0.8rem; }

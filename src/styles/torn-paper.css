@@ -1,0 +1,312 @@
+/* ===========================================================================
+   TORN PAPER — the hand-torn edge, shared
+   ---------------------------------------------------------------------------
+   The mechanism, not the palette. Every rule here is geometry painted from
+   the token contract, so any theme can opt in by adding itself to the :is()
+   scope below and setting --cut to one of the page's filters.
+
+   The mechanism is the app's — filtered flat layers, crisp content — with the
+   vertical amplitude pushed past the app's: sides keep the fine 3px cut, tops
+   and bottoms rip ±18-21px (the second, vertical-only filter pass; see the
+   defs PaperFilters.astro emits on every page). Photos are never filtered:
+   the clean img is clipped slightly smaller and the SAME image is repainted
+   behind it through the filters, so all raggedness is backing-fringe pixels.
+   The photo's own bottom edge runs a finer, separate tear (#cut-photo).
+
+   Currently worn by: Kraft, Milestone, Milestone Soft.
+
+   Loaded after every theme file, so a theme cannot accidentally out-order it;
+   a theme that wants to vary the tear should set the tokens it reads
+   (--cut, --notice-paper) rather than restate the geometry.
+   =========================================================================== */
+
+/* Vary the tear between neighbouring cards so the cut doesn't repeat —
+   the app's seed alternation, on the same variable the photos read. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .card:nth-child(3n + 2) {
+  --cut: url(#cut-2);
+}
+
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .card:nth-child(3n) {
+  --cut: url(#cut-3);
+}
+
+
+/* Covers bleed to the card's edge on the card's own tear. The clip that
+   rounds their corners in other themes would shear the ragged edge flat, so
+   it opens up and the radius moves onto the photo itself. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .photo-card,
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .feat-card {
+  overflow: visible;
+}
+
+/* The torn top edge belongs to the image backing ALONE: the card's surface
+   layer is clipped out of the top so no surface colour peeks out from
+   behind the image (see base.css's .bigcard--torn::before for the same
+   move on the exhibit cards). */
+/* Negative insets on the non-cutting sides — a 0 inset would shear the
+   outward fray straight, since clip-path clips AFTER the filter. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .photo-card::before {
+  clip-path: inset(40px -80px -80px -80px);
+}
+
+/* The featured card's photo only spans the left flank once the grid splits,
+   so the surface is cut away over that flank alone; stacked, the photo is
+   full-width on top and the plain inset applies. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .feat-card::before {
+  clip-path: polygon(
+    -80px 40px,
+    52.4% 40px,
+    52.4% -80px,
+    calc(100% + 80px) -80px,
+    calc(100% + 80px) calc(100% + 80px),
+    -80px calc(100% + 80px)
+  );
+}
+
+@media (max-width: 46rem) {
+  :is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .feat-card::before {
+    clip-path: inset(40px -80px -80px -80px);
+  }
+}
+
+
+/* The torn-photo split: the img itself takes NO filter — it is clipped a
+   little smaller instead — and the wrap's ::before repaints the same image
+   behind it, edge to edge, run through the card's filter. The ragged fringe
+   that shows past the clean image is backing pixels, so nothing the eye
+   reads as "the photo" is ever displaced. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .photo-card .photo-wrap::before,
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .feat-card .photo-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--photo);
+  background-size: cover;
+  background-position: center;
+  filter: var(--cut);
+  /* top half only: this layer's job is to follow the CARD's tear */
+  clip-path: inset(-80px -24px 55% -24px);
+}
+
+/* The photo's own bottom edge is a DIFFERENT tear — finer teeth, smaller
+   amplitude (the app's dedicated photo filter) — so the image-bottom rip
+   doesn't repeat the card's big top/bottom jaggedness. The straight seam
+   between the two backing halves hides under the clean image. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .photo-card .photo-wrap::after,
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .feat-card .photo-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--photo);
+  background-size: cover;
+  background-position: center;
+  filter: url(#cut-photo);
+  clip-path: inset(45% -24px -80px -24px);
+}
+
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .photo-card .photo,
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .feat-card .photo {
+  position: relative;
+  clip-path: inset(24px 3px 12px 3px);
+}
+
+/* ------------------------------------------------------- the transposed cut -- */
+/* `.torn-lr` swaps which axis carries the rip: sides ±19px, top and bottom
+   down to the fine 3px cut. Everything below is the default treatment with
+   its insets transposed — the big amplitude has moved to the horizontal, so
+   that is where the clean image has to give the fringe room, and the top no
+   longer needs the 40px the vertical rip demanded. */
+/* .card doubled into the selector so this outweighs the nth-child rotation
+   of #cut-1/2/3 above, which is one class heavier than a bare .torn-lr. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .card.torn-lr {
+  --cut: url(#cut-lr);
+}
+
+/* Neighbour variation, on the same alternation the default cut uses. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .card.torn-lr:nth-child(2n) {
+  --cut: url(#cut-lr-2);
+}
+
+/* No big top rip to hide, so the surface is cut back only enough to stay out
+   from behind the photo's own top edge. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .photo-card.torn-lr::before,
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .feat-card.torn-lr::before {
+  clip-path: inset(6px -80px -80px -80px);
+}
+
+/* Both backing halves fray sideways: the top half on the card's own cut, the
+   bottom half on the finer photo cut — same split, rotated. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .torn-lr .photo-wrap::before {
+  clip-path: inset(-80px -30px 55% -30px);
+}
+
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .torn-lr .photo-wrap::after {
+  filter: url(#cut-photo-lr);
+  clip-path: inset(45% -30px -80px -30px);
+}
+
+/* The clean image gives ground on the sides now instead of the top. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .torn-lr .photo {
+  clip-path: inset(6px 22px 8px 22px);
+}
+
+/* The badges can come back to the corner the vertical rip pushed them out
+   of, and the title clears the smaller bottom cut. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .torn-lr .photo-badge {
+  top: 0.9rem;
+  right: 1.6rem;
+}
+
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .torn-lr .photo-dateblock {
+  top: 0.9rem;
+  left: 1.6rem;
+}
+
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .torn-lr .photo-title {
+  padding-inline: 2rem;
+  padding-bottom: 0.9rem;
+}
+
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .torn-lr .photo-title::before {
+  filter: url(#cut-photo-lr);
+}
+
+/* Clear of the big top tear. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .photo-badge {
+  top: 1.8rem;
+  right: 1.1rem;
+}
+
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .photo-dateblock {
+  top: 1.8rem;
+  left: 1.1rem;
+}
+
+/* The wash under a photo-title follows the photo's tear (same filter, same
+   line); the title text is a sibling layer and stays crisp — the app's
+   cover-wash / cover-scrim--torn split. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .photo-title::before {
+  filter: url(#cut-photo);
+}
+
+/* Keep the white title clear of the bigger bottom tear. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .photo-title {
+  padding-bottom: 1.5rem;
+}
+
+/* The stats strip is one piece of torn paper, not four floating cells. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .stats {
+  position: relative;
+  border: none;
+  background: transparent;
+  overflow: visible;
+  gap: 0;
+}
+
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .stats::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--surface);
+  border-radius: var(--card-radius);
+  filter: url(#cut-2);
+}
+
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .stat {
+  background: transparent;
+  border-inline-start: 1px solid var(--line-soft);
+}
+
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .stat:first-child {
+  border-inline-start: none;
+}
+
+/* The edge exhibit's flat and straight-sided cards keep their own filters
+   even here — these outrank the nth-child seed rules above, which is the
+   point of the extra selector. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .bigcard-grid > .bigcard--flat {
+  --cut: opacity(1);
+}
+
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .bigcard-grid > .bigcard--torn-tb {
+  --cut: url(#cut-tb);
+}
+
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .bigcard-grid > .bigcard--flat .photo {
+  filter: none;
+}
+
+/* A notice is a strip torn off a larger sheet: the right edge frays, the
+   other three are guillotine-straight. The fill moves to its own layer so
+   only the paper is filtered — the text above it, and the punched hole, stay
+   crisp. `#cut-photo-lr` is the fine side cut (±5px), not the card's ±19px
+   rip, which would swallow a strip this short.
+
+   The clip is what makes it one edge: inset(0) on top/bottom/left holds those
+   sides to the box, and only the right is let out far enough for the fringe. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .notice {
+  background: transparent;
+  isolation: isolate;
+  /* The fringe needs somewhere to go, or the card's `overflow: clip` shears it. */
+  margin-inline-end: 0.5rem;
+}
+
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .notice::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--notice-paper, var(--surface-2));
+  filter: url(#cut-photo-lr);
+  clip-path: inset(0 -30px 0 0);
+}
+
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .notice-danger::after {
+  background: var(--danger-tint);
+}
+
+/* EventCardProminent-TornSides: the photo's two vertical edges are not the
+   same kind of edge. The left is the card's outer boundary — a real tear, and
+   it should look like one. The right is an INTERNAL seam against the body, so
+   the same ±19px rip reads as damage rather than a join.
+
+   Same filter on both (one layer, one filter), so the lever is how much of it
+   is let out: the clean photo gives up 22px on the left and only 8px on the
+   right, and the backing is allowed to fray 30px outward on the left but
+   barely past the seam on the right. Narrower band, shallower teeth. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .feat-card.torn-lr .photo {
+  clip-path: inset(6px 10px 8px 22px);
+}
+
+/* Two things the shared .torn-lr rules get wrong on this card:
+
+   TOP — the card's surface layer is sheared flat at 6px (the rule above), so
+   an unclipped backing frays ABOVE the line the body flank starts on and the
+   two halves of the card visibly begin at different heights. Both backing
+   halves are clipped to the same 6px, so the whole top edge starts on one
+   line.
+
+   RIGHT — this is an INTERNAL seam against the body, not the card's outer
+   boundary, so the ±19px rip that suits the left reads as damage here. Same
+   filter, less of it let out: the backing frays 6px past the seam instead of
+   30px, into the 10px the clean image gave up. Teeth, not a rip. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .feat-card.torn-lr .photo-wrap::before {
+  clip-path: inset(6px -6px 55% -30px);
+}
+
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .feat-card.torn-lr .photo-wrap::after {
+  clip-path: inset(45% -6px -80px -30px);
+}
+
+/* --- what does NOT tear ---------------------------------------------------
+   The travel form is a control surface, not a sheet: a ragged edge on
+   something you type into reads as damage rather than craft, and the ripped
+   corner competes with the field borders for the same attention. `.card` is
+   doubled into the selector so this outranks the nth-child cut rotation at the
+   top of this file, which is one class heavier than a bare class would be. */
+:is([data-theme="kraft"], [data-theme="kraft-night"], [data-theme="milestone"], [data-theme="milestone-soft"], [data-theme="milestone-night"]) .card.carpool-form {
+  --cut: opacity(1);
+}

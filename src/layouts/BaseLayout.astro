@@ -1,5 +1,5 @@
 ---
-/* Every page: the token contract, all eleven themes, the paper filters and
+/* Every page: the token contract, all thirteen themes, the paper filters and
    the top bar. Mirrors the app's design-system rule — components paint from a
    token contract, a theme is one file that re-points the tokens — so this
    layout imports base.css first and the themes after it, and nothing in
@@ -21,6 +21,15 @@ import "../styles/themes/bluebird.css";
 import "../styles/themes/canopy.css";
 import "../styles/themes/mono.css";
 import "../styles/themes/canopy-day.css";
+import "../styles/themes/milestone.css";
+/* After milestone.css, which declares the palette for both — this file is the
+   one token that differs, and it wins on order, not on specificity. */
+import "../styles/themes/milestone-soft.css";
+import "../styles/themes/kraft-night.css";
+import "../styles/themes/milestone-night.css";
+
+/* After every theme, so a theme cannot out-order the shared tear geometry. */
+import "../styles/torn-paper.css";
 
 interface Props {
   title: string;

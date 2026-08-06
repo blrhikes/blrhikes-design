@@ -3,12 +3,9 @@
 
    The price, the lead and who is going are one RegistrationCard — the very
    card the showcase's event section renders, same parts in the same order.
-   The trail below it is the ordinary TrailCard, one up instead of three: the
-   rail is the component's narrowest home, which is exactly the density it
-   was drawn for. */
+   The trail used to sit under it; it now leads the article column, where
+   there is width enough for the overlay variant. */
 import RegistrationCard from "../cards/RegistrationCard.astro";
-import TrailCard from "../cards/TrailCard.astro";
-import { emeraldFallsCircuit } from "../../data/trails.js";
 
 const links: [string, string][] = [
   ["suitcase-rolling", "Gear checklist — grab something to carry"],
@@ -36,15 +33,8 @@ const links: [string, string][] = [
     sticky={false}
   />
 
-  <div class="ev-trail">
-    <p class="ev-rail-title ev-rail-title--gap">We’re going here:</p>
-    <div class="trail-grid">
-      <TrailCard trail={emeraldFallsCircuit} />
-    </div>
-  </div>
-
   <div class="card">
-    <p class="ev-rail-title">Already registered?</p>
+    <p class="ev-block-title">Already registered?</p>
     <ul class="ev-links">
       {links.map(([icon, text]) => (
         <li><a href="#"><i class={`fa-solid fa-${icon}`} aria-hidden="true"></i> {text}</a></li>

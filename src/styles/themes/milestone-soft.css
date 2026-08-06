@@ -1,0 +1,68 @@
+/* ===========================================================================
+   THEME 13 · "Milestone Soft" — light
+   ---------------------------------------------------------------------------
+   Milestone, with the card lift changed from a stamp to a shadow.
+
+   The palette, the type and the torn edge are all Milestone's and are declared
+   there (./milestone.css scopes every selector to both themes), because the
+   two differ in exactly one token. This file is that token.
+
+   Milestone's `4px 4px 0` is the live site's shadow: one flat offset copy of
+   the card in grey, no blur — a hard-edged stamp that reads as graphic rather
+   than physical. Here the same paper is lit instead: two layers, both cast
+   straight DOWN with no sideways offset, the way a real overhead light works —
+
+     · a 1px contact shadow at 6% that keeps the sheet's edge touching the
+       ground, so the card doesn't appear to hover, and
+     · a wide, soft 18px ambient at 12%, pulled in 6px on each side (the
+       negative spread) so it reads as the penumbra of a lifted sheet rather
+       than a grey halo tracing the box.
+
+   Both still ride `.card::before` — the layer torn-paper.css filters — so the
+   blur is displaced with the paper and softens along the ragged edge instead
+   of outlining the rectangle the tear ripped away. That is the whole reason
+   this reads differently from the hard version at the torn top: a hard shadow
+   reproduces every tooth of the rip, a soft one lets them dissolve.
+
+   `--pop-shadow` comes along. It is `none` under Milestone only because the
+   live site has no floating surfaces to copy from; a theme whose premise is
+   real light cannot have its popovers sit flat on the page.
+   =========================================================================== */
+
+[data-theme="milestone-soft"] {
+  --card-shadow:
+    0 1px 1px 0 rgb(28 25 23 / 0.06),
+    0 8px 18px -6px rgb(28 25 23 / 0.12);
+
+  /* A popover is nearer the eye than a card, so it casts further and darker —
+     same light, more distance. */
+  --pop-shadow:
+    0 2px 4px -1px rgb(28 25 23 / 0.08),
+    0 14px 32px -10px rgb(28 25 23 / 0.22);
+}
+
+/* ---------------------------------------------------------- flourishes -- */
+
+/* base.css hangs `--pop-shadow` on .btn-primary, so giving this theme a real
+   popover shadow also put one under every CTA. Take it back off: the premise
+   here is a sheet of paper lit from above, and a button is not a sheet — it
+   is ink on the sheet. The cards lift; the controls do not. */
+[data-theme="milestone-soft"] .btn-primary {
+  box-shadow: none;
+}
+
+/* The secondary CTA takes Kraft's primary colours — its dark warm neutral on
+   its paper white. Two reasons it works rather than clashes: #44403c is
+   Tailwind's stone-700, so it is already in this palette's own ramp, and a
+   filled dark button against the yellow primary gives the pair a real
+   hierarchy, which "yellow vs outline" never quite does. */
+[data-theme="milestone-soft"] .btn-secondary {
+  background: #44403c; /* Kraft's --accent, and stone-700 */
+  color: #faf3e8; /* Kraft's --on-accent */
+  border-color: transparent;
+}
+
+[data-theme="milestone-soft"] .btn-secondary:hover {
+  background: #292524; /* stone-800 */
+  border-color: transparent;
+}
