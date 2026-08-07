@@ -13,19 +13,19 @@ Each entry follows the same template:
 > **Open questions**.
 
 Naming follows the memo convention: `Component-Variant` with a hyphen
-(`EventCardProminent-TornSides`). A component with no hyphen is the base.
+(`EventCardProminent-TornSides`). A component with no hyphen is the base
 
-| Component | Status | Entry |
-|---|---|---|
-| EventCard | shortlisted | [below](#eventcard) |
+| Component                   | Status      | Entry                                 |
+| --------------------------- | ----------- | ------------------------------------- |
+| EventCard                   | shortlisted | [below](#eventcard)                   |
 | EventCardProminent-TornEnds | shortlisted | [below](#eventcardprominent-tornends) |
-| EventPage *(surface)* | built | [below](#eventpage) |
-| EventCover | page-scoped | [below](#eventcover) |
-| EventArticle | page-scoped | [below](#eventarticle) |
-| EventRail | page-scoped | [below](#eventrail) |
-| RegistrationCard | shortlisted | [below](#registrationcard) |
-| TrailCardWide-TornEnds | shortlisted | [below](#trailcardwide-tornends) |
-| TrailCardOverlay | shortlisted | [below](#trailcardoverlay) |
+| EventPage _(surface)_       | built       | [below](#eventpage)                   |
+| EventCover                  | page-scoped | [below](#eventcover)                  |
+| EventArticle                | page-scoped | [below](#eventarticle)                |
+| EventRail                   | page-scoped | [below](#eventrail)                   |
+| RegistrationCard            | shortlisted | [below](#registrationcard)            |
+| TrailCardWide-TornEnds      | shortlisted | [below](#trailcardwide-tornends)      |
+| TrailCardOverlay            | shortlisted | [below](#trailcardoverlay)            |
 
 ---
 
@@ -38,7 +38,7 @@ on the wash) — and a body that answers price, place, who's going, and what to
 do about it.
 
 Three per row at desktop, one at phone. Where TrailCardOverlay is for
-*browsing places*, EventCard is for *deciding on a date*: everything above the
+_browsing places_, EventCard is for _deciding on a date_: everything above the
 fold is time-sensitive.
 
 ### What it's for
@@ -86,25 +86,39 @@ Canonical instance, from `src/components/cards/EventCard.astro`:
     </div>
     <div class="photo-dateblock">
       <div class="dateblock" aria-label="Sat 22 Aug">
-        <span class="db-mon">Aug</span><span class="db-day">22</span><span class="db-dow">Sat</span>
+        <span class="db-mon">Aug</span>
+        <span class="db-day">22</span>
+        <span class="db-dow">Sat</span>
       </div>
     </div>
     <span class="photo-badge"><span class="pill pill-full">Full</span></span>
   </div>
   <div class="photo-body">
     <div class="cluster">
-      <span class="pill"><i class="fa-solid fa-mountain-sun" aria-hidden="true"></i>Hike</span>
+      <span class="pill">
+        <i class="fa-solid fa-mountain-sun" aria-hidden="true"></i>
+        Hike
+      </span>
       <span class="pill">₹850</span>
       <span class="pill pill-ok">₹700 members</span>
     </div>
-    <p class="iconline"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Savandurga, Magadi</p>
+    <p class="iconline">
+      <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+      Savandurga, Magadi
+    </p>
     <p class="fine clamp-2">Asia's largest monolith by moonlight — a slow, quiet climb …</p>
     <p class="face-stack" aria-label="30 going">
-      <span class="face">RA</span><span class="face">RH</span><span class="face">SR</span><span class="face face-more">+27</span>
+      <span class="face">RA</span>
+      <span class="face">RH</span>
+      <span class="face">SR</span>
+      <span class="face face-more">+27</span>
       <span class="going">30 going</span>
     </p>
     <div class="card-foot">
-      <span class="iconline"><i class="fa-regular fa-clock" aria-hidden="true"></i> 5:30 pm start</span>
+      <span class="iconline">
+        <i class="fa-regular fa-clock" aria-hidden="true"></i>
+        5:30 pm start
+      </span>
       <span class="actions">
         <a class="btn btn-secondary btn-sm" href="#">Details</a>
         <a class="btn btn-primary btn-sm" href="#">Register</a>
@@ -118,23 +132,23 @@ The container is `div.event-grid`.
 
 ### Class contract
 
-| Class | Adds | Defined at |
-|---|---|---|
-| `.card` | the surface: background, border, radius | `base.css` |
-| `.photo-card` | `padding:0`, `overflow:clip`, flex column — a card whose first child is a photo bleeding to the edges | `base.css:1532` |
-| `.photo-wrap` | `position: relative` — the positioning context for the cover furniture | `base.css:1736` |
-| `.photo-title` | absolutely positioned bottom block, white type, `isolation: isolate` | `base.css:1740` |
-| `.photo-title::before` | the dark wash, as its own layer at `z-index: -1` | `base.css:1751` |
-| `.photo-title .photo-date` | the start time under the title, mono, white at 85% | `base.css:1763` |
-| `.photo-dateblock` / `.dateblock` | DateBlock pinned to the top-left corner: month in the accent, oversized day, weekday under it | `base.css:1845` / `:1805` |
-| `.photo-badge` | the opposite corner — capacity state | `base.css:1771` |
-| `.pill-live` / `.pill-full` / `.pill-ok` | the three semantic pill states: spots left (accent), full (danger), member price (ok) | `base.css:621`–`622` |
-| `.photo-body` | grid, `gap: 0.45rem`, `align-content: start` | `base.css:1545` |
-| `.cluster` | wrapping flex row for the type/price pills | `base.css:597` |
-| `.iconline` | icon + text line, icon in `--accent-type` | `base.css:1570` |
-| `.clamp-2` | the blurb, exactly two lines | `base.css:1777` |
-| `.face-stack` / `.face-shadow` / `.face` / `.face-more` / `.going` | AttendeeFaces — overlapping octagonal initial discs, `+n` for the rest | `base.css:1631` |
-| `.card-foot` | `margin-top: auto`, rule above, time on the left and actions on the right | `base.css:1784` |
+| Class                                                              | Adds                                                                                                  | Defined at                |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ------------------------- |
+| `.card`                                                            | the surface: background, border, radius                                                               | `base.css`                |
+| `.photo-card`                                                      | `padding:0`, `overflow:clip`, flex column — a card whose first child is a photo bleeding to the edges | `base.css:1532`           |
+| `.photo-wrap`                                                      | `position: relative` — the positioning context for the cover furniture                                | `base.css:1736`           |
+| `.photo-title`                                                     | absolutely positioned bottom block, white type, `isolation: isolate`                                  | `base.css:1740`           |
+| `.photo-title::before`                                             | the dark wash, as its own layer at `z-index: -1`                                                      | `base.css:1751`           |
+| `.photo-title .photo-date`                                         | the start time under the title, mono, white at 85%                                                    | `base.css:1763`           |
+| `.photo-dateblock` / `.dateblock`                                  | DateBlock pinned to the top-left corner: month in the accent, oversized day, weekday under it         | `base.css:1845` / `:1805` |
+| `.photo-badge`                                                     | the opposite corner — capacity state                                                                  | `base.css:1771`           |
+| `.pill-live` / `.pill-full` / `.pill-ok`                           | the three semantic pill states: spots left (accent), full (danger), member price (ok)                 | `base.css:621`–`622`      |
+| `.photo-body`                                                      | grid, `gap: 0.45rem`, `align-content: start`                                                          | `base.css:1545`           |
+| `.cluster`                                                         | wrapping flex row for the type/price pills                                                            | `base.css:597`            |
+| `.iconline`                                                        | icon + text line, icon in `--accent-type`                                                             | `base.css:1570`           |
+| `.clamp-2`                                                         | the blurb, exactly two lines                                                                          | `base.css:1777`           |
+| `.face-stack` / `.face-shadow` / `.face` / `.face-more` / `.going` | AttendeeFaces — overlapping octagonal initial discs, `+n` for the rest                                | `base.css:1631`           |
+| `.card-foot`                                                       | `margin-top: auto`, rule above, time on the left and actions on the right                             | `base.css:1784`           |
 
 Three invariants worth carrying into the app:
 
@@ -157,7 +171,7 @@ Three invariants worth carrying into the app:
 - **Grid**: `.event-grid` is `repeat(auto-fit, minmax(18rem, 1fr))`, gap
   `1.25rem` — three up on desktop, two around 40rem, one below ~37rem.
 - **Cover**: `16 / 10` (`.photo-card .photo`). Wider than a trail cover's 4:3,
-  because an event photo is a *scene* and the card's job is the furniture on
+  because an event photo is a _scene_ and the card's job is the furniture on
   top of it, not the picture.
 - **Body**: grid with `align-content: start`, so the content stacks from the
   top and the slack collects at the bottom — where `.card-foot`'s
@@ -273,18 +287,32 @@ Canonical instance, from `src/components/cards/EventCardProminent.astro`:
   <div class="feat-body">
     <div class="feat-head">
       <div class="dateblock" aria-label="Sat 15 Aug">
-        <span class="db-mon">Aug</span><span class="db-day">15</span><span class="db-dow">Sat</span>
+        <span class="db-mon">Aug</span>
+        <span class="db-day">15</span>
+        <span class="db-dow">Sat</span>
       </div>
       <div>
         <h3 class="title feat-title">Granite Gauntlet Night Trek</h3>
-        <p class="iconline"><i class="fa-regular fa-clock" aria-hidden="true"></i> 10:00 pm · carpools leave 8:00 pm</p>
+        <p class="iconline">
+          <i class="fa-regular fa-clock" aria-hidden="true"></i>
+          10:00 pm · carpools leave 8:00 pm
+        </p>
       </div>
     </div>
-    <p class="iconline"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> south-west of Bengaluru · 65 km drive</p>
+    <p class="iconline">
+      <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+      south-west of Bengaluru · 65 km drive
+    </p>
     <p class="fine clamp-2">Up the slab scramble under a waning moon, the summit by midnight …</p>
     <div class="cluster">
-      <span class="pill"><i class="fa-solid fa-mountain-sun" aria-hidden="true"></i>Hike</span>
-      <span class="pill pill-member pill-lead">Led by Shreshth<span class="face-shadow"><span class="face">SH</span></span></span>
+      <span class="pill">
+        <i class="fa-solid fa-mountain-sun" aria-hidden="true"></i>
+        Hike
+      </span>
+      <span class="pill pill-member pill-lead">
+        Led by Shreshth
+        <span class="face-shadow"><span class="face">SH</span></span>
+      </span>
       <span class="face-stack" aria-label="11 going">
         <span class="going">11 going</span>
         <span class="face-shadow"><span class="face face-more">+8</span></span>
@@ -309,38 +337,38 @@ No grid container — the card is full-measure inside `.container`. Add
 
 ### Class contract
 
-| Class | Adds | Defined at |
-|---|---|---|
-| `.card` | the surface: background, border, radius | `base.css:423` |
-| `.feat-card` | `padding:0`, `overflow:clip`, and the two-column grid `minmax(0,1.1fr) minmax(0,1fr)` | `base.css:1853` |
-| `.feat-card .photo-wrap` | `aspect-ratio: 4/3` **and** `min-height: 100%` — see Layout | `base.css:1874` |
-| `.feat-card .photo` | absolutely inset, `object-fit: cover` | `base.css:1862` |
-| `.photo-badge` | the capacity pill, top corner of the cover | `base.css:1771` |
-| `.feat-body` | flex column, `gap: 0.65rem`, `padding: clamp(1.25rem, 3vw, 1.75rem)` | `base.css:1887` |
-| `.feat-head` | the DateBlock/title row: flex, `align-items: flex-start` | `base.css:1894` |
-| `.feat-title` | `clamp(1.6rem, 3vw, 2.1rem)` — display scale, not `.title`'s 1.25rem | `base.css:1904` |
-| `.dateblock` / `.db-mon` / `.db-day` / `.db-dow` | DateBlock, inline here rather than pinned to a corner | `base.css:1805` |
-| `.iconline` | icon + text line, icon in `--accent-type` | `base.css:1570` |
-| `.clamp-2` | the blurb, exactly two lines | `base.css:1777` |
-| `.cluster` | wrapping flex row: type pill, lead chip, face stack | `base.css:597` |
-| `.pill-lead` | the lead chip — chamfered, borderless, with the face flush to its trailing edge | `base.css:657` |
-| `.face-stack` / `.face-shadow` / `.face` / `.face-more` / `.going` | AttendeeFaces | `base.css:1631` |
-| `.card-foot` | rule above, price left / actions right | `base.css:1784` |
-| `.torn-lr` | *(variant)* transposes the rip to the left and right edges | `themes/kraft.css:187` |
+| Class                                                              | Adds                                                                                  | Defined at             |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------- | ---------------------- |
+| `.card`                                                            | the surface: background, border, radius                                               | `base.css:423`         |
+| `.feat-card`                                                       | `padding:0`, `overflow:clip`, and the two-column grid `minmax(0,1.1fr) minmax(0,1fr)` | `base.css:1853`        |
+| `.feat-card .photo-wrap`                                           | `aspect-ratio: 4/3` **and** `min-height: 100%` — see Layout                           | `base.css:1874`        |
+| `.feat-card .photo`                                                | absolutely inset, `object-fit: cover`                                                 | `base.css:1862`        |
+| `.photo-badge`                                                     | the capacity pill, top corner of the cover                                            | `base.css:1771`        |
+| `.feat-body`                                                       | flex column, `gap: 0.65rem`, `padding: clamp(1.25rem, 3vw, 1.75rem)`                  | `base.css:1887`        |
+| `.feat-head`                                                       | the DateBlock/title row: flex, `align-items: flex-start`                              | `base.css:1894`        |
+| `.feat-title`                                                      | `clamp(1.6rem, 3vw, 2.1rem)` — display scale, not `.title`'s 1.25rem                  | `base.css:1904`        |
+| `.dateblock` / `.db-mon` / `.db-day` / `.db-dow`                   | DateBlock, inline here rather than pinned to a corner                                 | `base.css:1805`        |
+| `.iconline`                                                        | icon + text line, icon in `--accent-type`                                             | `base.css:1570`        |
+| `.clamp-2`                                                         | the blurb, exactly two lines                                                          | `base.css:1777`        |
+| `.cluster`                                                         | wrapping flex row: type pill, lead chip, face stack                                   | `base.css:597`         |
+| `.pill-lead`                                                       | the lead chip — chamfered, borderless, with the face flush to its trailing edge       | `base.css:657`         |
+| `.face-stack` / `.face-shadow` / `.face` / `.face-more` / `.going` | AttendeeFaces                                                                         | `base.css:1631`        |
+| `.card-foot`                                                       | rule above, price left / actions right                                                | `base.css:1784`        |
+| `.torn-lr`                                                         | _(variant)_ transposes the rip to the left and right edges                            | `themes/kraft.css:187` |
 
 Three invariants worth carrying into the app:
 
 1. **The two flanks must end on the same line.** The cover is `aspect-ratio:
-   4 / 3` for its shape **and** `min-height: 100%` so the grid can stretch it:
+4 / 3` for its shape **and** `min-height: 100%` so the grid can stretch it:
    with the ratio alone, a definite height wins over the grid's `stretch` and
    the cover finishes a couple of pixels short of the body. The ratio sizes
    the row; the `min-height` makes the cover fill whatever the row becomes.
 2. **The lead chip is text-then-face.** `Led by <name>` followed by the disc,
-   with `.pill-lead`'s padding on the *leading* side only, so the octagon is
+   with `.pill-lead`'s padding on the _leading_ side only, so the octagon is
    flush with the pill's trailing edge. Flipping the order means flipping that
    padding — the chamfer clip is symmetric and needs no change.
 3. **A photograph is never filtered.** The clean `<img>` is clipped a little
-   short and the *same* image is repainted behind it through the theme's cut,
+   short and the _same_ image is repainted behind it through the theme's cut,
    so the ragged edge is backing pixels. This is the same split EventCard and
    TrailCard use; it is what keeps a torn card from looking like a warped one.
 
@@ -374,8 +402,8 @@ Plus `--photo` (the cover URL, on `.photo-wrap`) per instance.
   left column once the grid splits; below `46rem` it falls back to the plain
   inset that `.photo-card` uses. The top edge is the image backing's tear
   alone, so no surface colour peeks out from behind the photograph.
-- **Kraft, `-TornSides`** — the right edge is an *internal seam against the
-  body*, not the card's outer boundary, so it gets the same filter with less of
+- **Kraft, `-TornSides`** — the right edge is an _internal seam against the
+  body_, not the card's outer boundary, so it gets the same filter with less of
   it let out: the backing frays 6px past the seam instead of 30, into the 10px
   the clean image gives up. Both backing halves are clipped at the same 6px
   the surface is, so the two flanks start on one line.
@@ -406,7 +434,7 @@ None. No JS touches this card.
 - At `46rem` the card collapses to EventCard's shape but keeps the display
   title, which is very large on a phone. Should `.feat-title` drop to `.title`
   once stacked?
-- Nothing expresses *why* this event is featured. Editorially chosen, or the
+- Nothing expresses _why_ this event is featured. Editorially chosen, or the
   next one out?
 
 ---
@@ -419,9 +447,9 @@ full-bleed cover running under the top bar, then a two-column split: the
 article on the left, a sticky rail on the right.
 
 It exists to answer a different question from the showcase. The showcase asks
-*does this component hold up under thirteen themes*; the event page asks *do
+_does this component hold up under thirteen themes_; the event page asks _do
 these components hold up next to each other, at real content length, on one
-screen*. It is kraft-only for now, and its top bar renders without the theme
+screen_. It is kraft-only for now, and its top bar renders without the theme
 picker for that reason.
 
 ### What it's for
@@ -480,15 +508,15 @@ From `src/pages/event.astro`:
 
 ### Class contract
 
-| Class | Adds | Defined at |
-|---|---|---|
-| `.ev-main` | the split: `grid-template-columns: minmax(0, 1fr) 22rem`, `align-items: start` | `event.css:98` |
-| `.ev-article` | the left column's card padding, `clamp(1.5rem, 3.5vw, 2.75rem)` | `event.css:111` |
-| `.ev-aside` | the rail: grid, `gap: 1.75rem`, sticky under the top bar | `event.css:216` |
-| `.ev-col` | the left column — the trail, then the article, gapped wide enough to clear both torn edges | `event.css:241` |
-| `.ev-block-title` | the mono label above a block that is not itself a card | `event.css:227` |
-| `.ev-block-title--gap` | that label's spacing under it | `event.css:273` |
-| `.ev-links` | the "Already registered?" list — icon + link rows | `event.css:247` |
+| Class                  | Adds                                                                                       | Defined at      |
+| ---------------------- | ------------------------------------------------------------------------------------------ | --------------- |
+| `.ev-main`             | the split: `grid-template-columns: minmax(0, 1fr) 22rem`, `align-items: start`             | `event.css:98`  |
+| `.ev-article`          | the left column's card padding, `clamp(1.5rem, 3.5vw, 2.75rem)`                            | `event.css:111` |
+| `.ev-aside`            | the rail: grid, `gap: 1.75rem`, sticky under the top bar                                   | `event.css:216` |
+| `.ev-col`              | the left column — the trail, then the article, gapped wide enough to clear both torn edges | `event.css:241` |
+| `.ev-block-title`      | the mono label above a block that is not itself a card                                     | `event.css:227` |
+| `.ev-block-title--gap` | that label's spacing under it                                                              | `event.css:273` |
+| `.ev-links`            | the "Already registered?" list — icon + link rows                                          | `event.css:247` |
 
 ### Layout
 
@@ -508,7 +536,7 @@ One invariant, learned the hard way:
 
 > **`.aside-card--static` is `position: relative`, never `static`.** A card's
 > paper is `.card::before`, absolutely positioned with `inset: 0`, which
-> resolves against the nearest *positioned* ancestor. `.card` is `relative`, so
+> resolves against the nearest _positioned_ ancestor. `.card` is `relative`, so
 > normally that is the card. Un-position the card and the paper resolves
 > against `.ev-aside` instead — one card's surface stretches over the whole
 > rail and the three blocks render as a single long sheet. If a card must not
@@ -601,12 +629,21 @@ Canonical instance, from `src/components/event/EventCover.astro`:
   <img class="photo" src="…" alt="First light over the fern gullies" />
   <div class="container">
     <div class="ev-cover-copy">
-      <a class="ev-back" href="/"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> All events</a>
+      <a class="ev-back" href="/">
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+        All events
+      </a>
       <p class="eyebrow">Upcoming hike</p>
       <h1 class="display-1">Fern Gully Sunrise Hike</h1>
       <p class="ev-when">
-        <span><i class="fa-regular fa-calendar" aria-hidden="true"></i> Thu, 13 Aug 2026, 5:00 am</span>
-        <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Emerald Hills, south-west</span>
+        <span>
+          <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+          Thu, 13 Aug 2026, 5:00 am
+        </span>
+        <span>
+          <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+          Emerald Hills, south-west
+        </span>
       </p>
       <p><span class="pill pill-on-photo">13 of 20 spots left</span></p>
     </div>
@@ -616,23 +653,23 @@ Canonical instance, from `src/components/event/EventCover.astro`:
 
 ### Class contract
 
-| Class | Adds | Defined at |
-|---|---|---|
-| `.ev-cover` | the bleed: negative `margin-top` of `--topbar-h` with matching padding, `min-height: clamp(20rem, 46vw, 30rem)`, flex/`flex-end` | `event.css:16` |
-| `.ev-cover > .container` | `width: 100%` — see the invariant | `event.css:49` |
-| `.ev-cover .photo` | the clean photograph, `inset: 0`, `object-fit: cover`, clipped short at the bottom | `event.css:26` |
-| `.ev-cover-backing` | the same photo as a `background-image` behind it, from `--photo` | `event.css:36` |
-| `.ev-cover-copy` | the type block: `isolation: isolate`, generous `padding-block` | `event.css:55` |
-| `.ev-cover-copy::before` | the wash, its own layer at `z-index: -1`, `inset: -1px -50vw` so it spans the viewport | `event.css:62` |
-| `.ev-back` | the mono back-link | `event.css:74` |
-| `.ev-when` | the wrapping meta row | `event.css:88` |
-| `.pill-on-photo` | frosted white pill — `pill-live`'s accent tokens are dark ink on a light tint and vanish on a photograph | `base.css` |
+| Class                    | Adds                                                                                                                             | Defined at     |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| `.ev-cover`              | the bleed: negative `margin-top` of `--topbar-h` with matching padding, `min-height: clamp(20rem, 46vw, 30rem)`, flex/`flex-end` | `event.css:16` |
+| `.ev-cover > .container` | `width: 100%` — see the invariant                                                                                                | `event.css:49` |
+| `.ev-cover .photo`       | the clean photograph, `inset: 0`, `object-fit: cover`, clipped short at the bottom                                               | `event.css:26` |
+| `.ev-cover-backing`      | the same photo as a `background-image` behind it, from `--photo`                                                                 | `event.css:36` |
+| `.ev-cover-copy`         | the type block: `isolation: isolate`, generous `padding-block`                                                                   | `event.css:55` |
+| `.ev-cover-copy::before` | the wash, its own layer at `z-index: -1`, `inset: -1px -50vw` so it spans the viewport                                           | `event.css:62` |
+| `.ev-back`               | the mono back-link                                                                                                               | `event.css:74` |
+| `.ev-when`               | the wrapping meta row                                                                                                            | `event.css:88` |
+| `.pill-on-photo`         | frosted white pill — `pill-live`'s accent tokens are dark ink on a light tint and vanish on a photograph                         | `base.css`     |
 
 Two invariants:
 
 1. **`.container` inside a flex parent needs a stated width.** `.ev-cover` is
    `display: flex`, so its `.container` child is a flex item and sizes to its
-   *content*, not to 100% — and `.container`'s `margin-inline: auto` then
+   _content_, not to 100% — and `.container`'s `margin-inline: auto` then
    centres that shrunken box, indenting the title away from the article below.
    `width: 100%` and the measure lines up. The showcase's `.cover-inner` states
    its width for the same reason.
@@ -726,23 +763,44 @@ From `src/components/event/EventArticle.astro`:
   <p class="lede">Catch first light over the fern gullies …</p>
 
   <section>
-    <h2 class="ev-sec-title"><i class="fa-regular fa-clock" aria-hidden="true"></i> The plan</h2>
+    <h2 class="ev-sec-title">
+      <i class="fa-regular fa-clock" aria-hidden="true"></i>
+      The plan
+    </h2>
     <dl class="ev-plan">
-      <div><dt>3:30 am</dt><dd>Carpools leave the city …</dd></div>
+      <div>
+        <dt>3:30 am</dt>
+        <dd>Carpools leave the city …</dd>
+      </div>
     </dl>
   </section>
 
   <section>
-    <h2 class="ev-sec-title"><i class="fa-solid fa-suitcase-rolling" aria-hidden="true"></i> What to bring</h2>
+    <h2 class="ev-sec-title">
+      <i class="fa-solid fa-suitcase-rolling" aria-hidden="true"></i>
+      What to bring
+    </h2>
     <ul class="ev-list">
-      <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Headlamp or torch<span class="note"> — we start in the dark</span></span></li>
+      <li>
+        <i class="fa-solid fa-check" aria-hidden="true"></i>
+        <span>
+          Headlamp or torch
+          <span class="note">— we start in the dark</span>
+        </span>
+      </li>
     </ul>
   </section>
 
   <section>
-    <h2 class="ev-sec-title"><i class="fa-regular fa-circle-question" aria-hidden="true"></i> Before you ask</h2>
+    <h2 class="ev-sec-title">
+      <i class="fa-regular fa-circle-question" aria-hidden="true"></i>
+      Before you ask
+    </h2>
     <details class="ev-fold">
-      <summary><i class="fa-solid fa-seedling" aria-hidden="true"></i> Is it beginner-friendly?</summary>
+      <summary>
+        <i class="fa-solid fa-seedling" aria-hidden="true"></i>
+        Is it beginner-friendly?
+      </summary>
       <div><p>Yes — this is the one we recommend for a first hike.</p></div>
     </details>
   </section>
@@ -751,19 +809,19 @@ From `src/components/event/EventArticle.astro`:
 
 ### Class contract
 
-| Class | Adds | Defined at |
-|---|---|---|
-| `.card` | the paper and its torn top/bottom edge | `base.css:423` |
-| `.ev-article` | prose padding, `clamp(1.5rem, 3.5vw, 2.75rem)` — wider than `.card`'s default 1.5rem | `event.css:111` |
-| `.ev-article > * + *` | the section rhythm, `clamp(1.75rem, 3.5vw, 2.75rem)` | `event.css:113` |
-| `.ev-article a` | prose links — `base.css` styles no bare `<a>`, since every link on the showcase carries a class | `event.css:117` |
-| `.ev-sec-title` | the icon'd `h2`: display face, icon in `--accent-type` at `0.85em` | `event.css:126` |
-| `.ev-plan` | the timetable: `5.5rem` mono time column against wrapping copy, baseline-aligned | `event.css:140` |
-| `.ev-cols` | the included/not-included pair, `auto-fit minmax(15rem, 1fr)` | `event.css:158` |
-| `.ev-list` / `.ev-list--yes` / `.ev-list--no` | the mark carries the tone (`--ok` / `--danger`), the type never does | `event.css:165`–`177` |
-| `.ev-list .note` | the trailing aside inside an item | `event.css:178` |
-| `.ev-fold` | the FAQ folds: rules above, chevron via `::after`, rotated when `[open]` | `event.css:182` |
-| `.ev-safety-note` | the one `Notice` in the body, and its air above | `event.css:269` |
+| Class                                         | Adds                                                                                            | Defined at            |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------- |
+| `.card`                                       | the paper and its torn top/bottom edge                                                          | `base.css:423`        |
+| `.ev-article`                                 | prose padding, `clamp(1.5rem, 3.5vw, 2.75rem)` — wider than `.card`'s default 1.5rem            | `event.css:111`       |
+| `.ev-article > * + *`                         | the section rhythm, `clamp(1.75rem, 3.5vw, 2.75rem)`                                            | `event.css:113`       |
+| `.ev-article a`                               | prose links — `base.css` styles no bare `<a>`, since every link on the showcase carries a class | `event.css:117`       |
+| `.ev-sec-title`                               | the icon'd `h2`: display face, icon in `--accent-type` at `0.85em`                              | `event.css:126`       |
+| `.ev-plan`                                    | the timetable: `5.5rem` mono time column against wrapping copy, baseline-aligned                | `event.css:140`       |
+| `.ev-cols`                                    | the included/not-included pair, `auto-fit minmax(15rem, 1fr)`                                   | `event.css:158`       |
+| `.ev-list` / `.ev-list--yes` / `.ev-list--no` | the mark carries the tone (`--ok` / `--danger`), the type never does                            | `event.css:165`–`177` |
+| `.ev-list .note`                              | the trailing aside inside an item                                                               | `event.css:178`       |
+| `.ev-fold`                                    | the FAQ folds: rules above, chevron via `::after`, rotated when `[open]`                        | `event.css:182`       |
+| `.ev-safety-note`                             | the one `Notice` in the body, and its air above                                                 | `event.css:269`       |
 
 ### Layout
 
@@ -863,12 +921,12 @@ From `src/components/event/EventRail.astro`:
 
 ### Class contract
 
-| Class | Adds | Defined at |
-|---|---|---|
-| `.ev-aside` | grid, `gap: 1.75rem`, sticky at `--topbar-h + 1rem`; static below `62rem` | `event.css:216` |
-| `.ev-block-title` | the mono uppercase label for a block | `event.css:227` |
-| `.ev-links` | the link list: icon + label rows, accent icons, underline on hover | `event.css:247` |
-| `.aside-card--static` | the registration card's opt-out of its own stickiness | `base.css:1262` |
+| Class                 | Adds                                                                      | Defined at      |
+| --------------------- | ------------------------------------------------------------------------- | --------------- |
+| `.ev-aside`           | grid, `gap: 1.75rem`, sticky at `--topbar-h + 1rem`; static below `62rem` | `event.css:216` |
+| `.ev-block-title`     | the mono uppercase label for a block                                      | `event.css:227` |
+| `.ev-links`           | the link list: icon + label rows, accent icons, underline on hover        | `event.css:247` |
+| `.aside-card--static` | the registration card's opt-out of its own stickiness                     | `base.css:1262` |
 
 One invariant, and the bug it came from:
 
@@ -960,21 +1018,38 @@ Canonical instance, from `src/components/cards/RegistrationCard.astro`:
 <aside class="card aside-card">
   <div class="rc-head">
     <div class="dateblock" aria-label="Thu 13 Aug">
-      <span class="db-mon">Aug</span><span class="db-day">13</span><span class="db-dow">Thu</span>
+      <span class="db-mon">Aug</span>
+      <span class="db-day">13</span>
+      <span class="db-dow">Thu</span>
     </div>
     <div class="rc-price">
-      <p class="price-big">₹900 <span class="mono">/ person</span></p>
-      <p class="fine">Members pay <strong>₹750</strong></p>
+      <p class="price-big">
+        ₹900
+        <span class="mono">/ person</span>
+      </p>
+      <p class="fine">
+        Members pay
+        <strong>₹750</strong>
+      </p>
     </div>
   </div>
 
   <dl class="aside-rows">
-    <div class="aside-row"><dt>Start</dt><dd>05:00 at the blue gate</dd></div>
-    <div class="aside-row"><dt>End</dt><dd>~10:00, back in the city</dd></div>
+    <div class="aside-row">
+      <dt>Start</dt>
+      <dd>05:00 at the blue gate</dd>
+    </div>
+    <div class="aside-row">
+      <dt>End</dt>
+      <dd>~10:00, back in the city</dd>
+    </div>
   </dl>
 
   <div class="rc-people">
-    <p class="ledby">Led by Ava Sharma <span class="face">AS</span></p>
+    <p class="ledby">
+      Led by Ava Sharma
+      <span class="face">AS</span>
+    </p>
     <span class="face-stack" aria-label="3 going">
       <span class="going">3 going</span>
       <span class="face-shadow"><span class="face">CD</span></span>
@@ -988,41 +1063,44 @@ Canonical instance, from `src/components/cards/RegistrationCard.astro`:
   </div>
   <p class="fine meter-note">7 / 20 registered · 13 left</p>
 
-  <button class="btn btn-primary btn-block">Register <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+  <button class="btn btn-primary btn-block">
+    Register
+    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+  </button>
 </aside>
 ```
 
 ### Props
 
-| Prop | Shape | Notes |
-|---|---|---|
-| `date` | `{ mon, day, dow, label? }` | the DateBlock beside the price |
-| `price` / `unit` | strings | `unit` renders mono, after a space |
-| `memberNote` | string (HTML) | `set:html`, so it can bold the number |
-| `rows` | `[label, value][]` | the fact rows |
-| `lead` | `{ initials, text }` | `text` is the whole phrase — "Led by Ava Sharma" |
-| `going` | `{ count, more?, faces }` | |
-| `meter` | `{ taken, total, note }` | percentage is derived |
-| `cta` / `ctaIcon` | strings | |
-| `fine` | string | trailing fine print |
-| `sticky` | boolean, default `true` | `false` adds `.aside-card--static` |
+| Prop              | Shape                       | Notes                                            |
+| ----------------- | --------------------------- | ------------------------------------------------ |
+| `date`            | `{ mon, day, dow, label? }` | the DateBlock beside the price                   |
+| `price` / `unit`  | strings                     | `unit` renders mono, after a space               |
+| `memberNote`      | string (HTML)               | `set:html`, so it can bold the number            |
+| `rows`            | `[label, value][]`          | the fact rows                                    |
+| `lead`            | `{ initials, text }`        | `text` is the whole phrase — "Led by Ava Sharma" |
+| `going`           | `{ count, more?, faces }`   |                                                  |
+| `meter`           | `{ taken, total, note }`    | percentage is derived                            |
+| `cta` / `ctaIcon` | strings                     |                                                  |
+| `fine`            | string                      | trailing fine print                              |
+| `sticky`          | boolean, default `true`     | `false` adds `.aside-card--static`               |
 
 ### Class contract
 
-| Class | Adds | Defined at |
-|---|---|---|
-| `.card` | the paper and its torn edge | `base.css:423` |
-| `.aside-card` | `position: sticky; top: 4.5rem`, and the `0.8rem` vertical rhythm between children | `base.css:1252` / `:1250` |
-| `.aside-card--static` | `position: relative; top: auto` — see the invariant | `base.css:1262` |
-| `.rc-head` | DateBlock + price row, flex, centred | scoped, in the component |
-| `.rc-price` | the price/member pair's own `0.2rem` rhythm | scoped |
-| `.rc-people` | lead + going, wrapping flex with a real gap | scoped |
-| `.price-big` / `.price-big .mono` | the display-scale price and its mono unit | `base.css:1271` |
-| `.aside-rows` / `.aside-row` | the fact list — `dl` with label left, value right | `base.css:1283` |
-| `.ledby` | the lead line, inline-flex, `--face-size: 1.35rem` | `base.css:1717` |
-| `.face-stack` / `.face-shadow` / `.face` / `.going` | AttendeeFaces | `base.css:1631` |
-| `.meter` / `.meter-fill` / `.meter-note` | capacity | `base.css:901` |
-| `.btn-block` | the full-width CTA | `base.css:1304` |
+| Class                                               | Adds                                                                               | Defined at                |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------- |
+| `.card`                                             | the paper and its torn edge                                                        | `base.css:423`            |
+| `.aside-card`                                       | `position: sticky; top: 4.5rem`, and the `0.8rem` vertical rhythm between children | `base.css:1252` / `:1250` |
+| `.aside-card--static`                               | `position: relative; top: auto` — see the invariant                                | `base.css:1262`           |
+| `.rc-head`                                          | DateBlock + price row, flex, centred                                               | scoped, in the component  |
+| `.rc-price`                                         | the price/member pair's own `0.2rem` rhythm                                        | scoped                    |
+| `.rc-people`                                        | lead + going, wrapping flex with a real gap                                        | scoped                    |
+| `.price-big` / `.price-big .mono`                   | the display-scale price and its mono unit                                          | `base.css:1271`           |
+| `.aside-rows` / `.aside-row`                        | the fact list — `dl` with label left, value right                                  | `base.css:1283`           |
+| `.ledby`                                            | the lead line, inline-flex, `--face-size: 1.35rem`                                 | `base.css:1717`           |
+| `.face-stack` / `.face-shadow` / `.face` / `.going` | AttendeeFaces                                                                      | `base.css:1631`           |
+| `.meter` / `.meter-fill` / `.meter-note`            | capacity                                                                           | `base.css:901`            |
+| `.btn-block`                                        | the full-width CTA                                                                 | `base.css:1304`           |
 
 Three invariants:
 
@@ -1141,26 +1219,62 @@ Canonical instance, from `src/components/cards/TrailCardWide.astro`:
   <div class="photo-body">
     <div class="photo-toprow">
       <span class="pill">Moderate</span>
-      <span class="rating"><i class="fa-solid fa-star" aria-hidden="true"></i>4.0</span>
+      <span class="rating">
+        <i class="fa-solid fa-star" aria-hidden="true"></i>
+        4.0
+      </span>
     </div>
     <h3 class="title">Cavern Crimson Loop</h3>
-    <p class="iconline"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> south-west of Bengaluru</p>
+    <p class="iconline">
+      <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+      south-west of Bengaluru
+    </p>
     <p class="fine">A lake, a hilltop and a cave strung into one loop — the long version …</p>
     <dl class="trail-stats mono">
-      <div><dt>Length</dt><dd>3.9 km</dd></div>
-      <div><dt>Gain</dt><dd>+224 m</dd></div>
-      <div><dt>Hike</dt><dd>3 h 29</dd></div>
-      <div><dt>Drive</dt><dd>1 h 59</dd></div>
+      <div>
+        <dt>Length</dt>
+        <dd>3.9 km</dd>
+      </div>
+      <div>
+        <dt>Gain</dt>
+        <dd>+224 m</dd>
+      </div>
+      <div>
+        <dt>Hike</dt>
+        <dd>3 h 29</dd>
+      </div>
+      <div>
+        <dt>Drive</dt>
+        <dd>1 h 59</dd>
+      </div>
     </dl>
     <div class="htags">
-      <span class="htag"><i class="fa-solid fa-water" aria-hidden="true"></i>Lake</span>
-      <span class="htag"><i class="fa-solid fa-mountain" aria-hidden="true"></i>Hilltop</span>
-      <span class="htag"><i class="fa-solid fa-dungeon" aria-hidden="true"></i>Cave</span>
+      <span class="htag">
+        <i class="fa-solid fa-water" aria-hidden="true"></i>
+        Lake
+      </span>
+      <span class="htag">
+        <i class="fa-solid fa-mountain" aria-hidden="true"></i>
+        Hilltop
+      </span>
+      <span class="htag">
+        <i class="fa-solid fa-dungeon" aria-hidden="true"></i>
+        Cave
+      </span>
     </div>
     <div class="trail-links">
-      <a class="trail-link" href="…"><i class="fa-solid fa-person-hiking" aria-hidden="true"></i>Trek start</a>
-      <a class="trail-link" href="…"><i class="fa-solid fa-map" aria-hidden="true"></i>Map</a>
-      <a class="trail-link" href="…" download><i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>GPX</a>
+      <a class="trail-link" href="…">
+        <i class="fa-solid fa-person-hiking" aria-hidden="true"></i>
+        Trek start
+      </a>
+      <a class="trail-link" href="…">
+        <i class="fa-solid fa-map" aria-hidden="true"></i>
+        Map
+      </a>
+      <a class="trail-link" href="…" download>
+        <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
+        GPX
+      </a>
     </div>
   </div>
 </article>
@@ -1170,16 +1284,16 @@ The container is `div.trail-grid.trail-grid--wide`.
 
 ### Class contract
 
-| Class | Adds | Defined at |
-|---|---|---|
-| `.card` | the surface: background, border, radius | `base.css` |
-| `.photo-card` | `padding:0`, `overflow:clip`, flex column — a card whose first child is a photo bleeding to the edges | `base.css:1532` |
-| `.trail-card-wide .photo-body` | the wide-density body: flex column, `1.1rem 1.25rem 1.35rem` padding, wrapping stats | `base.css:1987` |
-| `.photo-wrap` | `position: relative` — positioning context for the badge | `base.css:1736` |
-| `.photo-toprow` | grade on the left, rating on the right, one line | `base.css:1553` |
-| `.trail-stats` | the four-cell `dl`, rules above and below; wraps rather than squeezes at this width | `base.css:997` |
-| `.htags` / `.htag` | HighlightTag row — what the trail *has* | `base.css:1491` |
-| `.trail-links` / `.trail-link` | the three-column link rail, dashed dividers | `base.css:2002` |
+| Class                          | Adds                                                                                                  | Defined at      |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------- | --------------- |
+| `.card`                        | the surface: background, border, radius                                                               | `base.css`      |
+| `.photo-card`                  | `padding:0`, `overflow:clip`, flex column — a card whose first child is a photo bleeding to the edges | `base.css:1532` |
+| `.trail-card-wide .photo-body` | the wide-density body: flex column, `1.1rem 1.25rem 1.35rem` padding, wrapping stats                  | `base.css:1987` |
+| `.photo-wrap`                  | `position: relative` — positioning context for the badge                                              | `base.css:1736` |
+| `.photo-toprow`                | grade on the left, rating on the right, one line                                                      | `base.css:1553` |
+| `.trail-stats`                 | the four-cell `dl`, rules above and below; wraps rather than squeezes at this width                   | `base.css:997`  |
+| `.htags` / `.htag`             | HighlightTag row — what the trail _has_                                                               | `base.css:1491` |
+| `.trail-links` / `.trail-link` | the three-column link rail, dashed dividers                                                           | `base.css:2002` |
 
 The variant's whole difference from `TrailCardOverlay` is which classes are
 **absent**: no `.trail-card-overlay`, so `.photo-title` never enters the tree
@@ -1233,7 +1347,7 @@ neighbour and the two-up row would lose its alignment.
 
 - `h3.title` assumes an `h2` section head above. Parameterise in the app.
 - Cover `alt` describes the place (`"The cave mouth on the Cavern Crimson
-  loop"`). Decorative `<i>` glyphs are all `aria-hidden="true"`.
+loop"`). Decorative `<i>` glyphs are all `aria-hidden="true"`.
 - `dl` / `dt` / `dd` for the stats — genuinely a definition list.
 - `.rating` prints the number (`4.0`), not a row of star glyphs, so it survives
   a screen reader and a monochrome render alike.
@@ -1304,13 +1418,22 @@ Canonical instance, from `src/components/cards/TrailCardOverlay.astro`:
   <div class="photo-wrap" style="--photo:url('…')">
     <img class="photo" src="…" alt="Boulders and the plain from the panorama trail" loading="lazy" />
     <span class="photo-badge">
-      <span class="rating rating-on-photo"><i class="fa-solid fa-star" aria-hidden="true"></i>4.0</span>
+      <span class="rating rating-on-photo">
+        <i class="fa-solid fa-star" aria-hidden="true"></i>
+        4.0
+      </span>
     </span>
     <div class="photo-title">
       <div class="photo-pills">
         <span class="pill pill-on-photo">Easy–mod</span>
-        <span class="pill pill-on-photo"><i class="fa-solid fa-compass" aria-hidden="true"></i>South-west</span>
-        <span class="pill pill-on-photo"><i class="fa-solid fa-location-dot" aria-hidden="true"></i>Kanakapura</span>
+        <span class="pill pill-on-photo">
+          <i class="fa-solid fa-compass" aria-hidden="true"></i>
+          South-west
+        </span>
+        <span class="pill pill-on-photo">
+          <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+          Kanakapura
+        </span>
       </div>
       <h3 class="title">Panorama Boulder Trail</h3>
     </div>
@@ -1318,20 +1441,50 @@ Canonical instance, from `src/components/cards/TrailCardOverlay.astro`:
   <div class="photo-body">
     <p class="fine">A short climb onto a boulder field that opens the whole plain up at once …</p>
     <dl class="trail-stats mono">
-      <div><dt>Length</dt><dd>3.0 km</dd></div>
-      <div><dt>Gain</dt><dd>+215 m</dd></div>
-      <div><dt>Hike</dt><dd>2 h 55</dd></div>
-      <div><dt>Drive</dt><dd>1 h 48</dd></div>
+      <div>
+        <dt>Length</dt>
+        <dd>3.0 km</dd>
+      </div>
+      <div>
+        <dt>Gain</dt>
+        <dd>+215 m</dd>
+      </div>
+      <div>
+        <dt>Hike</dt>
+        <dd>2 h 55</dd>
+      </div>
+      <div>
+        <dt>Drive</dt>
+        <dd>1 h 48</dd>
+      </div>
     </dl>
     <div class="htags">
-      <span class="htag"><i class="fa-solid fa-mountain" aria-hidden="true"></i>Hilltop</span>
-      <span class="htag"><i class="fa-solid fa-gopuram" aria-hidden="true"></i>Temple</span>
-      <span class="htag"><i class="fa-solid fa-dungeon" aria-hidden="true"></i>Cave</span>
+      <span class="htag">
+        <i class="fa-solid fa-mountain" aria-hidden="true"></i>
+        Hilltop
+      </span>
+      <span class="htag">
+        <i class="fa-solid fa-gopuram" aria-hidden="true"></i>
+        Temple
+      </span>
+      <span class="htag">
+        <i class="fa-solid fa-dungeon" aria-hidden="true"></i>
+        Cave
+      </span>
     </div>
     <div class="trail-links">
-      <a class="trail-link" href="…"><i class="fa-solid fa-person-hiking" aria-hidden="true"></i>Trek start</a>
-      <a class="trail-link" href="…"><i class="fa-solid fa-map" aria-hidden="true"></i>Map</a>
-      <a class="trail-link" href="…" download><i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>GPX</a>
+      <a class="trail-link" href="…">
+        <i class="fa-solid fa-person-hiking" aria-hidden="true"></i>
+        Trek start
+      </a>
+      <a class="trail-link" href="…">
+        <i class="fa-solid fa-map" aria-hidden="true"></i>
+        Map
+      </a>
+      <a class="trail-link" href="…" download>
+        <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
+        GPX
+      </a>
     </div>
   </div>
 </article>
@@ -1345,21 +1498,21 @@ The class list is a stack, not a name — each class adds one thing, and the
 component is the composition. That's what lets a theme dress `.photo-card`
 once and get all three trail densities for free.
 
-| Class | Adds | Defined at |
-|---|---|---|
-| `.card` | the surface: background, border, radius | `base.css` |
-| `.photo-card` | `padding:0`, `overflow:clip`, flex column — a card whose first child is a photo bleeding to the edges | `base.css:1532` |
-| `.trail-card-wide .photo-body` | the wide-density body: flex column, `1.1rem 1.25rem 1.35rem` padding, wrapping stats | `base.css:1987` |
-| `.trail-card-overlay .photo-title` | moves the title onto the cover: `padding-top`, larger `.title` | `base.css:1929` |
-| `.trail-card-wide.trail-card-overlay .photo-title` | the compound — cover is twice as wide, so the name takes a display size rather than a card size | `base.css:1940` |
-| `.photo-wrap` | `position: relative` — the positioning context for everything on the cover | `base.css:1736` |
-| `.photo-title` | absolutely positioned bottom block, white type, `isolation: isolate` | `base.css:1740` |
-| `.photo-title::before` | the dark wash, as its own layer at `z-index: -1` | `base.css:1751` |
-| `.photo-pills` / `.pill-on-photo` | the fixed-facts row; frosted white pills that survive any photograph | `base.css:1948` / `:1957` |
-| `.rating-on-photo` | rating badge with its own dark backing, since it sits outside the wash | `base.css:1971` |
-| `.trail-stats` | the four-cell `dl`, rules above and below | `base.css:997` |
-| `.htags` / `.htag` | HighlightTag row — what the trail *has* | `base.css:1491` |
-| `.trail-links` / `.trail-link` | the three-column link rail, dashed dividers | `base.css:2002` |
+| Class                                              | Adds                                                                                                  | Defined at                |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------- |
+| `.card`                                            | the surface: background, border, radius                                                               | `base.css`                |
+| `.photo-card`                                      | `padding:0`, `overflow:clip`, flex column — a card whose first child is a photo bleeding to the edges | `base.css:1532`           |
+| `.trail-card-wide .photo-body`                     | the wide-density body: flex column, `1.1rem 1.25rem 1.35rem` padding, wrapping stats                  | `base.css:1987`           |
+| `.trail-card-overlay .photo-title`                 | moves the title onto the cover: `padding-top`, larger `.title`                                        | `base.css:1929`           |
+| `.trail-card-wide.trail-card-overlay .photo-title` | the compound — cover is twice as wide, so the name takes a display size rather than a card size       | `base.css:1940`           |
+| `.photo-wrap`                                      | `position: relative` — the positioning context for everything on the cover                            | `base.css:1736`           |
+| `.photo-title`                                     | absolutely positioned bottom block, white type, `isolation: isolate`                                  | `base.css:1740`           |
+| `.photo-title::before`                             | the dark wash, as its own layer at `z-index: -1`                                                      | `base.css:1751`           |
+| `.photo-pills` / `.pill-on-photo`                  | the fixed-facts row; frosted white pills that survive any photograph                                  | `base.css:1948` / `:1957` |
+| `.rating-on-photo`                                 | rating badge with its own dark backing, since it sits outside the wash                                | `base.css:1971`           |
+| `.trail-stats`                                     | the four-cell `dl`, rules above and below                                                             | `base.css:997`            |
+| `.htags` / `.htag`                                 | HighlightTag row — what the trail _has_                                                               | `base.css:1491`           |
+| `.trail-links` / `.trail-link`                     | the three-column link rail, dashed dividers                                                           | `base.css:2002`           |
 
 Two invariants worth carrying into the app:
 
@@ -1368,7 +1521,7 @@ Two invariants worth carrying into the app:
    an SVG filter; the title text is a sibling and stays crisp. This is the
    app's `cover-wash` / `cover-scrim--torn` split.
 2. **Nothing on the cover is theme-coloured.** `#fff`, `rgb(255 255 255 /
-   0.16)`, `rgb(10 10 10 / 0.55)` — literals, not tokens. A photograph has no
+0.16)`, `rgb(10 10 10 / 0.55)` — literals, not tokens. A photograph has no
    colour scheme, so type over one is white in every theme.
 
 ### Layout
@@ -1377,7 +1530,7 @@ Two invariants worth carrying into the app:
   gap `2.5rem 1.25rem` — more air between rows than columns, or the tall cards
   read as one continuous block. Falls to one column under ~53rem.
 - **Cover**: `4 / 3`, set by `.trail-grid .photo-card .photo`. Taller than an
-  event cover's 16:10, because a trail photo is a *place* and wants the
+  event cover's 16:10, because a trail photo is a _place_ and wants the
   vertical.
 - **Title block**: `padding: 4.5rem 1.4rem 1rem` at the wide+overlay compound.
   The 4.5rem top is the wash's runway — the gradient needs that height to fade
@@ -1426,7 +1579,7 @@ interactive elements.
 - `h3.title` — the heading level assumes the card sits under an `h2` section
   head. Parameterise this in the app.
 - Cover `alt` describes the place, not the trail (`"Boulders and the plain
-  from the panorama trail"`). Every decorative `<i>` is `aria-hidden="true"`.
+from the panorama trail"`). Every decorative `<i>` is `aria-hidden="true"`.
 - `dl` / `dt` / `dd` for the stats — they are genuinely a definition list.
 - Contrast on the cover comes from the wash, not the photograph. The gradient
   runs `rgb(10 10 10 / 0.8)` at the base to transparent at 70%, which holds
