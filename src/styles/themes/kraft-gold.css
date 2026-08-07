@@ -1,0 +1,36 @@
+/* ===========================================================================
+   THEME 16 · "Kraft Gold" — light
+   ---------------------------------------------------------------------------
+   Kraft, with Milestone's yellow in place of the dark warm neutral.
+
+   The ground, the paper grain, the torn edge, the type and the hand-placed
+   lean are all Kraft's and are declared there (./kraft.css scopes every
+   selector to both themes), because the two differ in exactly one thing.
+   This file is that thing: the four accent tokens, lifted from
+   ./milestone.css — the live site's yellow-400.
+
+   Kraft's accent (#44403c) is emphasis by *darkness*: it is the ink, one shade
+   removed. Yellow cannot do that job, so the tokens split the way Milestone's
+   do — the fill is the bright yellow, but the accent-as-TYPE steps down the
+   same ramp to yellow-900, which is the only rung that clears 4.5:1 as text on
+   a paper ground (yellow-400 manages 1.5:1 there). Same hue, legible weight.
+   =========================================================================== */
+
+[data-theme="kraft-gold"] {
+  --accent: #facc15; /* yellow-400 — Milestone's fill, unchanged */
+  --on-accent: #1c1917; /* stone-900; white on this yellow fails badly */
+  --accent-type: #713f12; /* yellow-900 — 6.9:1 on Kraft's washed ground */
+
+  /* Milestone's tint is solid yellow-100. Here it has to stay translucent:
+     Kraft's surfaces are alpha over the paper scan, and a solid fill would
+     stamp the grain out of every chip and focus ring that uses it. */
+  --accent-tint: rgb(250 204 21 / 0.3);
+}
+
+/* ---------------------------------------------------------- flourishes -- */
+
+/* Milestone's hover, for the same reason: on a fill this bright, "darken"
+   is the only move that still reads as a state change. */
+[data-theme="kraft-gold"] .btn-primary:hover {
+  background: #eab308; /* yellow-500 */
+}

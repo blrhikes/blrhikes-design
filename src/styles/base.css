@@ -267,11 +267,12 @@ body:has(.flush-top) .topbar {
    bar goes solid (below), at which point white on the page's own ground would
    be invisible — hence the :not(:has()) rather than a flat override. */
 body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
-  :is(.brand, .brand span, .nav-links a, .tp-toggle) {
+  :is(.brand, .brand span, .nav-links a, .tp-toggle, .nav-toggle) {
   color: #fff;
 }
 
-body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden]))) .tp-toggle {
+body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
+  :is(.tp-toggle, .nav-toggle) {
   border-color: rgb(255 255 255 / 0.45);
 }
 
@@ -365,6 +366,79 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
 
 .tp-dot + .tp-dot {
   margin-left: -0.35em;
+}
+
+/* ---- the picker's settings row: what is not a theme --------------------- */
+
+/* Hairline above rather than more space, because this row is a different kind
+   of control from the chips — it modifies whichever of them is showing. */
+.tp-settings {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 0.9rem;
+  padding-block: 0.75rem 0.9rem;
+  border-top: 1px solid var(--line-soft);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+}
+
+.tp-set-label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  color: var(--ink-faint);
+  text-transform: var(--label-case);
+}
+
+.tp-set-label kbd {
+  font-family: inherit;
+  font-size: 0.85em;
+  color: var(--ink-hint);
+}
+
+/* One box divided into segments, not three separate buttons: the states are
+   mutually exclusive, and the shared outline is what says so. The overlap
+   collapses the doubled borders between them. */
+.tp-seg {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: var(--ctl-radius);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.tp-seg-opt {
+  padding: 0.4rem 0.85rem;
+  border: none;
+  border-inline-start: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-faint);
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  transition:
+    background-color 120ms,
+    color 120ms;
+}
+
+.tp-seg-opt:first-child {
+  border-inline-start: none;
+}
+
+.tp-seg-opt:hover {
+  color: var(--ink);
+}
+
+.tp-seg-opt[aria-pressed="true"] {
+  background: var(--accent-tint);
+  color: var(--ink);
+}
+
+.tp-seg-opt:focus-visible {
+  outline: 2px solid var(--accent-type);
+  outline-offset: -2px;
 }
 
 /* ---- component spec labels: names each design-system part in place ---- */
@@ -697,9 +771,18 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
 
 @media (max-width: 40rem) {
   .type-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 0.25rem;
   }
+}
+
+/* A specimen is one long word set at display size — "Savandurga" in Hi-Vis's
+   wide uppercase Archivo is 329px on its own — and a grid track will not go
+   under the min-content width of a word that cannot break. On a 320px screen
+   it has to break; the alternative is the specimen dragging the page sideways
+   to show itself off. */
+.type-demo {
+  overflow-wrap: break-word;
 }
 
 .type-spec {
@@ -885,9 +968,15 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
 
 /* ----------------------------------------------------------- components -- */
 
+/* `minmax(min(19rem, 100%), 1fr)`, not `minmax(19rem, 1fr)`, and the same
+   everywhere an auto-fit grid appears below. A bare rem minimum is a floor the
+   track cannot go under, so on a viewport narrower than it the column — and
+   with it the document — is simply wider than the screen. `min(…, 100%)` lets
+   the floor collapse to the container once there is no room for it, which is
+   the whole of the mobile-overflow bug these grids used to have. */
 .comp-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr));
   gap: 1.25rem;
   align-items: start;
 }
@@ -1041,7 +1130,7 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
 
 .event-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
   gap: 1.25rem;
 }
 
@@ -1145,7 +1234,7 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr));
   gap: 1px;
   background: var(--line);
   border: 1px solid var(--line);
@@ -1181,7 +1270,7 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
 
 .trail-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
   gap: 1.25rem;
   margin-bottom: 1.5rem;
 }
@@ -1231,6 +1320,21 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
 
 .table-card > * + * {
   margin-top: 0.9rem;
+}
+
+/* A table's min-content width is a floor — `width: 100%` cannot take it below
+   the widest row, so on a phone the table pushed the whole document sideways.
+   The scroll belongs to the table, not the page: this is the one component
+   that is genuinely wider than a small screen, and admitting that is better
+   than shrinking the type until the columns fit. */
+.table-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.table-scroll:focus-visible {
+  outline: 2px solid var(--accent-type);
+  outline-offset: 2px;
 }
 
 .table {
@@ -1324,6 +1428,222 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
   border-bottom-color: var(--accent-type);
 }
 
+/* The bar's right-hand controls: theme, then menu. A group rather than two
+   loose flex children so the row stays a three-part layout — brand, nav,
+   controls — at every width. */
+.topbar-ctl {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* The hamburger. Square version of .tp-toggle rather than a new look: the two
+   sit side by side at small widths and should read as one pair of controls. */
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--ctl-radius);
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition:
+    border-color 120ms,
+    background-color 120ms,
+    color 120ms;
+}
+
+.nav-toggle:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+  border-color: var(--accent-type);
+}
+
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--accent-type);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------- nav drawer -- */
+
+/* Below the breakpoint the inline nav is replaced by a right-hand drawer —
+   see NavDrawer.astro for why it is a <dialog> and why it renders outside the
+   header. The theme toggle stays in the bar at every width; it is the point of
+   this site, and its panel is a full-width band under the bar rather than a
+   nav item.
+
+   Above the breakpoint the dialog is `display: none` outright — it is never
+   opened there, and the inline nav is the one that renders. */
+.nav-drawer {
+  display: none;
+}
+
+@media (max-width: 56rem) {
+  .nav-links {
+    display: none;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+  /* The panel is the dialog itself — no inner wrapper — so the UA's own box
+     has to be undone: its margin (auto, which centres it), its fit-content
+     width and its max-height. */
+  .nav-drawer {
+    position: fixed;
+    inset: 0 0 0 auto;
+    width: min(19rem, 82vw);
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    /* The drawer is a piece of the page slid in from the side, not a floating
+       card: it paints the page's own ground — texture and all, for the themes
+       that have one — rather than a surface colour. `fixed` attachment keeps
+       Kraft's grain and Canopy's dapple aligned with what is behind it, so it
+       reads as the paper continuing rather than a swatch of it. */
+    background-color: var(--ground);
+    background-image: var(--ground-img);
+    background-attachment: fixed;
+    color: var(--ink);
+
+    border: none;
+    border-inline-start: 1px solid var(--line);
+    border-radius: 0;
+    /* `none` in the flat themes, which is the right answer there — the scrim
+       is what separates the drawer from the page, not a lift. */
+    box-shadow: var(--pop-shadow);
+
+    translate: 100% 0;
+    /* `display` and `overlay` have to be in the transition for the CLOSING
+       slide to be seen at all: without them the element leaves the top layer
+       and goes `display: none` on the same frame the translate starts. */
+    transition:
+      translate 240ms ease,
+      display 240ms allow-discrete,
+      overlay 240ms allow-discrete;
+  }
+
+  .nav-drawer[open] {
+    display: flex;
+    flex-direction: column;
+    translate: 0 0;
+  }
+
+  /* Without this the opening slide has no start value to animate FROM — the
+     element only exists in the DOM as of the frame it opens. */
+  @starting-style {
+    .nav-drawer[open] {
+      translate: 100% 0;
+    }
+  }
+
+  .nav-drawer::backdrop {
+    background: rgb(0 0 0 / 0.45);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  /* The page must not scroll behind the drawer. `overscroll-behavior` above
+     stops the chaining; this stops the reach in the first place. */
+  body:has(.nav-drawer[open]) {
+    overflow: hidden;
+  }
+
+  .nav-drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.65rem clamp(1rem, 5vw, 1.25rem);
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .nav-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.15rem;
+    height: 2.15rem;
+    flex-shrink: 0;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--ctl-radius);
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    cursor: pointer;
+  }
+
+  .nav-close:hover {
+    background: var(--surface-2);
+    color: var(--ink);
+  }
+
+  .nav-close:focus-visible {
+    outline: 2px solid var(--accent-type);
+    outline-offset: 2px;
+  }
+
+  .nav-drawer-links {
+    display: flex;
+    flex-direction: column;
+    padding-block: 0.35rem;
+  }
+
+  /* Full-bleed rows, not a list of links: at this size the whole strip is the
+     target, and the hairline between rows does the separating. */
+  .nav-drawer-links a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem clamp(1rem, 5vw, 1.25rem);
+    border-bottom: 1px solid var(--line-soft);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    text-transform: var(--label-case);
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+
+  .nav-drawer-links a:last-child {
+    border-bottom: none;
+  }
+
+  .nav-drawer-links a i {
+    font-size: 0.8em;
+    opacity: 0.45;
+  }
+
+  .nav-drawer-links a:hover {
+    background: var(--surface-2);
+    color: var(--ink);
+  }
+
+  .nav-drawer-links a[aria-current="page"] {
+    color: var(--accent-type);
+    box-shadow: inset 3px 0 0 0 var(--accent-type);
+  }
+
+  .nav-drawer-links a:focus-visible {
+    outline: 2px solid var(--accent-type);
+    outline-offset: -2px;
+  }
+}
+
 /* ------------------------------------------------------------ photo hero -- */
 /* Type over a photograph stays white in every theme: a photograph has no
    colour scheme. The scrim is therefore a fixed dark wash, not a token. */
@@ -1404,7 +1724,7 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
 
 .detail-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(16rem, 1fr);
+  grid-template-columns: minmax(0, 1.6fr) minmax(min(16rem, 100%), 1fr);
   gap: 1.5rem;
   align-items: start;
 }
@@ -2150,7 +2470,7 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
 /* Taller cards need more air between rows than between columns, or the rows
    read as one continuous block. */
 .trail-grid--wide {
-  grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(26rem, 100%), 1fr));
   gap: 2.5rem 1.25rem;
 }
 

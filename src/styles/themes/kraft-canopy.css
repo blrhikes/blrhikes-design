@@ -1,0 +1,153 @@
+/* ===========================================================================
+   THEME 17 · "Kraft Canopy" — light
+   ---------------------------------------------------------------------------
+   Kraft's paper — the real kraft-board scan, the hand-torn card edges, the
+   flat no-shadow conviction — carrying Canopy Day's forest palette.
+
+   Unlike Kraft Gold, this one cannot be four token overrides on ./kraft.css:
+   the whole colour system changes, not just the accent, so this is a full
+   theme file. What it deliberately keeps from Kraft is the *form* — the
+   ground image and wash, radius 0, no border, no shadow, --cut, and the
+   Fraunces/DM Sans type. What it takes from ./canopy-day.css is every hue.
+
+   Two things had to be reconciled rather than copied:
+
+   · Canopy Day's ground is a pale leaf wash (#eef4da) under green dapple
+     gradients. Kraft's ground is a photographic paper scan. Both cannot be
+     the background, so the scan wins (it is the premise of the theme) and the
+     dapple survives as green light laid ON the paper — the gradients ride
+     above the scan in the same --ground-img stack, so the grain shows through
+     the pools instead of being covered by them.
+   · Canopy Day's surfaces are near-opaque (#f9fcef). Kraft's are translucent
+     so the grain reads through the card. These stay translucent, tinted with
+     Canopy's leaf-light rather than Kraft's cream — a sheet of pale green
+     paper on the board, not a white card floating over it.
+
+   The torn edge comes from ../torn-paper.css, which this theme is scoped
+   into; the geometry is shared, this file only sets the tokens it reads.
+   =========================================================================== */
+
+[data-theme="kraft-canopy"] {
+  color-scheme: light;
+
+  /* Kraft's board, cooled: the scan is warm brown, so the scrim over it is
+     Canopy's pale leaf rather than white — same "brightness up, contrast
+     down" trick, but the paper comes out green-grey instead of tan. Above it
+     sit Canopy Day's three dapple pools, unchanged. */
+  --ground: #cfd9ac;
+  --kraft-wash: 0.72;
+  --ground-img:
+    radial-gradient(40rem 24rem at 80% -6rem, rgb(78 159 61 / 0.16), transparent 70%),
+    radial-gradient(34rem 22rem at 10% 40rem, rgb(216 233 168 / 0.5), transparent 70%),
+    radial-gradient(30rem 20rem at 60% 90%, rgb(30 81 40 / 0.09), transparent 65%),
+    linear-gradient(rgb(238 244 218 / var(--kraft-wash)), rgb(238 244 218 / var(--kraft-wash))),
+    url("/assets/kraft-paper.jpg");
+
+  /* Canopy Day's surfaces, at Kraft's alphas so the grain still reads. */
+  --surface: rgb(249 252 239 / 0.74);
+  --surface-2: rgb(216 233 168 / 0.62);
+  --surface-raise: rgb(249 252 239 / 0.96);
+
+  --ink: #191a19;
+  --ink-soft: #2e3a2b;
+  --ink-faint: #4c5c46;
+  --ink-hint: #6a7a62; /* a step darker than Canopy Day's #75846c — the
+                          textured ground is busier, and the hint tier is the
+                          first thing grain eats */
+
+  --accent: #1e5128;
+  --on-accent: #eef4da;
+  --accent-type: #1e5128; /* 7.6:1 on this ground */
+  --accent-tint: rgb(30 81 40 / 0.14);
+
+  --ok: #2c6e35;
+  --ok-tint: rgb(44 110 53 / 0.15);
+  --danger: #a84632;
+  --danger-tint: rgb(168 70 50 / 0.15);
+
+  --line: rgb(25 26 25 / 0.2);
+  --line-soft: rgb(25 26 25 / 0.09);
+
+  /* Kraft's form verbatim: a torn edge is its own shape, so no radius, no
+     border and no lift — Canopy Day's rounded, bordered, softly-shadowed card
+     is exactly what this theme is trading away. */
+  --card-radius: 0;
+  --ctl-radius: 0.5rem;
+  --pill-radius: 999px;
+  --card-border: none;
+  --card-shadow: none;
+  --pop-shadow: none;
+  --cut: url(#cut-1);
+
+  /* The torn Notice's paper, read by ../torn-paper.css: Canopy's leaf tone,
+     which is this palette's equivalent of the warm note Milestone tears. */
+  --notice-paper: #d8e9a8;
+
+  /* Kraft's typography, not Canopy's Lora/Mulish — the trade here is palette
+     for palette. Swapping the faces too would make this a third theme rather
+     than Kraft in forest colours. */
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 500;
+  --display-case: none;
+  --display-track: 0;
+  --w-medium: 500;
+  --w-strong: 500;
+  --label-case: uppercase;
+  --label-track: 0.08em;
+}
+
+/* ---------------------------------------------------------- flourishes -- */
+
+/* Hold the dapple still while the page scrolls — Canopy Day's rule, and it
+   matters more here: the paper scan under the pools would otherwise slide
+   against light that is meant to be falling on it. */
+[data-theme="kraft-canopy"] body {
+  background-attachment: fixed;
+}
+
+/* Kraft's hand-placed lean: photos taped to a journal page. */
+[data-theme="kraft-canopy"] .event-card:nth-child(2),
+[data-theme="kraft-canopy"] .trail-card:nth-child(2),
+[data-theme="kraft-canopy"] .photo-card:nth-child(2) {
+  rotate: 0.4deg;
+}
+
+[data-theme="kraft-canopy"] .event-card:nth-child(3),
+[data-theme="kraft-canopy"] .trail-card:nth-child(3),
+[data-theme="kraft-canopy"] .photo-card:nth-child(3) {
+  rotate: -0.35deg;
+}
+
+/* Canopy Day's hero, verbatim — the sun through leaves, and the hills wearing
+   the palette outright: pale leaf → living green → understorey. */
+[data-theme="kraft-canopy"] .ridges .sun {
+  fill: #4e9f3d;
+  filter: drop-shadow(0 0 12px rgb(78 159 61 / 0.45));
+}
+
+[data-theme="kraft-canopy"] .ridges .r1 {
+  fill: #d8e9a8;
+  opacity: 1;
+}
+
+[data-theme="kraft-canopy"] .ridges .r2 {
+  fill: #4e9f3d;
+  opacity: 1;
+}
+
+[data-theme="kraft-canopy"] .ridges .r3 {
+  fill: #1e5128;
+  opacity: 1;
+}
+
+[data-theme="kraft-canopy"] .meter-fill {
+  background: linear-gradient(90deg, #4e9f3d, #1e5128);
+}
+
+[data-theme="kraft-canopy"] .pill-live {
+  background: #d8e9a8;
+  color: #1e5128;
+  border-color: rgb(78 159 61 / 0.7);
+}

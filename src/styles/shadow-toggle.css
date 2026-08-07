@@ -1,0 +1,91 @@
+/* ===========================================================================
+   SHADOW TOGGLE — the lift, overridden across every theme
+   ---------------------------------------------------------------------------
+   `data-shadows` on <html>, alongside `data-theme`. Three states, and the
+   default is the absent one:
+
+     (no attribute)  the theme's own lift — nothing here applies
+     off             every surface shadow suppressed, on any theme
+     on              a lift for the themes that ship without one
+
+   "Off" is the easy direction: shadows in this system funnel through two
+   contract tokens (--card-shadow, --pop-shadow), so re-pointing that pair to
+   `none` flattens cards, popovers, dropdowns and CTAs at once. The one shadow
+   that is NOT a token is the hero button's, hardcoded in base.css because it
+   sits on a photograph rather than on a theme, and it is turned off by hand
+   below.
+
+   "On" is the awkward one, and the awkwardness is real rather than a shortcut:
+   CSS cannot ask "does this theme's --card-shadow happen to be none?", so the
+   themes that need supplying are named. Eleven of the seventeen already lift,
+   and for those "on" is what they were already doing — the state is a no-op,
+   deliberately, because overriding Poster's hard stamp or Monsoon's deep glow
+   with a generic drop shadow would answer a question nobody asked. Only the
+   six flat ones change.
+
+   ⚠ Adding a theme that sets `--card-shadow: none` means adding it to the
+   :is() list below, or its "on" state will do nothing.
+
+   Deliberately left alone in every state: focus rings and the avatar stack's
+   `drop-shadow`, which separate overlapping shapes rather than lift them; the
+   inset line that reads as a paper edge's thickness; the white type shadows
+   over photographs, which are legibility on an image that has no colour
+   scheme; and the dark themes' `drop-shadow` glows, which are light sources,
+   not shadows.
+
+   Loaded last of all — after the themes AND after torn-paper.css — so it needs
+   no !important: every selector here matches the themes' own specificity and
+   wins on order.
+   =========================================================================== */
+
+/* ------------------------------------------------------------------ off -- */
+
+[data-shadows="off"] {
+  --card-shadow: none;
+  --pop-shadow: none;
+}
+
+/* The hero pair sits on a photograph, so base.css seats the primary with a
+   hardcoded shadow rather than a token. Same specificity as that rule plus the
+   attribute, which is all it takes. */
+[data-shadows="off"] .hero-actions .btn-primary {
+  box-shadow: none;
+}
+
+/* ------------------------------------------------------------------- on -- */
+
+/* The six themes that ship flat. Everything else already lifts. */
+[data-shadows="on"]:is(
+    [data-theme="kraft"],
+    [data-theme="kraft-gold"],
+    [data-theme="kraft-night"],
+    [data-theme="kraft-canopy"],
+    [data-theme="contour"],
+    [data-theme="mono"]
+  ) {
+  /* Cast straight down, no sideways offset, in two layers: a contact shadow
+     that keeps the sheet's edge on the ground, and a wide ambient pulled in at
+     the sides (the negative spread) so it reads as a penumbra rather than a
+     grey box behind the card. Deliberately generic — this state asks "what
+     would a lift do here", so it must not smuggle in a style of its own.
+
+     Four of these six wear the hand-torn edge, where the shadow rides
+     `.card::before` and is displaced by the tear filter along with the paper,
+     so it frays with the edge instead of outlining the rectangle. */
+  --card-shadow:
+    0 1px 2px 0 rgb(0 0 0 / var(--lift-near, 0.06)),
+    0 10px 24px -8px rgb(0 0 0 / var(--lift-far, 0.16));
+
+  /* A popover is nearer the eye than a card: same light, more distance. */
+  --pop-shadow:
+    0 2px 6px -1px rgb(0 0 0 / var(--lift-near, 0.08)),
+    0 16px 34px -12px rgb(0 0 0 / var(--lift-far, 0.26));
+}
+
+/* Black on a dark ground is barely an event — the card is LIGHTER than what is
+   behind it, so there is little for a shadow to darken. The one dark theme in
+   the list above gets the alphas raised to compensate. */
+[data-shadows="on"][data-theme="kraft-night"] {
+  --lift-near: 0.5;
+  --lift-far: 0.55;
+}

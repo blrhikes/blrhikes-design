@@ -2,7 +2,7 @@
 
 Theme explorations for the BLR Hikes rebuild (`../blrhikes-app`). An Astro
 site that renders the same set of real components — hero, palette, type ramp,
-buttons, forms, event cards, trail cards, stats, table — under fifteen
+buttons, forms, event cards, trail cards, stats, table — under seventeen
 interchangeable themes.
 
 ## Run it
@@ -18,7 +18,25 @@ Switch themes with the paint-roller button in the top bar (an mxb.dev-style
 picker: each theme is a button showing its name over a row of colour dots) or
 the keys `1`–`0` and `-` `=` `[` `]` `\`. The choice is stored in
 `localStorage` and applied before first paint (no flash), and the picker
-closes on Escape or a click anywhere outside it.
+closes on Escape or a click anywhere outside it. The same panel carries the
+**shadow override** (`s`), which applies across every theme — see below.
+
+Both settings also read from the **query string**, so a particular look can be
+linked to rather than described:
+
+```
+/?theme=poster                 a theme by id (the ids are in src/data/themes.js)
+/?shadows=off                  the shadow override: on · off · theme
+/event?theme=milestone-soft&shadows=on
+```
+
+The URL wins over `localStorage` — a link that says which theme to show has to
+out-rank what the recipient's browser last picked — and is then stored, so the
+choice survives the next click. An unknown `?theme=` is ignored rather than
+applied, since it would leave the page with no theme's tokens at all. Picking
+from the panel writes both params back into the address bar (`replaceState`, so
+Back still leaves the page), which is where you copy the link from; a page that
+was never touched leaves the URL alone.
 
 ## Deploying
 
@@ -67,7 +85,7 @@ src/layouts/
 src/components/
   PaperFilters.astro  every SVG tear filter + the AttendeeFaces octagon,
                       one definition set shared by all pages
-  TopBar · ThemePicker · PageNav · SiteFooter
+  TopBar · ThemePicker · NavDrawer · PageNav · SiteFooter
   ui/                 the primitives: Btn, Pill, HighlightTags, DateBlock,
                       AttendeeFaces, SeatRow, Meter, Notice, Rating,
                       IconLine, TrailStats, TrailLinks, Field, PhotoWrap,
@@ -88,19 +106,67 @@ src/data/
 src/styles/
   base.css            the contract (documented at the top) + every component
   themes/*.css        one [data-theme="…"] block per theme + flourishes
-                      (milestone-soft.css is the exception: it re-points one
-                      token of milestone.css, whose block is scoped to both)
+                      (two exceptions, both variant files that re-point a few
+                      tokens of a block scoped to the pair: milestone-soft.css
+                      over milestone.css, kraft-gold.css over kraft.css)
   torn-paper.css      the hand-torn edge — geometry only, painted from the
-                      contract, worn by five themes through one :is() scope
+                      contract, worn by seven themes through one :is() scope
+  shadow-toggle.css   the shadow override (see below); imported last of all,
+                      so it outranks every theme on order, not specificity
   event.css           page-scoped layout for the event surface
   tear-lab.css        page-scoped layout for the lab
 
 src/scripts/
-  theme.js            theme picker, localStorage, View Transitions crossfade
+  theme.js            theme picker + the shadow override, localStorage, View
+                      Transitions crossfade
   pagenav.js          floating "on this page" jump list + scroll-spy
   htags.js            clamps each HighlightTag row to one line, counts rest
+  nav-drawer.js       opens/closes the small-viewport menu
   tear-lab.js         builds the lab's sliders and drives the live filters
+  debug.js            the on-page layout inspector (see below)
 ```
+
+## The nav at small widths
+
+Under **56rem** the inline nav is replaced by a right-hand drawer. It is a
+`<dialog>` opened with `showModal()`, so the scrim, Escape, and inerting the
+page behind it are the browser's, not ours; `nav-drawer.js` adds only the
+toggle wiring, click-off dismissal, closing on navigation, and closing if the
+viewport grows past the breakpoint while it is open. The drawer paints the
+page's own ground — texture and all — rather than a surface colour, so it
+reads as the paper sliding in rather than a card floating over it.
+
+**The theme toggle stays in the bar at every width.** It is the point of this
+site, and its panel is a full-width band under the bar rather than a nav item;
+burying the one control everything else exists to demonstrate behind a
+hamburger would be the wrong trade. So small screens carry two controls —
+theme, then menu.
+
+The drawer renders as a sibling of `<header>`, not inside it: `.topbar` carries
+a `backdrop-filter`, which makes it the containing block for anything fixed
+within it. Its links and the inline nav's are the same `links` array rendered
+twice; one of the two is `display: none` at any width, so only one reaches the
+accessibility tree and neither can drift.
+
+## The debug panel
+
+`src/scripts/debug.js` — an on-page inspector for the layout bugs that only
+show up on a real device. Open it with `?debug` in the URL or **Shift+D** (the
+theme shortcuts are unshifted single keys, so the two cannot collide); the
+state is remembered per tab.
+
+It reports the viewport width, the document's `scrollWidth` and the difference
+between them, then lists every element sticking out past the document's edge —
+widest first, and starred when it has *no* overflowing ancestor, which is
+usually where the cause is. Elements inside something that scrolls or clips
+them are excluded: they cannot move the document. A second list catches the
+containers that are silently scrolling sideways instead. Tapping a row outlines
+that element and scrolls to it; **Copy report** puts the whole thing on the
+clipboard as text.
+
+It is inert until switched on, builds its own DOM, and injects its own styles
+from the script — nothing about it is in `base.css`, so it cannot leak into a
+theme or a component.
 
 A `.spec` label whose component has a written entry in `COMPONENTS.md` carries
 a **spec'd** mark linking to it. The mark is generated by reading that file's
@@ -155,11 +221,38 @@ single light+dark theme.
 
 | ] | **Kraft Night** | dark | Kraft after dark: the same paper scan under a near-black wash so the grain survives, the accent inverted to pale-paper-on-ink, same tear and type |
 | \\ | **Milestone Night** | dark | Milestone Soft after dark, transcribed from the app's own `dark:` classes: stone-900 ground, stone-800 cards, yellow-500 still the one accent |
+| ; | **Kraft Gold** | light | Kraft with Milestone's accent: same paper, tear and type, but the dark warm neutral becomes yellow-400 (fills) / yellow-900 (type). Shares kraft.css; the variant file is only the four accent tokens |
+| ' | **Kraft Canopy** | light | Kraft's paper scan and torn edges carrying Canopy Day's forest palette: the leaf wash and green dapple laid over the grain, deep-green ink and accent, Kraft's type kept |
 
 Icons are Font Awesome 6 (CDN), matching the app's own icon names
 (`location-dot`, `clock`, `mountain-sun`, `fish`, `car-side`, `star`).
 
-Themes 6–7, 12 and 13 all keep Kraft's typography — Fraunces over DM Sans,
+### The shadow override
+
+The one control in the picker that is not a theme. It sits below the chips,
+cycles with **`s`**, persists like the theme does, and stays put across a theme
+change — the comparison it exists for is a theme against *itself*.
+
+| | |
+|---|---|
+| **Theme** | the default. No attribute is written; every theme lifts exactly as it means to |
+| **On** | supplies a plain two-layer drop shadow to the six themes that ship flat (the four Krafts, Contour, Mono). A no-op on the other eleven, deliberately: overriding Poster's hard stamp with a generic shadow would answer a question nobody asked |
+| **Off** | flattens everything, on any theme — cards, popovers, dropdowns and CTAs at once |
+
+`data-shadows` on `<html>`, alongside `data-theme`, applied in the same
+pre-paint script; the rules are `src/styles/shadow-toggle.css`, imported last
+so it outranks the themes on order rather than on specificity. "Off" is cheap
+because shadows in this system funnel through two tokens — `--card-shadow` and
+`--pop-shadow` — so re-pointing that pair reaches everything. "On" cannot be:
+CSS has no way to ask whether a theme's shadow *happens* to be `none`, so the
+flat six are named in that file, and a new flat theme has to join them there.
+
+Left alone in every state: focus rings and the avatar stack's `drop-shadow`
+(they separate overlapping shapes rather than lift them), the inset line that
+reads as a paper edge's thickness, the white type shadows over photographs, and
+the dark themes' `drop-shadow` glows, which are light sources.
+
+Themes 6–7, 12–13 and 16–17 all keep Kraft's typography — Fraunces over DM Sans,
 weights capped at 500 — so that a theme switch reads as a change of colour
 rather than a change of voice, and the palettes can be compared on equal
 terms.
@@ -180,6 +273,9 @@ Theme 12 takes its palette from the running app, not the live site's faces
 2. Set **every** token in the contract (listed at the top of `base.css`).
 3. Add a row in `src/data/themes.js` — the picker chip, the keyboard
    shortcut and the label all come from there.
+4. If the theme sets `--card-shadow: none`, add it to the `:is()` list in
+   `src/styles/shadow-toggle.css` too, or the picker's **Shadows · On** will do
+   nothing for it.
 
 Slots are named for their job, not their colour — `--accent` is the fill,
 `--accent-type` is the accent *as text* and must clear 4.5:1 on `--ground`.

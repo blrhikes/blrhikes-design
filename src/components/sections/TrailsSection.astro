@@ -47,6 +47,11 @@ const registrations = [
 
     <Spec gap>Table — recent registrations</Spec>
     <div class="card table-card">
+      {/* Four columns of tabular data have a min-content width a phone does
+          not have; the wrapper lets the TABLE scroll sideways instead of the
+          page. tabindex makes it reachable by keyboard, which a scrollable
+          region needs to be. */}
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Recent registrations">
       <table class="table">
         <thead>
           <tr><th>Name</th><th>Event</th><th>Status</th><th class="num">Amount</th></tr>
@@ -62,6 +67,7 @@ const registrations = [
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   </div>
 </section>

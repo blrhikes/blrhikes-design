@@ -1,5 +1,5 @@
 ---
-/* Every page: the token contract, all thirteen themes, the paper filters and
+/* Every page: the token contract, all seventeen themes, the paper filters and
    the top bar. Mirrors the app's design-system rule — components paint from a
    token contract, a theme is one file that re-points the tokens — so this
    layout imports base.css first and the themes after it, and nothing in
@@ -7,10 +7,28 @@
 import PaperFilters from "../components/PaperFilters.astro";
 import TopBar from "../components/TopBar.astro";
 import SiteFooter from "../components/SiteFooter.astro";
-import { defaultTheme, storageKey } from "../data/themes.js";
+import {
+  themes,
+  defaultTheme,
+  storageKey,
+  shadowKey,
+  themeParam,
+  shadowParam,
+} from "../data/themes.js";
+
+/* The inline script below cannot import, so the roster it validates against is
+   handed to it — an unknown ?theme= must not reach `data-theme`, or the page
+   paints with no theme at all. */
+const themeIds = themes.map((t) => t.id);
 
 import "../styles/base.css";
 import "../styles/themes/kraft.css";
+/* After kraft.css, which declares the palette for Kraft AND Kraft Gold — the
+   file below is only the accent that differs, and it wins on order, not on
+   specificity. Kraft Canopy is a whole theme file and merely keeps the
+   company. */
+import "../styles/themes/kraft-gold.css";
+import "../styles/themes/kraft-canopy.css";
 import "../styles/themes/contour.css";
 import "../styles/themes/monsoon.css";
 import "../styles/themes/poster.css";
@@ -30,6 +48,10 @@ import "../styles/themes/milestone-night.css";
 
 /* After every theme, so a theme cannot out-order the shared tear geometry. */
 import "../styles/torn-paper.css";
+
+/* Last of all: the shadow override has to outrank every theme's own lift, and
+   it does it on order rather than on specificity. */
+import "../styles/shadow-toggle.css";
 
 interface Props {
   title: string;
@@ -58,11 +80,63 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
 
-    <!-- Applied before first paint so there is no theme flash. -->
-    <script is:inline define:vars={{ storageKey }}>
+    <!-- Applied before first paint so there is no theme flash. The shadow
+         override rides along: it is a second attribute on the same element,
+         and a card that painted lifted and then flattened a frame later would
+         be exactly the flash this script exists to prevent.
+
+         The query string outranks localStorage — a link that says which theme
+         to show has to win over what this browser last picked, or it isn't a
+         link to anything. Both settings are then stored, so the choice
+         survives the next click the way the picker's does. -->
+    <script
+      is:inline
+      define:vars={{ storageKey, shadowKey, themeParam, shadowParam, themeIds }}
+    >
       try {
-        var t = localStorage.getItem(storageKey);
-        if (t) document.documentElement.dataset.theme = t;
+        var root = document.documentElement;
+        var qs = new URLSearchParams(location.search);
+
+        /* Storage throws outright in some privacy modes; a link should still
+           work there, so every touch of it is swallowed on its own rather than
+           taking the URL down with it. */
+        var get = function (k) {
+          try {
+            return localStorage.getItem(k);
+          } catch (e) {
+            return null;
+          }
+        };
+        var put = function (k, v) {
+          try {
+            localStorage.setItem(k, v);
+          } catch (e) {}
+        };
+
+        /* An unknown id would leave the page with no theme's tokens at all, so
+           a param that names one is discarded — and discarded back to what was
+           stored, since a typo in a link is no reason to also forget the
+           browser's own choice. */
+        var t = qs.get(themeParam);
+        if (!t || themeIds.indexOf(t) === -1) t = get(storageKey);
+        if (t && themeIds.indexOf(t) !== -1) {
+          root.dataset.theme = t;
+          put(storageKey, t);
+        }
+
+        /* `theme` is the URL's word for the default mode; the stored form of
+           it is the empty string, and neither writes an attribute. Same
+           fallback as above for anything else. */
+        var s = qs.get(shadowParam);
+        if (s === "theme") s = "";
+        else if (s !== "on" && s !== "off") s = get(shadowKey);
+
+        if (s === "on" || s === "off") {
+          root.dataset.shadows = s;
+          put(shadowKey, s);
+        } else if (s === "") {
+          put(shadowKey, "");
+        }
       } catch (e) {}
     </script>
 
@@ -103,6 +177,8 @@ const {
       import "../scripts/theme.js";
       import "../scripts/pagenav.js";
       import "../scripts/htags.js";
+      import "../scripts/nav-drawer.js";
+      import "../scripts/debug.js";
     </script>
   </body>
 </html>

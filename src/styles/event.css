@@ -31,6 +31,15 @@
   min-height: clamp(28rem, 82vh, 46rem);
   display: flex;
   align-items: flex-end;
+  /* The wash under the title bleeds ±50vw to reach past the container (see
+     .ev-cover-copy::before). The left bleed is invisible — you cannot scroll
+     to negative — but the right one is real, scrollable width: it made every
+     event page overflow horizontally by half a viewport. Clip it here, at the
+     full-bleed element, so the wash still spans the whole width and stops
+     exactly at it. `clip` on the x axis only: the cover's bottom tear must
+     still be able to hang past the block edge, which `hidden` would cut and
+     which would also make this a scroll container. */
+  overflow-x: clip;
 }
 
 .ev-cover .photo {
@@ -180,7 +189,7 @@
 
 .ev-cols {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
   gap: clamp(1.25rem, 3vw, 2rem);
 }
 
@@ -281,12 +290,14 @@
 .ev-links a:hover { color: var(--accent-type); text-decoration: underline; text-underline-offset: 3px; }
 .ev-links i { color: var(--accent-type); font-size: 0.85em; }
 
-/* ---- kraft only: the cover's bottom edge tears like every other photo -- */
-[data-theme="kraft"] .ev-cover-backing { filter: url(#cut-photo); }
+/* ---- the Kraft family only: the cover's bottom edge tears like every
+     other photo. Kraft Gold and Kraft Canopy wear Kraft's form, so they take
+     this too -- */
+:is([data-theme="kraft"], [data-theme="kraft-gold"], [data-theme="kraft-canopy"]) .ev-cover-backing { filter: url(#cut-photo); }
 
-[data-theme="kraft"] .ev-cover .photo { clip-path: inset(0 0 16px 0); }
+:is([data-theme="kraft"], [data-theme="kraft-gold"], [data-theme="kraft-canopy"]) .ev-cover .photo { clip-path: inset(0 0 16px 0); }
 
-[data-theme="kraft"] .ev-cover-copy::before { filter: url(#cut-photo-wide); }
+:is([data-theme="kraft"], [data-theme="kraft-gold"], [data-theme="kraft-canopy"]) .ev-cover-copy::before { filter: url(#cut-photo-wide); }
 
 /* The one notice in the article body wants air above it. */
 .ev-safety-note { margin-top: 1rem; }

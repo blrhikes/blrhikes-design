@@ -97,9 +97,60 @@ export const themes = [
     key: "\\",
     dots: ["#1c1917", "#292524", "#eab308", "#fafaf9"],
   },
+  {
+    /* Kraft's palette with Milestone's yellow in the accent slot — the dots
+       are Kraft's, third one swapped. */
+    id: "kraft-gold",
+    label: "Kraft Gold",
+    key: ";",
+    dots: ["#d4b896", "#faf3e8", "#facc15", "#1a1a1a"],
+  },
+  {
+    /* Kraft's paper and tear, Canopy Day's forest. */
+    id: "kraft-canopy",
+    label: "Kraft Canopy",
+    key: "'",
+    dots: ["#cfd9ac", "#d8e9a8", "#1e5128", "#4e9f3d"],
+  },
 ];
 
 export const defaultTheme = "kraft";
 
 /* localStorage key, shared by the pre-paint inline script and theme.js. */
 export const storageKey = "blrhikes-theme";
+
+/* ------------------------------------------------------------- shadows -- */
+
+/* The shadow override, orthogonal to the theme: it sets `data-shadows` on
+   <html>, which src/styles/shadow-toggle.css reads. Three states rather than a
+   checkbox, because "on" and "the theme's own" are genuinely different answers
+   — six of the themes ship deliberately flat, and for the other eleven "on" is
+   what they already do. A checkbox would have to mean something different
+   depending on which theme was showing.
+
+   The empty id is the default and writes no attribute at all, so a page with
+   no stored preference renders exactly as its theme intends. */
+export const shadowModes = [
+  { id: "", label: "Theme" },
+  { id: "on", label: "On" },
+  { id: "off", label: "Off" },
+];
+
+export const shadowKey = "blrhikes-shadows";
+
+/* Cycles the three, unshifted — the theme shortcuts are the number row and its
+   punctuation, and the debug panel is Shift+D, so `s` is free. */
+export const shadowCycleKey = "s";
+
+/* ----------------------------------------------------------- query string -- */
+
+/* `?theme=poster&shadows=off` — the same two settings, set from the URL so a
+   particular look can be linked to rather than described ("open the site, hit
+   4, then turn shadows off"). Read before first paint, ahead of localStorage,
+   and then stored: a link that only lasted until the next click would be a
+   worse version of the picker rather than a way to share what you are seeing.
+
+   `shadows=theme` is how the URL spells the default mode, since an empty
+   `shadows=` in a link reads like a mistake. */
+export const themeParam = "theme";
+export const shadowParam = "shadows";

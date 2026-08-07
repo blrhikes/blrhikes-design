@@ -9,9 +9,15 @@
    The torn edge itself lives in ../torn-paper.css, which Milestone wears too
    — it is a mechanism, not a palette. This file sets the tokens it reads
    (--cut among them) and adds the one flourish that is Kraft's alone.
+
+   ⚠ This file declares the palette for BOTH Kraft and Kraft Gold — the two
+   differ only in the accent, so the second is `./kraft-gold.css` re-pointing
+   the four accent tokens rather than a second copy of this file that would
+   drift. Every selector here is scoped to the pair; edit the palette here,
+   and put anything that must differ in the variant file.
    =========================================================================== */
 
-[data-theme="kraft"] {
+:is([data-theme="kraft"], [data-theme="kraft-gold"]) {
   color-scheme: light;
 
   --ground: #d4b896;
@@ -69,14 +75,14 @@
 }
 
 /* A hand-placed lean, like photos taped to a journal page. */
-[data-theme="kraft"] .event-card:nth-child(2),
-[data-theme="kraft"] .trail-card:nth-child(2),
-[data-theme="kraft"] .photo-card:nth-child(2) {
+:is([data-theme="kraft"], [data-theme="kraft-gold"]) .event-card:nth-child(2),
+:is([data-theme="kraft"], [data-theme="kraft-gold"]) .trail-card:nth-child(2),
+:is([data-theme="kraft"], [data-theme="kraft-gold"]) .photo-card:nth-child(2) {
   rotate: 0.4deg;
 }
 
-[data-theme="kraft"] .event-card:nth-child(3),
-[data-theme="kraft"] .trail-card:nth-child(3),
-[data-theme="kraft"] .photo-card:nth-child(3) {
+:is([data-theme="kraft"], [data-theme="kraft-gold"]) .event-card:nth-child(3),
+:is([data-theme="kraft"], [data-theme="kraft-gold"]) .trail-card:nth-child(3),
+:is([data-theme="kraft"], [data-theme="kraft-gold"]) .photo-card:nth-child(3) {
   rotate: -0.35deg;
 }

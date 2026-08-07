@@ -1,8 +1,9 @@
 ---
 /* ThemePicker — an mxb.dev-style panel: every theme is a button showing its
-   name over the four colours that fingerprint it. theme.js wires the clicks,
-   the keyboard shortcuts and localStorage. */
-import { themes, defaultTheme } from "../data/themes.js";
+   name over the four colours that fingerprint it, plus the one setting that is
+   NOT a theme: the shadow override, which applies across all of them. theme.js
+   wires the clicks, the keyboard shortcuts and localStorage. */
+import { themes, defaultTheme, shadowModes, shadowCycleKey } from "../data/themes.js";
 ---
 
 <div class="themepicker" id="themepicker" hidden>
@@ -19,5 +20,25 @@ import { themes, defaultTheme } from "../data/themes.js";
         </span>
       </button>
     ))}
+  </div>
+
+  {/* Below the chips and divided from them: it modifies whichever theme is
+      showing rather than being one of them. Rendered pressed on the default
+      mode; theme.js corrects it from localStorage on load. */}
+  <div class="container tp-settings">
+    <span class="tp-set-label" id="tp-shadow-label">
+      Shadows <kbd>{shadowCycleKey}</kbd>
+    </span>
+    <div class="tp-seg" role="group" aria-labelledby="tp-shadow-label">
+      {shadowModes.map((m) => (
+        <button
+          class="tp-seg-opt"
+          data-shadow-opt={m.id}
+          aria-pressed={String(m.id === "")}
+        >
+          {m.label}
+        </button>
+      ))}
+    </div>
   </div>
 </div>
