@@ -27,8 +27,9 @@ const root = document.documentElement;
 const toggle = document.getElementById("theme-toggle");
 const panel = document.getElementById("themepicker");
 
-/* Pages without the picker — the event surface, the tear lab — are kraft
-   only, so there is nothing to wire. */
+/* Every page carries the picker today, but this module is bundled once for all
+   of them, so it stays defensive: no toggle, nothing to wire. The pre-paint
+   script in the layout is what applies the theme, and it runs regardless. */
 if (toggle && panel) {
   const labelEl = document.querySelector("[data-theme-label]");
   const options = panel.querySelectorAll("[data-theme-opt]");
