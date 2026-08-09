@@ -1,13 +1,40 @@
 ---
-/* SeatRow — filled and free seats in a car, as a row of blocks. */
+/* SeatRow — the seats in a car AND the people in them, one row of circles.
+   A filled seat is a face disc carrying the rider's initials (a solid disc
+   when no initials are given); a free seat is a dotted outline — an absence
+   with a shape, so the distinction survives monochrome. This row absorbed the
+   separate AttendeeFaces stack VehicleCard used to draw under it: one seat,
+   one circle, occupied or not.
+
+   `driver` (an initial) draws the driver as the first seat, distinct from the
+   riders, because the driver occupies one and a manifest that hides that
+   over-promises by a seat. `filled` counts riders only when a driver is shown,
+   and `faces` (rider initials, in seat order) labels the filled seats. Riders
+   past the rider seats render as danger seats — over-capacity is a fact worth
+   drawing, not clamping away. (Treatment adopted from the app's SeatMeter,
+   2026-08-07.) */
 interface Props {
   filled: number;
   total: number;
+  driver?: string;
+  faces?: string[];
 }
-const { filled, total } = Astro.props;
-const seats = Array.from({ length: total }, (_, i) => i < filled);
+const { filled, total, driver, faces = [] } = Astro.props;
+const riderSeats = driver ? Math.max(0, total - 1) : total;
+const taken = Math.min(filled, riderSeats);
+const free = Math.max(0, riderSeats - filled);
+const over = Math.max(0, filled - riderSeats);
+const label = driver
+  ? `driver plus ${filled} of ${riderSeats} rider seats filled${over ? `, ${over} over capacity` : ""}`
+  : `${filled} of ${total} seats filled${over ? `, ${over} over capacity` : ""}`;
 ---
 
-<div class="seats" role="img" aria-label={`${filled} of ${total} seats filled`}>{seats.map((taken) => (
-  <span class:list={["seat", !taken && "seat-free"]}></span>
+<div class="seats" role="img" aria-label={label}>{driver && (
+  <span class="seat seat-driver">{driver}</span>
+)}{Array.from({ length: taken }, (_, i) => (
+  <span class="seat">{faces[i]}</span>
+))}{Array.from({ length: free }, () => (
+  <span class="seat seat-free"></span>
+))}{Array.from({ length: over }, (_, i) => (
+  <span class="seat seat-over">{faces[taken + i]}</span>
 ))}</div>

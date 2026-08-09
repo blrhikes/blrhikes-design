@@ -6,6 +6,7 @@
    content and the `sticky` flag differ. */
 import Meter from "../ui/Meter.astro";
 import AttendeeFaces from "../ui/AttendeeFaces.astro";
+import PillLead from "../ui/PillLead.astro";
 import DateBlock from "../ui/DateBlock.astro";
 import Btn from "../ui/Btn.astro";
 
@@ -14,14 +15,22 @@ interface Props {
   date?: { mon: string; day: string; dow: string; label?: string };
   price: string;
   unit?: string;
-  memberNote?: string;
+  /* Structured, not an HTML string: the price is data and the label is a
+     translatable phrase, so the component does the bolding. */
+  member?: { price: string; label?: string };
   rows?: [string, string][];
-  lead?: { initials: string; text: string };
+  /* Name and role separate — "Led by" is a phrase a locale owns, the name is
+     not. `role` defaults to "Led by". */
+  lead?: { initials: string; name: string; role?: string };
   going?: { count: string; more?: string; faces: string[] };
   meter?: { taken: number; total: number; note: string };
   cta: string;
   ctaIcon?: string;
   fine?: string;
+  /* The commit surface's own state. "open" is a live button. "full" and
+     "closed" render the button disabled — a card whose event still takes a
+     waitlist is `open` with a waitlist `cta`, not `full`. */
+  state?: "open" | "full" | "closed";
   /* Sticks to the viewport by default; pass false where the card already
      sits inside a sticky rail. */
   sticky?: boolean;
@@ -31,7 +40,7 @@ const {
   date,
   price,
   unit,
-  memberNote,
+  member,
   rows,
   lead,
   going,
@@ -39,9 +48,11 @@ const {
   cta,
   ctaIcon,
   fine,
+  state = "open",
   sticky = true,
   class: klass,
 } = Astro.props;
+const open = state === "open";
 ---
 
 <aside class:list={["card", "aside-card", !sticky && "aside-card--static", klass]}>
@@ -49,7 +60,7 @@ const {
     {date && <DateBlock {...date} />}
     <div class="rc-price">
       <p class="price-big">{price}{unit && <> <span class="mono">{unit}</span></>}</p>
-      {memberNote && <p class="fine" set:html={memberNote} />}
+      {member && <p class="fine">{member.label ?? "Members pay"} <strong>{member.price}</strong></p>}
     </div>
   </div>
 
@@ -63,7 +74,12 @@ const {
 
   {(lead || going) && (
     <div class="rc-people">
-      {lead && <p class="ledby">{lead.text} <span class="face">{lead.initials}</span></p>}
+      {/* One interpolation, not two adjacent expressions: Astro's compiler
+          drops the literal space between `{a} {b}` in slot content, which
+          shipped "Led byAva Sharma" — found by the React-clone diff harness
+          on its first run (2026-08-08) and carried as a blessed difference on
+          two pages until this fix. */}
+      {lead && <PillLead initials={lead.initials}>{`${lead.role ?? "Led by"} ${lead.name}`}</PillLead>}
       {going && <AttendeeFaces as="span" {...going} />}
     </div>
   )}
@@ -75,7 +91,7 @@ const {
     </>
   )}
 
-  <Btn variant="primary" block>{cta}{ctaIcon && <> <i class={`fa-solid fa-${ctaIcon}`} aria-hidden="true" /></>}</Btn>
+  <Btn variant="primary" block disabled={!open}>{cta}{open && ctaIcon && <> <i class={`fa-solid fa-${ctaIcon}`} aria-hidden="true" /></>}</Btn>
   {fine && <p class="fine">{fine}</p>}
 </aside>
 
@@ -94,7 +110,10 @@ const {
 
   /* Who is leading and who is going. Both are inline-flex chips, so they
      share a line when there is room and stack when there is not — without
-     the gap they run straight into each other. */
+     the gap they run straight into each other. The lead is PillLead, the same
+     chip the prominent event card carries, rather than the bare `.ledby` line
+     it used to be: the two cards state the same fact and should state it in
+     the same shape. */
   .rc-people {
     display: flex;
     flex-wrap: wrap;

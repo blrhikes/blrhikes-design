@@ -69,17 +69,24 @@
      grey box behind the card. Deliberately generic — this state asks "what
      would a lift do here", so it must not smuggle in a style of its own.
 
+     Kept SHORT on purpose: the far layer is roughly half the throw it started
+     with. These six are the themes that chose to be flat, and the question the
+     toggle asks is "would a little lift help?" — a tall soft shadow answers a
+     different one, and on paper stock it reads as the card hovering above the
+     page rather than resting on it.
+
      Four of these six wear the hand-torn edge, where the shadow rides
      `.card::before` and is displaced by the tear filter along with the paper,
-     so it frays with the edge instead of outlining the rectangle. */
+     so it frays with the edge instead of outlining the rectangle. A short
+     shadow keeps that fraying legible; a long blur washes it out. */
   --card-shadow:
-    0 1px 2px 0 rgb(0 0 0 / var(--lift-near, 0.06)),
-    0 10px 24px -8px rgb(0 0 0 / var(--lift-far, 0.16));
+    0 1px 2px 0 rgb(0 0 0 / var(--lift-near, 0.05)),
+    0 5px 12px -6px rgb(0 0 0 / var(--lift-far, 0.14));
 
   /* A popover is nearer the eye than a card: same light, more distance. */
   --pop-shadow:
-    0 2px 6px -1px rgb(0 0 0 / var(--lift-near, 0.08)),
-    0 16px 34px -12px rgb(0 0 0 / var(--lift-far, 0.26));
+    0 2px 4px -1px rgb(0 0 0 / var(--lift-near, 0.07)),
+    0 8px 18px -8px rgb(0 0 0 / var(--lift-far, 0.22));
 }
 
 /* Black on a dark ground is barely an event — the card is LIGHTER than what is

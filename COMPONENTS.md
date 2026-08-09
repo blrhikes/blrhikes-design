@@ -26,6 +26,11 @@ Naming follows the memo convention: `Component-Variant` with a hyphen
 | RegistrationCard            | shortlisted | [below](#registrationcard)            |
 | TrailCardWide-TornEnds      | shortlisted | [below](#trailcardwide-tornends)      |
 | TrailCardOverlay            | shortlisted | [below](#trailcardoverlay)            |
+| Notice                      | shortlisted | [below](#notice)                      |
+| HighlightTags               | shortlisted | [below](#highlighttags)               |
+| VehicleCard                 | shortlisted | [below](#vehiclecard)                 |
+| TornPaper _(mechanism)_     | shortlisted | [below](#tornpaper)                   |
+| PillLead                    | shortlisted | [below](#pilllead)                    |
 
 ---
 
@@ -1072,18 +1077,19 @@ Canonical instance, from `src/components/cards/RegistrationCard.astro`:
 
 ### Props
 
-| Prop              | Shape                       | Notes                                            |
-| ----------------- | --------------------------- | ------------------------------------------------ |
-| `date`            | `{ mon, day, dow, label? }` | the DateBlock beside the price                   |
-| `price` / `unit`  | strings                     | `unit` renders mono, after a space               |
-| `memberNote`      | string (HTML)               | `set:html`, so it can bold the number            |
-| `rows`            | `[label, value][]`          | the fact rows                                    |
-| `lead`            | `{ initials, text }`        | `text` is the whole phrase — "Led by Ava Sharma" |
-| `going`           | `{ count, more?, faces }`   |                                                  |
-| `meter`           | `{ taken, total, note }`    | percentage is derived                            |
-| `cta` / `ctaIcon` | strings                     |                                                  |
-| `fine`            | string                      | trailing fine print                              |
-| `sticky`          | boolean, default `true`     | `false` adds `.aside-card--static`               |
+| Prop              | Shape                        | Notes                                                                |
+| ----------------- | ---------------------------- | -------------------------------------------------------------------- |
+| `date`            | `{ mon, day, dow, label? }`  | the DateBlock beside the price                                       |
+| `price` / `unit`  | strings                      | `unit` renders mono, after a space                                   |
+| `member`          | `{ price, label? }`          | structured; the component bolds the price. `label` defaults "Members pay" |
+| `rows`            | `[label, value][]`           | the fact rows                                                        |
+| `lead`            | `{ initials, name, role? }`  | name and role separate; `role` defaults "Led by"                     |
+| `going`           | `{ count, more?, faces }`    |                                                                      |
+| `meter`           | `{ taken, total, note }`     | percentage is derived                                                |
+| `cta` / `ctaIcon` | strings                      |                                                                      |
+| `fine`            | string                       | trailing fine print                                                  |
+| `state`           | `"open" \| "full" \| "closed"` | default `open`; `full`/`closed` disable the CTA. An event still taking a waitlist is `open` with a waitlist `cta` |
+| `sticky`          | boolean, default `true`      | `false` adds `.aside-card--static`                                   |
 
 ### Class contract
 
@@ -1157,11 +1163,11 @@ None.
 
 - Price and member price are both shown with no indication of which applies to
   the reader — the same open question `EventCard` has.
-- `memberNote` takes HTML so it can bold the number. That should be structured
-  data in the app, not a string.
-- The card carries no sold-out or closed state; `cta` is always a live button.
-- `lead` takes the whole phrase ("Led by Ava Sharma"), which is not
-  translatable. Name and role should be separate fields.
+
+Resolved 2026-08-07: `memberNote` (an HTML string) became structured
+`member: { price, label? }`; `lead` split into `{ initials, name, role? }` so
+the phrase is translatable; and `state: "open" | "full" | "closed"` gives the
+card a real closed rendering (disabled CTA) instead of an always-live button.
 
 ---
 
@@ -1323,8 +1329,8 @@ there is no type over a photograph anywhere in it.
 `--ink-faint` `--ink-hint` `--accent-type` `--accent-tint` `--font-mono`
 `--pill-radius` `--label-case` `--w-medium`
 
-Plus `--photo` (the cover URL, on `.photo-wrap`) and `--foot` (the link rail's
-bottom reach, on `.trail-links`) per instance.
+Plus `--photo` (the cover URL, on `.photo-wrap`) per instance, and `--foot`
+(the body's bottom padding / the link rail's reach, declared on the card).
 
 ### Theme notes
 
@@ -1357,8 +1363,9 @@ loop"`). Decorative `<i>` glyphs are all `aria-hidden="true"`.
 ### Open questions
 
 - Shared with `TrailCardOverlay`: the card isn't a link, the blurb is
-  unclamped, `--foot` duplicates `.photo-body`'s bottom padding by hand, and
-  there's no empty state for a trail with no highlights or no GPX.
+  unclamped, and there's no empty state for a trail with no highlights or no
+  GPX. (`--foot` duplicating the body's bottom padding was resolved
+  2026-08-07: the card declares it once and both readers inherit it.)
 - `Hike` and `Drive` are durations while `Length` and `Gain` are distances, all
   four in one undifferentiated `dl`. Worth splitting in the app.
 - The grade pill (`Moderate`) reuses the neutral `.pill` here but `.pill-full`
@@ -1552,7 +1559,8 @@ Paints only from the contract — nothing in `base.css` knows themes exist.
 `--label-case` `--w-medium`
 
 Plus the two per-instance inputs: `--photo` (the cover URL, on `.photo-wrap`)
-and `--foot` (the link rail's bottom reach, on `.trail-links`).
+and `--foot` (the body's bottom padding / the link rail's reach, declared on
+the card).
 
 ### Theme notes
 
@@ -1594,7 +1602,647 @@ from the panorama trail"`). Every decorative `<i>` is `aria-hidden="true"`.
 - The blurb is unclamped here (unlike `TrailCard`'s `.clamp-2`), so two cards
   in a row can differ in height. `margin-top: auto` on the link rail absorbs
   it, but a long blurb still stretches the row.
-- `--foot` duplicates `.photo-body`'s bottom padding by hand. In the app this
-  should be one token read from both places.
 - No empty state: a trail with no highlights renders an empty `.htags` row,
   and one with no GPX renders a dead third column.
+
+Resolved 2026-08-07: `--foot` is declared once on `.photo-card` (re-pointed by
+`.trail-card-wide`), and `.photo-body`'s bottom padding and `.trail-links`'
+reclaim both read it — one token, both readers in step.
+
+---
+
+## Notice
+
+The boxed aside — a strip of the card's second surface with a punched hole in
+it, for the sentence that must not read as body copy: the safety note, the
+payment caveat, the thing that changes what you pack. The hole is what makes
+it kraft's: the strip reads as a sheet filed onto the card, not a `<blockquote>`
+with a background.
+
+### What it's for
+
+- The **inline aside** inside an article or a card — one or two sentences with
+  a tone. Distinct from the app's page-level `NoticeBar` (a banner across the
+  viewport); Notice belongs to the surface it interrupts.
+- The one `variant` is `danger`. Everything else is the neutral strip.
+
+### Anatomy
+
+```
+┌─ .notice ──────────────────────────────────────────────┐
+│  ::before   the punched hole — filled with --surface,  │
+│             the CONTAINER's paper, so it reads as a    │
+│             hole through the strip                     │
+│  <slot>     the copy; <strong> takes --ink             │
+└────────────────────────────────────────────────────────┘
+```
+
+### Markup
+
+Canonical instance, from `src/components/ui/Notice.astro`:
+
+```html
+<div class="notice">
+  Rain shifts this plan: if the gullies are running we walk the ridge
+  instead. <strong>Check the group the night before.</strong>
+</div>
+
+<div class="notice notice-danger notice-hole-tl">
+  No network on the trail. <strong>Download the map before you leave.</strong>
+</div>
+```
+
+### Class contract
+
+| Class                    | Adds                                                                                              | Defined at             |
+| ------------------------ | -------------------------------------------------------------------------------------------------- | ---------------------- |
+| `.notice`                | the strip: `--surface-2`, no border, no radius, leading gutter for the hole                        | `base.css:1083`        |
+| `.notice::before`        | the hole: a `--surface` disc with a solid (unblurred) inset shadow — a punched hole has a cut edge | `base.css:1097`        |
+| `.notice-hole-top`       | the punch moved above the copy — a sheet on a spike, copy reclaims the full width                  | `base.css:1113`        |
+| `.notice-hole-tl`        | the corner punch — level with the first line, tighter gutter                                       | `base.css:1128`        |
+| `.notice strong`         | the sentence that matters, in `--ink` at `--w-medium`                                              | `base.css:1138`        |
+| `.notice-danger`         | the one tonal variant: `--danger-tint` behind the same anatomy                                     | `base.css:1143`        |
+
+One invariant:
+
+1. **The hole is filled with the container's surface, not the notice's.**
+   `::before` paints `--surface` — the card beneath — so the disc reads as a
+   hole punched through the strip. A notice on a different backing (e.g.
+   `--surface-2` itself) loses the illusion; the fill would need to follow the
+   backing.
+
+### Layout
+
+- `padding: 0.8rem 1rem 0.8rem 2.4rem` — the leading gutter is the hole's.
+  The two hole variants trade that gutter for top padding (`-top`) or tighten
+  it (`-tl`).
+- No radius and no border, deliberately: the strip is a different paper, not a
+  smaller card.
+
+### Tokens
+
+`--surface` `--surface-2` `--ink` `--ink-soft` `--danger-tint` `--w-medium`
+
+### Theme notes
+
+None — the hole variants live in `base.css`, not the kraft theme, and no theme
+overrides any of it. The cut-edge shadow is a literal (`rgb(0 0 0 / 0.3)`)
+because a punched edge is shadow, not scheme.
+
+### Behaviour
+
+None.
+
+### Accessibility
+
+- The hole is `::before` with empty content — decoration, invisible to a
+  screen reader.
+- The `danger` state is tint only; the **copy** must carry the urgency
+  ("Download the map _before you leave_"), since the tint won't survive a
+  monochrome read.
+- Consider `role="note"` in the app when the aside is genuinely an aside.
+
+### Open questions
+
+- `danger` is the only variant. Does the app want an `ok` (confirmation) tone,
+  or is that a different component?
+- The app's `NoticeBar` and this share a name and nothing else. Rename one
+  (`Aside`? `NoticeInline`?) before both live in one codebase.
+
+---
+
+## HighlightTags
+
+What a trail **has** — cave, lake, temple, quarry — as opposed to what it _is_
+(easy, full, members'). A row of quiet mono chips, icon in the accent, that is
+**always exactly one line deep**: tags that would wrap are hidden and counted
+into a trailing `+N` chip.
+
+### What it's for
+
+- The highlight row on every trail card density (`TrailCard`,
+  `TrailCardWide`, `TrailCardOverlay`) and anywhere else a thing's features
+  are listed in a space that must not grow.
+- Distinct from `Pill` (status: tonal, can be loud) — an `.htag` is quiet by
+  weight and never carries state.
+
+### Anatomy
+
+```
+┌─ .htags ──────────────────────────── flex, wrap, overflow hidden ─┐
+│  .htag × n        icon (accent) + mono label                      │
+│  .htag.htag-more  "+N" — appended by htags.js, counts the hidden  │
+└───────────────────────────────────────────────────────────────────┘
+```
+
+### Markup
+
+Canonical instance, from `src/components/ui/HighlightTags.astro` — the markup
+lists **every** tag; the clamp is the script's job:
+
+```html
+<div class="htags">
+  <span class="htag"><i class="fa-solid fa-water" aria-hidden="true"></i>Lake</span>
+  <span class="htag"><i class="fa-solid fa-mountain" aria-hidden="true"></i>Hilltop</span>
+  <span class="htag"><i class="fa-solid fa-dungeon" aria-hidden="true"></i>Cave</span>
+</div>
+```
+
+### Class contract
+
+| Class           | Adds                                                                                       | Defined at      |
+| --------------- | ------------------------------------------------------------------------------------------ | --------------- |
+| `.htags`        | the row: flex, `wrap`, `gap: 0.35rem`, `overflow: hidden` — the no-JS fallback (see below) | `base.css:2037` |
+| `.htag`         | the chip: mono at 0.8rem, `--ink-faint`, `--line` border, `--pill-radius`, `nowrap`        | `base.css:2044` |
+| `.htag i`       | the icon, in `--accent-type`                                                               | `base.css:2058` |
+| `.htag-more`    | the overflow count — same shell, no icon, accent tint so it reads as a control             | `base.css:2065` |
+| `.htag[hidden]` | `display: none` — stated because `[hidden]` alone loses to `.htag`'s `display`             | `base.css:2072` |
+
+Two invariants:
+
+1. **The markup is complete; the clamp is behaviour.** Every tag is in the
+   DOM. `htags.js` hides from the first wrapping tag on, then keeps giving
+   ground until the `+N` chip itself fits on the measured line. No JS →
+   `.htags` simply wraps — degraded but correct, which is what lets this pass
+   the app's progressive-enhancement bar. (The app currently hard-caps at
+   `slice(0, 4)` instead; the port replaces the cap with the measure.)
+2. **Measured, not estimated — and re-measured.** On resize (rAF-throttled),
+   on `document.fonts.ready`, and on `data-theme` change, because a theme swap
+   changes the font and therefore the line. In the app the theme observer can
+   go; the font and resize triggers stay.
+
+### Layout
+
+- One line deep by contract. This is what keeps a trail with eight highlights
+  the same card height as one with two, and the two-up grid level.
+- `overflow: hidden` on the row means even the no-JS wrapped state never
+  bleeds outside a clipped card.
+
+### Tokens
+
+`--font-mono` `--ink-faint` `--line` `--pill-radius` `--accent-type`
+`--accent-tint`
+
+### Theme notes
+
+None — no theme touches `.htag`. The chip is quiet in every theme by
+construction.
+
+### Behaviour
+
+`src/scripts/htags.js` (~70 lines, no dependencies). Remove-and-refit is
+idempotent: each pass removes the old `+N` chip, unhides everything, measures
+`offsetTop`s, and re-cuts. In the app this becomes a small effect/hook on the
+row component rather than a page-level script.
+
+### Accessibility
+
+- Icons are `aria-hidden`; the label is the text.
+- Hidden tags are `hidden` — removed from the accessibility tree, so a screen
+  reader hears the same clamped list a sighted user sees, plus "+N". If the
+  full list matters, the card should link somewhere that states it.
+- `+N` is not interactive. If it ever becomes a "show all" control it must be
+  a `<button>`.
+
+### Open questions
+
+- Should `+N` expand in place on tap (it currently just counts), and if so,
+  what does that do to the level-row guarantee?
+- The app stores highlight icons by name (`h.icon`); the mapping from
+  highlight kind → icon lives in data, not the component. Keep it that way.
+
+---
+
+## VehicleCard
+
+One car in the carpool manifest: who is driving what, where from, when it
+leaves, and the seats — a row of discs where **an occupied seat IS its
+occupant**. The seat row is the card's centre: capacity drawn as things you
+can sit on, each filled one carrying its rider's initials, so the row does the
+work a separate face stack used to duplicate.
+
+### What it's for
+
+- The **transport plan**: the manifest of cars for an event, one card per
+  vehicle, inside a `.manifest` list on the carpool surface.
+- In the app this is the DS shape for what `event-plan.tsx` and
+  `event-my-ride.tsx` build — the app's version keeps its per-pickup roster
+  list below the shell (see open questions).
+
+### Anatomy
+
+```
+┌─ .vehicle ─────────────────────────────────────────────────┐
+│ ┌─ .vehicle-head ──────────── flex, space-between ───────┐ │
+│ │  strong   car icon + driver · vehicle-label   (left)   │ │
+│ │  span.mono  from · N seats                    (right)  │ │
+│ └────────────────────────────────────────────────────────┘ │
+│  p.vehicle-route.mono   leaves 03:10 · ETA 05:05 · route ↗ │
+│  .seats     SeatRow — Ⓡ Ⓡ Ⓢ ◌ ◌      role="img"           │
+│  p.vehicle-riders       names + pickup points, as text     │
+└────────────────────────────────────────────────────────────┘
+```
+
+### Markup
+
+Canonical instance, from `src/components/cards/VehicleCard.astro` (SeatRow
+expanded):
+
+```html
+<div class="vehicle">
+  <div class="vehicle-head">
+    <strong>
+      <i class="fa-solid fa-car-side" aria-hidden="true"></i>
+      Rahul<span class="vehicle-label"> · Jimny</span>
+    </strong>
+    <span class="mono">Cooke Town · 5 seats</span>
+  </div>
+  <p class="vehicle-route mono">
+    <span>leaves 03:10</span>
+    <span>ETA 05:05</span>
+    <a href="…">route <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+  </p>
+  <div class="seats" role="img" aria-label="driver plus 2 of 4 rider seats filled">
+    <span class="seat seat-driver">R</span>
+    <span class="seat">RA</span>
+    <span class="seat">SR</span>
+    <span class="seat seat-free"></span>
+    <span class="seat seat-free"></span>
+  </div>
+  <p class="vehicle-riders">Rahul · Radhika (New Tipassandra) · Srilekha (Koramangala)</p>
+</div>
+```
+
+The container is `.manifest` (`> * + *` at `0.9rem`). The logistics line is
+optional **as a unit** — a manifest drawn before times are set renders
+without it rather than printing TBDs.
+
+### Props
+
+| Prop                           | Shape           | Notes                                                                   |
+| ------------------------------ | --------------- | ----------------------------------------------------------------------- |
+| `driver`                       | string          | the person; its first letter seeds the driver seat                      |
+| `vehicle`                      | string?         | the machine — "Jimny", "white Swift" — one step quieter than its driver |
+| `from` / `seats`               | string / number | the head's right side                                                   |
+| `filled`                       | number          | occupants, **driver included**; the card hands SeatRow `filled - 1`     |
+| `faces`                        | string[]?       | rider initials, in seat order                                           |
+| `riders`                       | string          | the text line — names and pickup points, what circles can't say         |
+| `departs` / `eta` / `routeUrl` | strings?        | the logistics line; any subset renders clean                            |
+
+### Class contract
+
+| Class              | Adds                                                                                                     | Defined at      |
+| ------------------ | -------------------------------------------------------------------------------------------------------- | --------------- |
+| `.manifest`        | the list rhythm between cards                                                                            | `base.css:1962` |
+| `.vehicle`         | the shell: `--surface-2`, `--line-soft` border, `--ctl-radius` — a control-scale card, not a `.card` (no paper, no tear) | `base.css:1966` |
+| `.vehicle-head`    | driver left, origin/seats right, baseline-aligned                                                        | `base.css:1973` |
+| `.vehicle-label`   | the machine, `--ink-faint` at weight 400 — riders scan for the person first                              | `base.css:1986` |
+| `.vehicle-route`   | the logistics line; dot separators drawn by `> * + *::before`, so any subset of its parts reads clean    | `base.css:1993` |
+| `.vehicle-head i`  | the car icon                                                                                             | `base.css:2200` |
+| `.seats`           | the seat row, flex, `gap: 0.3rem`                                                                        | `base.css:2010` |
+| `.seat`            | an occupied seat: a disc, the same shape a person is drawn as everywhere else (`.face`) — `--ink-faint` ground, initials in `--surface` | `base.css:2020` |
+| `.seat-free`       | an empty seat: transparent, `1.5px` **dotted** `--ink-hint` — an absence with a shape                    | `base.css:2037` |
+| `.seat-driver`     | the driver's seat: `--ok` with the initial — a car with a driver is a car that goes                      | `base.css:2046` |
+| `.seat-over`       | a rider past capacity: `--danger`, still carrying its initials. Drawn, not clamped                       | `base.css:2053` |
+| `.vehicle-riders`  | the text line's size and colour at this scale                                                            | `base.css:2058` |
+
+Three invariants:
+
+1. **A vehicle is not a `.card`.** It sits _on_ a card (the manifest), so it
+   takes the control radius and the second surface — no paper layer, no torn
+   edge. Kraft has nothing to say about it, which is why it survives every
+   theme untouched.
+2. **One seat, one circle, occupied or not.** The seats absorbed the
+   AttendeeFaces stack the card used to draw under them — a filled seat is a
+   face disc with initials, so the same person is never drawn twice. The
+   `.vehicle-riders` line below keeps only what circles can't say: names and
+   pickup points.
+3. **Free seats are outlined, not faded.** Dotted, transparent — so
+   filled/free survives monochrome without leaning on the accent, and
+   over-capacity (`--danger`) stays the only tonal alarm in the row.
+
+### Layout
+
+- The head is one line, baseline-aligned, `space-between` — driver and
+  logistics never interleave.
+- Each row takes its own small top margin; the card has no internal rhythm
+  rule because its rows are fixed.
+
+### Tokens
+
+`--surface` `--surface-2` `--line-soft` `--ctl-radius` `--ok` `--danger`
+`--ink-hint` `--ink-faint` `--accent-type` `--w-medium` `--font-mono`
+
+### Theme notes
+
+None — every theme takes it unchanged.
+
+### Behaviour
+
+None.
+
+### Accessibility
+
+- `.seats` is `role="img"` with the full sentence (`"driver plus 2 of 4 rider
+seats filled, 1 over capacity"`) — the discs and their initials are drawn
+  for sighted scanning; the label carries the fact.
+- The rider names are real text in `.vehicle-riders`; the initials in the
+  seats are decoration.
+- The card is not interactive apart from the route link. If the app makes it
+  a link to "my ride", the whole card wants to be the target, not the
+  driver's name.
+
+### Open questions
+
+- The app's per-pickup roster (each stop with its time and who boards there)
+  stays app-side below this shell — a list that long is a different
+  component, not more rows on this card.
+- No empty state for a manifest with zero vehicles; the surface above needs
+  one ("No carpools planned yet" already exists in the app).
+
+Resolved 2026-08-07, in three steps: SeatRow adopted the app SeatMeter's
+driver-seat + over-capacity treatment; the seats then absorbed the face stack
+(one seat, one circle, initials in the disc); and the head split `driver`
+from `vehicle` while `departs`/`eta`/`routeUrl` gave the logistics a home as
+an optional one-line unit.
+
+---
+
+## TornPaper
+
+Not a component — the **mechanism** every torn edge on this site runs on, and
+a different animal from the app's current tear. The app cuts every edge with
+one fine isotropic filter; this repo adds a second, **anisotropic** pass, so a
+card's sides keep the fine 3px cut while its top and bottom rip ±18–21px —
+paper torn by hands, not trimmed by pinking shears. It lives in
+`src/styles/torn-paper.css` (geometry) + `PaperFilters.astro` (the SVG defs),
+scoped so themes opt in; porting it to the app means replacing the filter defs
+in `paper.tsx` and the tear geometry in `theme.css` §2.
+
+### What it's for
+
+- Every torn edge: cards, covers, the hero, the stats strip, the notice, the
+  viewport-wide cover wash. One definition set per page, so a card torn on
+  one surface tears the same way on another.
+- Worn by the Kraft and Milestone families; any theme opts in by joining the
+  `:is()` scope and pointing `--cut` at a filter. Everything else keeps
+  straight edges and is correct as-is.
+
+### Anatomy — the two-pass filter
+
+```
+#cut-1/2/3 (a card's edge):
+  pass 1  feTurbulence (isotropic, bf 0.04) → displace scale 3
+          — the app's fine cut, on all four edges
+  pass 2  feTurbulence fractalNoise, bf 0.015 × 0.002  ← varies only along x
+          feComponentTransfer neutralises the R channel to 0.5
+          → displace scale 36–48, so it moves pixels ONLY vertically
+          — the rip, on the top and bottom edges alone
+```
+
+The second pass's noise is stretched flat (x-frequency ≫ y-frequency) and one
+displacement channel is pinned to neutral, which is what makes the rip
+directional. `#cut-lr` is the same recipe turned on its side (bf 0.002 × 0.015,
+G channel pinned): sides rip, top and bottom stay fine.
+
+### The filter roster (`PaperFilters.astro`)
+
+| Filter                         | Job                                                                  | Amplitude    |
+| ------------------------------ | -------------------------------------------------------------------- | ------------ |
+| `#cut-1` / `#cut-2` / `#cut-3` | a card's edge; three seeds so neighbours never repeat                | ±18–21px t/b |
+| `#cut-hero`                    | the hero band — bigger teeth for a bigger sheet                      | ±24px t/b    |
+| `#cut-tb`                      | pure vertical rip, no fine pass (the edge exhibit)                   | ±20px t/b    |
+| `#cut-photo` / `#cut-photo-tb` | a photograph's own edge — finer teeth so it doesn't repeat the card's | ±5px         |
+| `#cut-lr` / `#cut-lr-2`        | the transposed card cut (`.torn-lr`)                                 | ±19px l/r    |
+| `#cut-photo-lr`                | the transposed photo cut; also the notice's single fraying edge      | ±5px         |
+| `#cut-photo-wide`              | the viewport-wide cover wash — longer wavelength, or the tear reads as a repeating comb at that width | ±6px |
+
+### Class contract (`torn-paper.css`)
+
+| Rule                              | Adds                                                                                       |
+| --------------------------------- | ------------------------------------------------------------------------------------------ |
+| `.card:nth-child(3n+2)` / `(3n)`  | rotates `--cut` through `#cut-2`/`#cut-3` so neighbouring tears never repeat               |
+| `.photo-card`, `.feat-card`       | `overflow: visible` — the corner-rounding clip would shear the fringe flat                 |
+| `.photo-card::before`             | the surface layer clipped `inset(40px -80px -80px -80px)`: the torn top belongs to the image backing ALONE, and negative insets keep the outward fray unsheared (clip-path clips AFTER the filter) |
+| `.feat-card::before`              | the same cut-away as a `polygon()` over the photo's flank only; plain inset once stacked   |
+| `.photo-wrap::before` / `::after` | the torn-photo split: two backing halves repainting the SAME image — top half through the card's `--cut`, bottom half through `#cut-photo` — with the straight seam hidden under the clean img |
+| `.photo` (clean img)              | no filter, ever; clipped `inset(24px 3px 12px 3px)` so every ragged pixel is backing       |
+| `.photo-badge` / `.photo-dateblock` | both corners drop to `1.8rem` to clear the top rip — they move as a pair                 |
+| `.photo-title::before`            | the wash tears on `#cut-photo`; the title is a sibling layer and stays crisp               |
+| `.stats::before`                  | the stats strip as ONE torn sheet (fill moved to a filtered layer), not four floating cells |
+| `.notice` / `.notice::after`      | a strip torn off a larger sheet: fill on its own filtered layer, `clip-path: inset(0 -30px 0 0)` frees exactly ONE edge to fray; text and the punched hole stay crisp |
+| `.torn-lr` family                 | the transposed tear, plus the furniture moving back (badges to `0.9rem`, title clearing the smaller cut) |
+| `.feat-card.torn-lr .photo-wrap`  | the internal-seam nuance: same filter both sides, but the right (a join, not a boundary) lets out 6px of fray instead of 30 — teeth, not a rip |
+| `.card.carpool-form`, `.bigcard--flat` | the opt-outs: `--cut: opacity(1)` — a control surface is not a sheet, and a ragged edge on something you type into reads as damage |
+
+### Per-component variation
+
+Every component wears the mechanism a little differently — the tear is one
+system, but which edges rip, which layer carries them, and what moves out of
+their way is decided per component:
+
+| Component | Its tear |
+| --- | --- |
+| **Plain `.card`** (EventArticle, RegistrationCard, EventRail's blocks) | the whole sheet on `--cut` (#cut-1/2/3 by grid position): top and bottom rip, sides fine. Nothing else to coordinate — one layer, one filter. |
+| **EventCard / TrailCardWide / TrailCardOverlay** (`.photo-card`) | the torn **top belongs to the image backing alone** — the surface layer is clipped 40px out of the top so no paper peeks from behind the photo. Cover = the backing split (top half on the card's cut, bottom half on the finer `#cut-photo`); clean img clipped `24/3/12/3`. The DateBlock and badge both drop to `1.8rem` to clear the rip — they move as a pair. The title wash tears on `#cut-photo`; the title pads `1.5rem` clear of the bottom rip. |
+| **EventCardProminent** (`.feat-card`) | same as `.photo-card`, but the surface cut-away is a `polygon()` over the photo's flank only (the photo spans just the left column once the grid splits); stacked below `46rem` it falls back to the plain inset. |
+| **EventCardProminent-TornSides** (`.feat-card.torn-lr`) | the transpose, plus the internal-seam nuance: left edge (outer boundary) frays 30px, right edge (a join against the body) lets out only 6px of the same filter — teeth, not a rip. Both backing halves clip to the surface's 6px so the top starts on one line. |
+| **EventCover** (`.ev-cover`) | backing on `#cut-photo`, clean photo clipped `16px` at the bottom only, and the **wash** tears on `#cut-photo-wide` — the viewport-wide layer needs the longer wavelength or the tear reads as a comb. |
+| **TrailStats strip** (`.stats`) | one torn sheet, not four floating cells: the fill moves to a single filtered `::before` on `#cut-2`; the cells go transparent with hairline dividers. |
+| **Notice** | a strip torn off a larger sheet: fill on its own filtered layer through `#cut-photo-lr` (the fine ±5px side cut — the card rip would swallow a strip this short), `clip-path: inset(0 -30px 0 0)` freeing exactly ONE edge to fray. Text and the punched hole stay crisp above it. |
+| **Torn-lr cards** (`.torn-lr`) | the rip transposed to the sides; the badge and DateBlock come back to `0.9rem` (no top rip to clear) and the title clears the smaller bottom cut. |
+| **VehicleCard / the carpool form** | **no tear** — `--cut: opacity(1)`. A control surface is not a sheet; a ragged edge on something you type into (or a manifest you read) reads as damage, and the rip would compete with the field borders. |
+| **BigCard exhibits** | `--flat` opts out entirely; `--torn-tb` runs the pure-vertical `#cut-tb` with no fine pass — the reference specimens for the lab. |
+
+### Invariants
+
+1. **A photograph is never filtered.** The clean `<img>` is clipped slightly
+   smaller and the same image is repainted behind it through the filters —
+   all raggedness is backing-fringe pixels. This is what keeps a torn photo
+   from looking like a warped one. (The app already holds this invariant; it
+   keeps it.)
+2. **`--cut` is the single lever.** Cards, backings, washes and strips all
+   read it (or a named filter), so a theme re-points one variable — and an
+   opt-out is `--cut: opacity(1)`, never a restated geometry.
+3. **Clip after filter.** Every clip that shapes a filtered layer uses
+   negative insets on the sides that must stay ragged, because `clip-path`
+   applies after `filter` and a 0 inset shears the fray straight.
+4. **Different sheets, different teeth.** Card ±19, hero ±24, photo ±5,
+   viewport wash long-wavelength ±6. Two adjacent edges never run the same
+   amplitude, which is what sells the collage.
+
+### Tokens
+
+Geometry only — `--cut` (the filter), `--notice-paper` (the notice strip's
+fill), everything else painted by the layers it filters. No colours of its
+own.
+
+### Theme notes
+
+Loaded **after** every theme file, so a theme cannot out-order the shared
+geometry. A theme joins by adding itself to the `:is()` scope; it tunes by
+setting the tokens, never by restating rules.
+
+### Behaviour
+
+None at runtime. `src/pages/tear-lab.astro` is the tuning bench — every
+filter variable behind the tear is adjustable there before it gets frozen
+into `PaperFilters.astro`.
+
+### Accessibility
+
+- Pure decoration: filters apply to backgrounds and backings, never to text
+  or interactive elements; the SVG defs are `aria-hidden` and zero-sized.
+- The torn-photo split keeps the actual photograph crisp, so nothing a
+  screen-magnifier user reads is displaced.
+
+### Open questions
+
+- The app's port order: filters first (`paper.tsx` defs), then card geometry
+  (`theme.css` §2), then the photo-backing split on its card covers — each
+  step renders correctly on its own.
+- The app rounds card corners (`--ds-radius-card: 0.875rem`); this mechanism
+  assumes square sheets (kraft's `--card-radius: 0`). Adopting the big rip
+  without deciding the radius question leaves rounded corners on a hand-torn
+  edge — the exact noise KRAFT.md calls out.
+- `filter` on large layers costs paint time; the app should confirm the
+  two-pass filters hold 60fps on its longest pages (the design repo's pages
+  are short).
+
+---
+
+## PillLead
+
+The one pill that carries a person: a label ("Led by Ava Sharma") with that
+person's face sitting in the pill's trailing cap, edge to edge — the disc IS
+the pill's right end. One pill rather than a pill beside a disc, because two
+elements read as two separate credits for the same person.
+
+### What it's for
+
+- Naming the lead wherever an event states one: `EventCardProminent`'s pill
+  cluster and `RegistrationCard`'s people row render the same chip, so the
+  same fact is stated in the same shape everywhere.
+
+### Markup
+
+Canonical instance, from `src/components/ui/PillLead.astro` (a `Pill` with
+`.pill-lead` and the face nested):
+
+```html
+<span class="pill pill-member pill-lead">
+  Led by Ava Sharma<span class="face-shadow"><span class="face">AS</span></span>
+</span>
+```
+
+No whitespace between the label and the face: the gap is `.pill-lead`'s own,
+and a text node would add a second one the disc cannot close.
+
+### Class contract
+
+| Class          | Adds                                                                                              | Defined at     |
+| -------------- | -------------------------------------------------------------------------------------------------- | -------------- |
+| `.pill-lead`   | the shape: `--face-size` pinned to the chip height, padding on the leading side only, no border, and `border-radius: 999px` regardless of `--pill-radius` — this pill ends in a circle whatever the theme thinks of corners | `base.css` |
+| `.pill-lead` (type) | **sans, not mono, and no label case** (2026-08-07): every other pill is a label — HIKE, ₹600 — but a name is not a label; uppercasing overrides how someone spells themselves and mono types it like data | `base.css` |
+| `.pill-lead .face-shadow` | the disc's lift turned OFF — the pill is already the surface it would lift from        | `base.css` |
+
+### Invariants
+
+1. **Text-then-face.** `Led by <name>` then the disc, with the asymmetric
+   padding making the disc flush to the trailing edge. Flipping the order
+   means flipping the padding.
+2. **Name and role are separate inputs** in any implementation ("Led by" is a
+   phrase a locale owns; the name is not) — the app's port takes
+   `{ name, role?, face? }` with `role` defaulting to "Led by".
+
+### Accessibility
+
+- The chip reads "Led by Ava Sharma" in full — the initials in the disc are
+  decoration, not the name.
+
+### Open questions
+
+- None open. (Sans-not-mono and the name/role split were both decided
+  2026-08-07.)
+
+## PageHeader
+
+What every app page opens with when it has no photographic cover: a mono
+breadcrumb line, an optional eyebrow, the display title, one line of fine
+print, and room for an action or two on the same baseline. The first component
+ported FROM blrhikes-app into the canon (2026-08-08) rather than the other way.
+
+### What it's for
+
+- Listing and utility pages — `/events`, `/trails`, admin surfaces. A page
+  that opens on a photograph uses EventCover instead; the two never stack.
+- The crumbs speak in the data voice (mono, uppercase); the title in the
+  display voice; the sub in fine print. No background and no rule underneath:
+  it is a heading, not a bar, and the ground already separates it.
+
+### Parts
+
+- `.page-head` — flex row, baseline-aligned, wraps on narrow screens.
+- `.crumbs` / `.crumb` / `.crumbs-sep` — links for the ancestors, plain text
+  with `aria-current="page"` for the leaf.
+- `.page-head-actions` — the right-hand cluster; small buttons (`btn-sm`).
+
+### Open questions
+
+- None yet.
+
+## CtaPanel
+
+The inverted sell: one dark panel, a claim in the display voice, a line of
+copy, a single action. Ported FROM blrhikes-app (2026-08-08), where it closes
+the home page on membership.
+
+### What it's for
+
+- Exactly one per page, near the foot — the moment the page stops informing
+  and asks for something. Two of these on one screen is a bazaar.
+
+### How it inverts
+
+One custom property is the whole trick: the panel re-points `--surface` at
+`--ink`, so the torn edge, border and shadow are the ordinary card's — a card
+whose paper happens to be ink. Type over it paints from the ground pair and an
+opacity step; no new tokens, and every theme inverts correctly for free.
+
+### Open questions
+
+- None yet.
+
+## StatBand
+
+The claims, as numbers: a row of big display numerals with quiet labels under
+them. Componentised out of the showcase's Trails section (2026-08-08) because
+the app's home page carries the same band.
+
+### What it's for
+
+- Three or four `[number, label]` pairs, one row. The sentence around them
+  belongs to the page; the band carries no prose of its own.
+
+### Open questions
+
+- None yet.
+
+## TravelForm
+
+The rider's half of the travel section: three mode cards (radio group), the
+start/pickup pair, the vehicle + seats row, notes, one save button. Extracted
+from the Travel section as a component (2026-08-08) so blrhikes-app can wrap
+it around its real progressively-enhanced form — in the app every control is
+inside a real `<form method="post">` and works with JavaScript off.
+
+### Parts
+
+- `.carpool-form` on a `.card` — the form IS a card.
+- `.mode-row` / `.mode-card` — the radio cards; checked state paints from the
+  accent pair.
+- `Field` rows; `.field-row` for the two-up pair; `.check` for the checkbox.
+
+### Open questions
+
+- None yet.

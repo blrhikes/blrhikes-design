@@ -1,0 +1,26 @@
+---
+/* CtaPanel — the inverted sell: one dark panel, a claim, a line of copy and a
+   single action. Ported FROM blrhikes-app (2026-08-08), where it closes the
+   home page on membership.
+
+   The inversion is one custom property, not a second card system: the panel
+   re-points `--surface` at ink, so the torn edge, the border and the shadow
+   are the ordinary card's — a card whose paper happens to be ink. */
+import Btn from "./ui/Btn.astro";
+
+interface Props {
+  title: string;
+  blurb: string;
+  cta: string;
+  href: string;
+}
+const { title, blurb, cta, href } = Astro.props;
+---
+
+<section class="card cta-panel">
+  <div class="cta-copy">
+    <h2 class="display-2">{title}</h2>
+    <p class="cta-blurb">{blurb}</p>
+  </div>
+  <Btn variant="primary" href={href}>{cta}</Btn>
+</section>

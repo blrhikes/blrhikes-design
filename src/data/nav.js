@@ -34,4 +34,5 @@ export const pageNavItems = [
   { href: "#carpool", n: "05", label: "Travel" },
   { href: "#trails", n: "06", label: "Trails" },
   { href: "#edges", n: "07", label: "Edges" },
+  { href: "#app", n: "08", label: "App surfaces" },
 ];

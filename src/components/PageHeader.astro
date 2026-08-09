@@ -1,0 +1,46 @@
+---
+/* PageHeader — what every app page opens with when it has no photographic
+   cover: a mono breadcrumb line, an optional eyebrow, the display title, a
+   line of fine print, and room for one or two actions on the right.
+
+   Ported FROM blrhikes-app (2026-08-08) — the first component to travel that
+   direction. No background and no bottom rule on purpose: it is a page
+   heading, not a bar; the ground already separates it from the content.
+   The page provides the container; this is only the header's own row. */
+interface Crumb {
+  label: string;
+  href?: string;
+}
+interface Props {
+  crumbs?: Crumb[];
+  kicker?: string;
+  title: string;
+  sub?: string;
+}
+const { crumbs = [], kicker, title, sub } = Astro.props;
+const hasActions = Astro.slots.has("actions");
+---
+
+<header class="page-head">
+  <div class="page-head-copy">
+    {crumbs.length > 0 && (
+      <nav class="crumbs" aria-label="Breadcrumb">
+        {crumbs.map((c) =>
+          c.href ? (
+            <span class="crumb"><a href={c.href}>{c.label}</a><span class="crumbs-sep" aria-hidden="true">/</span></span>
+          ) : (
+            <span class="crumb" aria-current="page">{c.label}</span>
+          ),
+        )}
+      </nav>
+    )}
+    {kicker && <p class="eyebrow">{kicker}</p>}
+    <h1 class="display-2">{title}</h1>
+    {sub && <p class="fine page-head-sub">{sub}</p>}
+  </div>
+  {hasActions && (
+    <div class="page-head-actions">
+      <slot name="actions" />
+    </div>
+  )}
+</header>

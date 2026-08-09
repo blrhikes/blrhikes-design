@@ -1,0 +1,26 @@
+---
+/* PillLead — the one pill that carries a person: a label with that person's
+   face sitting in the pill's trailing cap, edge to edge, so the disc IS the
+   pill's right end. `.pill-lead` in base.css owns the shape.
+
+   A component rather than the markup copied twice, because the nesting is
+   fiddly and load-bearing: the face rides inside `.face-shadow`, whose
+   `drop-shadow()` traces the disc's real silhouette, and the wrapper's lift is
+   turned OFF here (the pill is already the surface it would lift from). Two
+   hand-written copies would drift the first time either detail changed.
+
+   The label is the slot, since the two callers spell it differently: the
+   prominent card composes it from the event's lead name, the registration card
+   is handed the whole line. */
+import Pill from "./Pill.astro";
+
+interface Props {
+  initials: string;
+  class?: string;
+}
+const { initials, class: klass } = Astro.props;
+---
+
+{/* No whitespace between the label and the face: the gap is `.pill-lead`'s,
+    and a text node here would add a second one the disc cannot close. */}
+<Pill variant="member" class={["pill-lead", klass].filter(Boolean).join(" ")}><slot /><span class="face-shadow"><span class="face">{initials}</span></span></Pill>

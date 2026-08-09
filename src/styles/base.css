@@ -36,6 +36,19 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Structure, not palette — deliberately NOT part of the theme contract above:
+   a theme re-points colour, type and lift, not the height of a chip.
+
+   --chip-h is the one height every small round thing shares. Pills, the lead
+   pill and the attendee discs all end up in the same rows (a card's cluster,
+   the registration card's people line), and three chips within 4px of each
+   other read as a mistake rather than a hierarchy. One number, so they cannot
+   drift apart again. The small face variants (.face-sm, .ledby) opt out on
+   purpose: those sit in a line of type rather than in a row of chips. */
+:root {
+  --chip-h: 1.6rem;
+}
+
 body {
   background-color: var(--ground);
   background-image: var(--ground-img);
@@ -890,6 +903,10 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
 .pill {
   display: inline-flex;
   align-items: center;
+  /* The height is the shared chip height, not whatever the type happens to
+     measure — a pill sits beside attendee discs and the lead pill, and all
+     three have to agree. Padding still sets the inline axis. */
+  min-height: var(--chip-h);
   padding: 0.18rem 0.65rem;
   border-radius: var(--pill-radius);
   font-family: var(--font-mono);
@@ -927,34 +944,37 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
 }
 
 /* PillLead — the one pill that carries a person, so it takes the person's
-   shape: the face's octagon, stretched. A 45° chamfer rather than the disc's
-   rounded one, because a pill's height is fixed and its width is not, and the
-   rounded joins would foreshorten at every content length.
+   shape. That used to mean the face's rounded octagon stretched into a
+   chamfered slab, from when the discs WERE octagons; they became circles on
+   2026-08-06 and this followed them. Fully round ends now, which is what a
+   pill wrapping a disc should have been all along — the face's own curve runs
+   straight into the pill's instead of meeting a 45° cut.
 
-   Filled and borderless, like the faces: clip-path cuts the border off the
-   four diagonals and leaves it on the four straights, which reads as a broken
-   outline rather than a bevel. */
-/* The face is edge to edge: no padding on the trailing side and none on the
+   Filled and borderless, like the faces: an outline here would have to stop
+   where the disc takes over the right end, which reads as a broken chip.
+
+   The face is edge to edge: no padding on the trailing side and none on the
    block axis, so the disc IS the pill's height and its right edge IS the
-   pill's. --chamfer is 0.364 × the face size, the same ratio the octagon path
-   cuts its own corners at, so the two bevels nest instead of double-cutting. */
+   pill's. With both ends now struck from the same radius, the disc and the
+   pill's cap are concentric — the join is invisible rather than nested. */
 .pill-lead {
-  --face-size: 1.6rem;
-  --chamfer: 0.58rem;
+  /* The disc IS the pill's trailing cap, so it is exactly the pill's height —
+     which is the shared one, like every other chip in the row. */
+  --face-size: var(--chip-h);
+  /* Every other pill is a label — HIKE, ₹600, 12 SPOTS LEFT — and takes the
+     theme's label case and mono face. This one is a person's name, and a name
+     is not a label: uppercasing it overrides how someone spells themselves,
+     and mono types it like data. Sans, as prose (owner, 2026-08-07). */
+  font-family: var(--font-body);
+  text-transform: none;
+  letter-spacing: 0.02em;
   gap: 0.5rem;
   padding: 0 0 0 0.85rem;
   border: none;
-  border-radius: 0;
-  clip-path: polygon(
-    var(--chamfer) 0,
-    calc(100% - var(--chamfer)) 0,
-    100% var(--chamfer),
-    100% calc(100% - var(--chamfer)),
-    calc(100% - var(--chamfer)) 100%,
-    var(--chamfer) 100%,
-    0 calc(100% - var(--chamfer)),
-    0 var(--chamfer)
-  );
+  /* Not var(--pill-radius): a theme is free to set that to something square
+     (Mono runs 0), and this pill ends in a circle whatever the theme thinks of
+     corners. Half the face size is exactly the disc's own radius. */
+  border-radius: 999px;
 }
 
 /* No lift of its own — the pill is already the surface it would lift off. */
@@ -1623,7 +1643,8 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
     border-bottom: none;
   }
 
-  .nav-drawer-links a i {
+  .nav-drawer-links a i,
+  .nav-drawer-links a svg {
     font-size: 0.8em;
     opacity: 0.45;
   }
@@ -1961,24 +1982,78 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
   font-weight: var(--w-medium);
 }
 
+/* The machine, one step quieter than its driver — riders scan for the person
+   first and the car second. */
+.vehicle-label {
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+/* The logistics line: when it leaves, when it lands, the route out. One line,
+   dot-separated by the gap's ::before so any subset of the three reads clean. */
+.vehicle-route {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+}
+
+.vehicle-route > * + *::before {
+  content: "· ";
+}
+
+.vehicle-route a {
+  color: var(--accent-type);
+}
+
 .seats {
   display: flex;
   gap: 0.3rem;
   margin-top: 0.55rem;
 }
 
+/* A seat is a disc, the same shape a person is drawn as everywhere else
+   (.face) — so an occupied seat IS its occupant, and the row does the work
+   the AttendeeFaces stack under it used to duplicate. --ink-faint over
+   --surface for the same after-dark inversion the faces rely on. */
 .seat {
-  width: 1rem;
-  height: 1.3rem;
-  border-radius: 0.25rem 0.25rem 0.45rem 0.45rem;
-  background: var(--accent);
-  opacity: 0.9;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--ink-faint);
+  color: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: var(--w-medium);
+  text-transform: uppercase;
+  line-height: 1;
 }
 
+/* An empty seat is a dotted outline — an absence with a shape, so the
+   distinction survives monochrome. */
 .seat-free {
   background: transparent;
-  border: 1.5px dashed var(--ink-hint);
+  border: 1.5px dotted var(--ink-hint);
   opacity: 0.8;
+}
+
+/* The driver's seat: same disc, marked with the initial so it reads as a
+   person occupying a seat rather than another rider. `--ok` because a car
+   with a driver is a car that goes. */
+.seat-driver {
+  background: var(--ok);
+  color: #fff;
+}
+
+/* A rider past capacity. Drawn, not clamped: the manifest's job is to show
+   the problem. */
+.seat-over {
+  background: var(--danger);
+  color: #fff;
 }
 
 .vehicle-riders {
@@ -2037,7 +2112,8 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
   white-space: nowrap;
 }
 
-.htag i {
+.htag i,
+.htag svg {
   color: var(--accent-type);
   font-size: 1em;
 }
@@ -2058,6 +2134,11 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
 /* ------------------------------------------------------------ photo cards -- */
 
 .photo-card {
+  /* The body's bottom padding, held as a token because two readers share it:
+     .photo-body pads with it and .trail-links reclaims it (negative margin,
+     handed back as link padding) so the dividers reach the card's edge. One
+     declaration, both stay in step. */
+  --foot: 1.5rem;
   padding: 0;
   overflow: clip;
   display: flex;
@@ -2071,7 +2152,7 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
 }
 
 .photo-body {
-  padding: 1rem 1.1rem 1.5rem;
+  padding: 1rem 1.1rem var(--foot, 1.5rem);
   display: grid;
   gap: 0.45rem;
   flex: 1;
@@ -2109,27 +2190,32 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
   flex: none;
 }
 
-.pill i {
+.pill i,
+.pill svg {
   font-size: 0.85em;
   margin-right: 0.35em;
 }
 
-.feat-date i {
+.feat-date i,
+.feat-date svg {
   margin-right: 0.3em;
 }
 
-.vehicle-head i {
+.vehicle-head i,
+.vehicle-head svg {
   font-size: 0.85em;
   color: var(--ink-faint);
   margin-right: 0.3em;
 }
 
-.rating i {
+.rating i,
+.rating svg {
   font-size: 0.8em;
   margin-right: 0.25em;
 }
 
-.ticket-chev i {
+.ticket-chev i,
+.ticket-chev svg {
   font-size: 0.9rem;
 }
 
@@ -2162,8 +2248,12 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
   align-items: center;
 }
 
+/* The overlap is a fraction of the disc, not a fixed distance: the stack is
+   drawn at three sizes (--chip-h here, .face-sm in a vehicle's rider row) and
+   a constant would bite deeper the smaller the disc got — far enough, at the
+   small end, to eat the "+" off the +N. */
 .face-stack > .face-shadow {
-  margin-left: -0.45rem;
+  margin-left: calc(var(--face-size, var(--chip-h)) * -0.26);
 }
 
 .face-stack > .face-shadow:last-child {
@@ -2172,8 +2262,8 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
 
 .face-shadow {
   display: block;
-  width: var(--face-size, 1.75rem);
-  height: var(--face-size, 1.75rem);
+  width: var(--face-size, var(--chip-h));
+  height: var(--face-size, var(--chip-h));
   flex: none;
   filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.35));
 }
@@ -2185,8 +2275,8 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
   position: relative;
   display: grid;
   place-items: center;
-  width: var(--face-size, 1.75rem);
-  height: var(--face-size, 1.75rem);
+  width: var(--face-size, var(--chip-h));
+  height: var(--face-size, var(--chip-h));
   flex: none;
   font-family: var(--font-mono);
   font-size: 0.62rem;
@@ -2371,6 +2461,9 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
 /* The place, on the photograph's bottom-left corner. White with a shadow, not
    a token colour — the usual reason: a photograph has no colour scheme. It
    sits far enough in to clear a torn bottom edge. */
+/* Placement only, since 2026-08-08 — the content is a `pill-on-photo` chip
+   (the trail overlay card's), which brings its own paint; the bare white type
+   and its text-shadow went with the change. */
 .photo-meta {
   position: absolute;
   left: 1.1rem;
@@ -2380,14 +2473,6 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
   align-items: center;
   gap: 0.4rem;
   margin: 0;
-  font-size: 0.85rem;
-  color: #fff;
-  text-shadow: 0 1px 5px rgb(0 0 0 / 0.65);
-}
-
-.photo-meta i {
-  color: #fff;
-  font-size: 0.85em;
 }
 
 /* Pinned to a cover photo's corner, opposite the capacity badge. */
@@ -2517,7 +2602,8 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
   -webkit-backdrop-filter: blur(6px);
 }
 
-.pill-on-photo i {
+.pill-on-photo i,
+.pill-on-photo svg {
   color: #fff;
 }
 
@@ -2536,11 +2622,12 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
 }
 
 /* Flex, not the grid .photo-body uses, so the link rail can be pinned to the
-   card's bottom with margin-top:auto however tall the blurb runs. */
-.trail-card-wide .trail-links { --foot: 1.35rem; }
+   card's bottom with margin-top:auto however tall the blurb runs. The tighter
+   --foot lands on the card, where body and link rail both inherit it. */
+.trail-card-wide { --foot: 1.35rem; }
 
 .trail-card-wide .photo-body {
-  padding: 1.1rem 1.25rem 1.35rem;
+  padding: 1.1rem 1.25rem var(--foot, 1.35rem);
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
@@ -2551,16 +2638,16 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
    utilities, not the card's call to action. */
 /* Three equal columns across the card, split by dotted rules — a rail of
    equals, not a sentence of links. */
-/* --foot is the body's own bottom padding; the row reclaims it with a negative
-   margin and hands it back to the links as padding, so the dividers reach the
-   bottom of the card while the labels stay put. */
+/* --foot is the body's own bottom padding, inherited from .photo-card (the
+   card declares it once for the body and this row both); the row reclaims it
+   with a negative margin and hands it back to the links as padding, so the
+   dividers reach the bottom of the card while the labels stay put. */
 .trail-links {
-  --foot: 1.5rem;
   /* Mixed off --ink rather than --line so it darkens with every theme,
      light or dark, instead of hard-coding a value that only suits kraft. */
   --rule: color-mix(in srgb, var(--ink) 45%, transparent);
   margin-top: auto;
-  margin-bottom: calc(-1 * var(--foot));
+  margin-bottom: calc(-1 * var(--foot, 1.5rem));
   border-top: 1px solid var(--line-soft);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -2579,7 +2666,7 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
   text-decoration: none;
   /* The row's breathing room lives on the links, not the container, so the
      dividers run the full height of the row — top rule to bottom edge. */
-  padding-block: 0.85rem var(--foot);
+  padding-block: 0.85rem var(--foot, 1.5rem);
 }
 
 /* The divider belongs to the gap, so it never sits on an outer edge. Drawn as
@@ -2598,7 +2685,8 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
   );
 }
 
-.trail-link i {
+.trail-link i,
+.trail-link svg {
   color: var(--accent-type);
   font-size: 1.15em;
 }
@@ -2851,7 +2939,8 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
   box-shadow: var(--pop-shadow);
 }
 
-.pagenav-toggle i {
+.pagenav-toggle i,
+.pagenav-toggle svg {
   font-size: 0.95rem;
 }
 
@@ -2919,6 +3008,93 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
   .pagenav-list {
     min-width: 11rem;
   }
+}
+
+/* ---------------------------------------------------------- page header -- */
+/* The app's page opening (PageHeader.astro): crumbs in the data voice, the
+   title in the display voice, actions on the same baseline. No ground of its
+   own — a heading, not a bar. */
+
+.page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  padding-block: clamp(1.5rem, 4vw, 2.5rem) 0.25rem;
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-hint);
+}
+
+.crumb {
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+.crumbs a {
+  color: var(--ink-faint);
+  text-decoration: none;
+}
+
+.crumbs a:hover {
+  text-decoration: underline;
+}
+
+.crumbs-sep {
+  opacity: 0.5;
+}
+
+.page-head-sub {
+  margin-top: 0.4rem;
+}
+
+.page-head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ------------------------------------------------------------ cta panel -- */
+/* One custom property is the whole inversion: the panel's paper is ink, so
+   the tear, border and shadow are the ordinary card's. Type over ink paints
+   from the ground pair — the same trick the dark themes use, no new tokens. */
+
+.cta-panel {
+  --surface: var(--ink);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem 2.5rem;
+  padding: clamp(1.75rem, 4vw, 2.75rem) clamp(1.5rem, 4vw, 2.5rem);
+  color: var(--ground);
+}
+
+.cta-copy {
+  flex: 1 1 18rem;
+  min-width: 0;
+}
+
+.cta-panel .display-2 {
+  color: inherit;
+}
+
+.cta-blurb {
+  margin-top: 0.6rem;
+  max-width: 28rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  opacity: 0.8;
 }
 
 /* --------------------------------------------------------------- motion -- */

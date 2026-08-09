@@ -3,32 +3,32 @@
    right. Same tokens, two very different densities. */
 import SectionHead from "../ui/SectionHead.astro";
 import Spec from "../ui/Spec.astro";
-import Field from "../ui/Field.astro";
-import Btn from "../ui/Btn.astro";
 import VehicleCard from "../cards/VehicleCard.astro";
-
-const modes = [
-  { value: "needs_pickup", title: "Need a pickup", note: "Match me with a car", checked: true },
-  { value: "driving", title: "Driving", note: "I can take others" },
-  { value: "own_way", title: "Own way", note: "I’ll reach the base myself" },
-];
+import TravelForm from "../TravelForm.astro";
 
 const vehicles = [
   {
-    driver: "Rahul’s car",
+    driver: "Rahul",
+    vehicle: "Jimny",
     from: "Cooke Town",
     seats: 5,
     filled: 3,
+    /* Rider initials only, in seat order — the driver seat draws its own. */
     riders: "Rahul · Radhika (New Tipassandra) · Srilekha (Koramangala)",
-    faces: ["SR", "RA", "RH"],
+    faces: ["RA", "SR"],
+    departs: "03:10",
+    eta: "05:05",
+    routeUrl: "#",
   },
   {
-    driver: "Chandan’s car",
+    /* No vehicle label and no logistics line yet — the card renders without
+       either rather than printing TBDs. */
+    driver: "Chandan",
     from: "Esteem Mall",
     seats: 3,
     filled: 1,
     riders: "Chandan — picking up along Bellary Road",
-    faces: ["CH"],
+    faces: [],
   },
 ];
 ---
@@ -42,48 +42,7 @@ const vehicles = [
     <div class="carpool-grid">
       <div>
         <Spec>TravelForm · ModeCard · Field</Spec>
-        <form class="card carpool-form">
-          <div class="mode-row" role="radiogroup" aria-label="Travel mode">
-            {modes.map((m) => (
-              <label class="mode-card">
-                <input type="radio" name="mode" value={m.value} checked={m.checked} />
-                <strong>{m.title}</strong>
-                <span>{m.note}</span>
-              </label>
-            ))}
-          </div>
-
-          <Field id="cp-start" label="Starting from">
-            <input id="cp-start" type="text" value="5th block, Koramangala" />
-          </Field>
-
-          <label class="check">
-            <input type="checkbox" checked />
-            <span>Pick me up from where I start</span>
-          </label>
-
-          <div class="field-row">
-            <Field id="cp-vehicle" label="Vehicle">
-              <select id="cp-vehicle">
-                <option>Car — 5 seats</option>
-                <option>Car — 3 seats</option>
-                <option>Bike — 1 pillion</option>
-              </select>
-            </Field>
-            <Field id="cp-seats" label="Seats you can offer">
-              <select id="cp-seats">
-                <option>0</option><option>1</option><option>2</option>
-                <option selected>3</option><option>4</option>
-              </select>
-            </Field>
-          </div>
-
-          <Field id="cp-notes" label="Notes for the organiser">
-            <textarea id="cp-notes" rows="2">Sri Harsha and I are starting from the same location.</textarea>
-          </Field>
-
-          <Btn variant="primary" type="button">Save travel plan</Btn>
-        </form>
+        <TravelForm />
       </div>
 
       <div>

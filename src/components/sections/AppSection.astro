@@ -1,0 +1,41 @@
+---
+/* App surfaces — components that travelled the OTHER way: born in
+   blrhikes-app, ported into the canon so the two stop drifting. The header
+   every page opens with, and the panel that closes the home page. */
+import SectionHead from "../ui/SectionHead.astro";
+import Spec from "../ui/Spec.astro";
+import Btn from "../ui/Btn.astro";
+import PageHeader from "../PageHeader.astro";
+import CtaPanel from "../CtaPanel.astro";
+---
+
+<section class="section" id="app">
+  <div class="container">
+    <SectionHead eyebrow="08 · App surfaces" title="The app's own furniture">
+      Ported <em>from</em> the app rather than to it — the surfaces every page
+      shares, now spec'd here so there is one answer to what they look like.
+    </SectionHead>
+
+    <Spec doc="PageHeader">PageHeader — crumbs, kicker, title, actions on one baseline</Spec>
+    <PageHeader
+      crumbs={[{ label: "Events", href: "#" }, { label: "Skandagiri Sunrise Hike" }]}
+      kicker="Upcoming hike"
+      title="Skandagiri Sunrise Hike"
+      sub="Sat 8 Aug · 04:30 at the base · 6 of 25 spots left"
+    >
+      {/* The slot rides a Fragment, not the Btn: Btn spreads its rest props,
+          so `slot="actions"` on it would land in the DOM as an attribute. */}
+      <Fragment slot="actions">
+        <Btn variant="secondary" size="sm" href="#">Manage event</Btn>
+      </Fragment>
+    </PageHeader>
+
+    <Spec gap doc="CtaPanel">CtaPanel — the inverted sell, one action</Spec>
+    <CtaPanel
+      title="Adventure awaits"
+      blurb="Membership unlocks the exact locations, GPX files and access notes for every documented trail — and gets you first pick of the trips."
+      cta="What membership unlocks"
+      href="#"
+    />
+  </div>
+</section>

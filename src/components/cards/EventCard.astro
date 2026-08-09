@@ -6,6 +6,7 @@ import DateBlock from "../ui/DateBlock.astro";
 import Pill from "../ui/Pill.astro";
 import IconLine from "../ui/IconLine.astro";
 import AttendeeFaces from "../ui/AttendeeFaces.astro";
+import PillLead from "../ui/PillLead.astro";
 import Btn from "../ui/Btn.astro";
 
 interface Props {
@@ -29,7 +30,14 @@ const { event } = Astro.props;
     </div>
     <IconLine icon="location-dot">{event.where}</IconLine>
     <p class="fine clamp-2">{event.blurb}</p>
-    <AttendeeFaces {...event.going} />
+    {/* Who is leading and who is going, on one line — the pair the prominent
+        card and the registration card both carry, in the same shape. A cluster
+        rather than two blocks, so on a narrow column they wrap instead of
+        taking a row each. */}
+    <div class="cluster">
+      {event.lead && <PillLead initials={event.lead.initials}>Led by {event.lead.name}</PillLead>}
+      <AttendeeFaces as="span" {...event.going} />
+    </div>
     <div class="card-foot">
       <IconLine icon="clock" regular as="span">{event.start}</IconLine>
       <span class="actions">

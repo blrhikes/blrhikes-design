@@ -1,0 +1,16 @@
+---
+/* StatBand — the claims, as numbers. Each stat is a [number, label] pair; the
+   sentence around them belongs to the page, not the band. Componentised from
+   the showcase's Trails section (2026-08-08) because the app's home page
+   carries the same band and wants to adopt it. */
+interface Props {
+  stats: [string, string][];
+}
+const { stats } = Astro.props;
+---
+
+<div class="stats">
+  {stats.map(([n, l]) => (
+    <div class="stat"><span class="stat-n">{n}</span><span class="stat-l">{l}</span></div>
+  ))}
+</div>

@@ -20,12 +20,12 @@ const links: [string, string][] = [
     date={{ mon: "Aug", day: "13", dow: "Thu", label: "Thu 13 Aug" }}
     price="₹900"
     unit="/ person"
-    memberNote="Members pay <strong>₹750</strong>"
+    member={{ price: "₹750" }}
     rows={[
       ["Start", "05:00 at the blue gate"],
       ["End", "~10:00, back in the city"],
     ]}
-    lead={{ initials: "AS", text: "Led by Ava Sharma" }}
+    lead={{ initials: "AS", name: "Ava Sharma" }}
     going={{ count: "3 going", faces: ["CD", "EL", "DO"] }}
     meter={{ taken: 7, total: 20, note: "7 / 20 registered · 13 left" }}
     cta="Register"

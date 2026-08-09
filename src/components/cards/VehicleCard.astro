@@ -1,25 +1,52 @@
 ---
-/* VehicleCard — one car in the carpool manifest: who is driving, where from,
-   the seats it has and who is in them. */
+/* VehicleCard — one car in the carpool manifest: who is driving what, where
+   from, when it leaves, the seats and who is in them.
+
+   `driver` is the person and `vehicle` the machine — separate fields, because
+   "Rahul's car" elides a fact ("Rahul" · "Jimny" states two) and the driver's
+   initial seeds the driver seat, which wants a name, not a possessive.
+
+   The logistics line (departs · ETA · route) is optional as a unit: a manifest
+   drawn before times are set simply doesn't render it, rather than rendering
+   TBDs. */
 import SeatRow from "../ui/SeatRow.astro";
-import AttendeeFaces from "../ui/AttendeeFaces.astro";
 
 interface Props {
   driver: string;
+  /* The machine, when naming it helps riders find it — "Jimny", "white Swift". */
+  vehicle?: string;
   from: string;
   filled: number;
   seats: number;
   riders: string;
-  faces: string[];
+  faces?: string[];
+  departs?: string;
+  eta?: string;
+  routeUrl?: string;
 }
-const { driver, from, filled, seats, riders, faces } = Astro.props;
+const { driver, vehicle, from, filled, seats, riders, faces = [], departs, eta, routeUrl } = Astro.props;
 ---
 
 <div class="vehicle">
   <div class="vehicle-head">
-    <strong><i class="fa-solid fa-car-side" aria-hidden="true"></i> {driver}</strong>
+    <strong>
+      <i class="fa-solid fa-car-side" aria-hidden="true"></i>
+      {driver}{vehicle && <span class="vehicle-label"> · {vehicle}</span>}
+    </strong>
     <span class="mono">{from} · {seats} seats</span>
   </div>
-  <SeatRow filled={filled} total={seats} />
-  <AttendeeFaces class="vehicle-riders" count={riders} faces={faces} size="sm" label={riders} />
+  {(departs || eta || routeUrl) && (
+    <p class="vehicle-route mono">
+      {departs && <span>leaves {departs}</span>}
+      {eta && <span>ETA {eta}</span>}
+      {routeUrl && (
+        <a href={routeUrl}>route <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+      )}
+    </p>
+  )}
+  {/* `filled` counts occupants, driver included; SeatRow wants riders when it
+      draws the driver seat itself. The seats carry the faces now, so the line
+      below is left with what circles can't say: names and pickup points. */}
+  <SeatRow filled={Math.max(0, filled - 1)} total={seats} driver={driver[0]} faces={faces} />
+  <p class="vehicle-riders">{riders}</p>
 </div>

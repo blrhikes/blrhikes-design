@@ -153,7 +153,8 @@
   margin-bottom: 0.9rem;
 }
 
-.ev-sec-title i { color: var(--accent-type); font-size: 0.85em; }
+.ev-sec-title i,
+.ev-sec-title svg { color: var(--accent-type); font-size: 0.85em; }
 
 /* A run of times against a run of events — the times are the spine, so they
    get the mono column and the copy wraps against it.
@@ -204,9 +205,12 @@
   color: var(--ink-soft);
 }
 
-.ev-list i { color: var(--ink-hint); font-size: 0.85em; }
-.ev-list--yes i { color: var(--ok); }
-.ev-list--no i { color: var(--danger); }
+.ev-list i,
+.ev-list svg { color: var(--ink-hint); font-size: 0.85em; }
+.ev-list--yes i,
+.ev-list--yes svg { color: var(--ok); }
+.ev-list--no i,
+.ev-list--no svg { color: var(--danger); }
 .ev-list .note { color: var(--ink-hint); font-size: 0.85em; }
 
 /* Policies and FAQ: closed by default, because they are the answers to
@@ -288,7 +292,8 @@
 }
 
 .ev-links a:hover { color: var(--accent-type); text-decoration: underline; text-underline-offset: 3px; }
-.ev-links i { color: var(--accent-type); font-size: 0.85em; }
+.ev-links i,
+.ev-links svg { color: var(--accent-type); font-size: 0.85em; }
 
 /* ---- the Kraft family only: the cover's bottom edge tears like every
      other photo. Kraft Gold and Kraft Canopy wear Kraft's form, so they take

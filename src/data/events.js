@@ -34,6 +34,7 @@ export const eventCards = [
       { text: "₹700 members", variant: "ok" },
     ],
     where: "Savandurga, Magadi",
+    lead: { initials: "AS", name: "Ava Sharma" },
     blurb:
       "Asia’s largest monolith by moonlight — a slow, quiet climb up the open rock with the city glowing on the horizon.",
     going: { count: "30 going", more: "+27", faces: ["SR", "RH", "RA"] },
@@ -52,6 +53,7 @@ export const eventCards = [
       { text: "₹500 members", variant: "ok" },
     ],
     where: "north of Bengaluru · 60 km drive",
+    lead: { initials: "SH", name: "Shreshth" },
     blurb:
       "An easy lakeside loop and a long swim — lake and waterfall days include the swim-safety kit. Breakfast at the village mess after.",
     going: { count: "8 going", more: "+6", faces: ["CH", "DH"] },
