@@ -9,7 +9,10 @@
     "preview": "astro preview",
     "astro": "astro",
     "preview:cf": "astro build && wrangler dev",
-    "deploy": "astro build && wrangler deploy"
+    "deploy": "astro build && wrangler deploy",
+    "diff": "scripts/diff-pages.sh",
+    "clone:dev": "pnpm --dir react dev",
+    "clone:typecheck": "pnpm --dir react typecheck"
   },
   "devDependencies": {
     "astro": "^5.13.5",

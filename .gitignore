@@ -32,3 +32,11 @@ npm-debug.log*
 
 # Cloudflare
 .wrangler/
+
+# The React clone's build output (react/). Its source is committed; the
+# prerendered HTML the diff harness compares is regenerated on every run.
+react/build/
+react/.react-router/
+
+# TypeScript incremental build state
+*.tsbuildinfo
