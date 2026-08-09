@@ -1,0 +1,129 @@
+/* The event article — everything a hiker reads before deciding. It is a
+   .card, so it takes the same paper as the registration card beside it and
+   the same torn top and bottom edge from whichever theme is on. */
+import EventSection from "./EventSection";
+import EventList from "./EventList";
+import EventFaq from "./EventFaq";
+import Notice from "../ui/Notice";
+import type { IconItem, Pair } from "../types";
+
+const plan: Pair[] = [
+  ["3:30 AM", "Carpools leave the city (see the transport plan once you register)"],
+  ["4:45 AM", "Regroup at the blue gate, quick briefing + headcount"],
+  ["5:00 AM", "Gentle climb to the ridge for sunrise"],
+  ["6:15 AM", "Down to the lower falls for a swim and chai"],
+  ["8:00 AM", "Breakfast on the way back; in the city by ~10 AM"],
+];
+
+const highlights: Pair[] = [
+  ["water", "Two-tier waterfall with safe pools for a dip"],
+  ["tree", "Gentle, first-timer-friendly forest trail"],
+  ["mug-saucer", "Local breakfast stop on the drive out"],
+];
+
+const included: Pair[] = [
+  ["check", "Experienced crew and sweep, first-aid kit, and swim-safety gear"],
+  ["check", "Breakfast on the way back"],
+  ["check", "Carpool coordination"],
+];
+
+const notIncluded: IconItem[] = [
+  ["xmark", "Your share of transport", "settle fuel with your driver"],
+  ["xmark", "Personal gear"],
+  ["xmark", "Anything you buy en route"],
+];
+
+const bring: IconItem[] = [
+  ["check", "Headlamp or torch", "we start in the dark"],
+  ["check", "2L water and light snacks"],
+  ["check", "Shoes with grip", "a couple of rocky steps"],
+  ["check", "A warm layer for the ridge, plus swimwear and a towel for the pools"],
+  ["check", "Cap, sunscreen, and a bag to carry your trash back out"],
+];
+
+const faq = [
+  {
+    icon: "seedling",
+    q: "Is it beginner-friendly?",
+    a: "Yes — this is the one we recommend for a first hike.",
+  },
+  {
+    icon: "person-swimming",
+    q: "Can I come without swimming?",
+    a: "Absolutely; the pools are optional.",
+  },
+  {
+    icon: "cloud-rain",
+    q: "What if it rains?",
+    a: "Light rain is fine and makes the falls better. We postpone for a heavy forecast and let the WhatsApp group know.",
+  },
+  {
+    icon: "rotate-left",
+    q: "Refund & cancellation",
+    a: "Full refund up to 7 days before the event, 50% up to 48 hours before, none after. Spot transfers are always free — hand your seat to a friend instead.",
+  },
+];
+
+export default function EventArticle() {
+  return (
+    <article className="card ev-article">
+      <p className="lede">
+        Catch first light over the fern gullies, then cool off at the waterfall
+        pools before breakfast. An easy, beginner-friendly morning out — our
+        most popular first hike.
+      </p>
+
+      <EventSection icon="clock" regular title="The plan">
+        <dl className="ev-plan">
+          {plan.map(([time, what]) => <div key={time}><dt>{time}</dt><dd>{what}</dd></div>)}
+        </dl>
+      </EventSection>
+
+      <EventSection icon="car-side" title="Meeting point &amp; carpools">
+        <p className="fine">
+          We sort everyone into carpools the evening before — drivers and riders
+          both fill the travel form after registering. If you're driving, tell us
+          how many spare seats you can offer; if you need a pickup, tell us where
+          you'll start from.
+        </p>
+      </EventSection>
+
+      <EventSection icon="star" title="Highlights">
+        <EventList items={highlights} />
+      </EventSection>
+
+      <div className="ev-cols">
+        <EventSection icon="circle-check" title="What's included">
+          <EventList variant="yes" items={included} />
+        </EventSection>
+
+        <EventSection icon="ban" title="Not included">
+          <EventList variant="no" items={notIncluded} />
+        </EventSection>
+      </div>
+
+      <EventSection icon="suitcase-rolling" title="What to bring">
+        <EventList items={bring} />
+        <p className="fine" style={{ marginTop: "0.9rem" }}>
+          <a href="#">Full gear checklist — grab shared items <i className="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </p>
+      </EventSection>
+
+      <EventSection icon="shield-halved" title="Difficulty &amp; safety">
+        <p className="fine">
+          Easy — about 6 km with gentle ups and downs, fine for first-timers,
+          kids (8+), and dogs on a lead.
+        </p>
+        <Notice hole="tl" class="ev-safety-note">
+          <strong>The water is the one real caution.</strong> Swim only with
+          others around, never near the lip of the falls, and follow the crew's
+          call on the day. We move the date if the forecast turns.
+        </Notice>
+      </EventSection>
+
+      <EventSection icon="circle-question" regular title="Before you ask">
+        <EventFaq items={faq} />
+      </EventSection>
+    </article>
+  );
+}

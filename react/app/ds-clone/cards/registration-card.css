@@ -1,0 +1,29 @@
+/* RegistrationCard's own layout — the <style> block from
+   src/components/cards/RegistrationCard.astro, verbatim. Unscoped here; see
+   the note at the top of RegistrationCard.tsx for why that is safe and where
+   these rules are headed. */
+
+/* Layout only, painted from the token contract — nothing here is a colour
+   or a face a theme would want to override. */
+.rc-head {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.rc-price > * + * {
+  margin-top: 0.2rem;
+}
+
+/* Who is leading and who is going. Both are inline-flex chips, so they
+   share a line when there is room and stack when there is not — without
+   the gap they run straight into each other. The lead is PillLead, the same
+   chip the prominent event card carries, rather than the bare `.ledby` line
+   it used to be: the two cards state the same fact and should state it in
+   the same shape. */
+.rc-people {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.9rem;
+}

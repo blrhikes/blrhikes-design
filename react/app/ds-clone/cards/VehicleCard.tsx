@@ -1,0 +1,76 @@
+/* VehicleCard — one car in the carpool manifest: who is driving what, where
+   from, when it leaves, the seats and who is in them.
+
+   `driver` is the person and `vehicle` the machine — separate fields, because
+   "Rahul's car" elides a fact ("Rahul" · "Jimny" states two) and the driver's
+   initial seeds the driver seat, which wants a name, not a possessive.
+
+   The logistics line (departs · ETA · route) is optional as a unit: a manifest
+   drawn before times are set simply doesn't render it, rather than rendering
+   TBDs.
+
+   The `{" "}` after the car icon is required, not decorative — see IconLine.
+   Astro's newline there survives as a collapsed space and the normaliser
+   compares it; JSX would drop it and the icon would sit flush against the
+   driver's name. */
+import SeatRow from "../ui/SeatRow";
+import { useIcon } from "../icon-seam";
+
+type Props = {
+  driver: string;
+  /* The machine, when naming it helps riders find it — "Jimny", "white Swift". */
+  vehicle?: string;
+  from: string;
+  filled: number;
+  seats: number;
+  riders: string;
+  faces?: string[];
+  departs?: string;
+  eta?: string;
+  routeUrl?: string;
+};
+
+export default function VehicleCard({
+  driver,
+  vehicle,
+  from,
+  filled,
+  seats,
+  riders,
+  faces = [],
+  departs,
+  eta,
+  routeUrl,
+}: Props) {
+  const drawIcon = useIcon();
+  return (
+    <div className="vehicle">
+      <div className="vehicle-head">
+        <strong>
+          {drawIcon("car-side")}{" "}
+          {driver}
+          {vehicle && <span className="vehicle-label"> · {vehicle}</span>}
+        </strong>
+        <span className="mono">
+          {from} · {seats} seats
+        </span>
+      </div>
+      {(departs || eta || routeUrl) && (
+        <p className="vehicle-route mono">
+          {departs && <span>leaves {departs}</span>}
+          {eta && <span>ETA {eta}</span>}
+          {routeUrl && (
+            <a href={routeUrl}>
+              route {drawIcon("arrow-up-right-from-square")}
+            </a>
+          )}
+        </p>
+      )}
+      {/* `filled` counts occupants, driver included; SeatRow wants riders when it
+          draws the driver seat itself. The seats carry the faces now, so the line
+          below is left with what circles can't say: names and pickup points. */}
+      <SeatRow filled={Math.max(0, filled - 1)} total={seats} driver={driver[0]} faces={faces} />
+      <p className="vehicle-riders">{riders}</p>
+    </div>
+  );
+}
