@@ -13,8 +13,13 @@ import Btn from "../ui/Btn.astro";
 interface Props {
   event: any;
   tear?: "ends" | "sides";
+  /** The event page. Given, the PHOTO becomes an overlay anchor and the
+      TITLE a plain link (owner, 2026-08-10) — deliberately not the trail
+      cards' stretched .photo-link, whose whole-card cover would swallow the
+      Details/Register buttons in the foot. */
+  href?: string;
 }
-const { event, tear = "ends" } = Astro.props;
+const { event, tear = "ends", href } = Astro.props;
 ---
 
 <article class:list={["card", "feat-card", tear === "sides" && "torn-lr"]}>
@@ -26,12 +31,13 @@ const { event, tear = "ends" } = Astro.props;
         frosted chip the trail overlay card wears, so every fact sitting on a
         photograph speaks in one voice. .photo-meta only places it now. */}
     <p class="photo-meta"><Pill variant="on-photo" icon="location-dot">{event.where}</Pill></p>
+    {href && <a class="photo-door" href={href} aria-label={event.name}></a>}
   </PhotoWrap>
   <div class="feat-body">
     <div class="feat-head">
       <DateBlock {...event.date} label={event.dateLabel} />
       <div>
-        <h3 class="title feat-title">{event.name}</h3>
+        <h3 class="title feat-title">{href ? <a class="title-link" href={href}>{event.name}</a> : event.name}</h3>
         <IconLine icon="clock" regular>{event.time}</IconLine>
       </div>
     </div>

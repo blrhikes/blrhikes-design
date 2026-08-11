@@ -39,7 +39,7 @@ if (toggle && panel) {
   /* Write the current pair back into the address bar, so what is on screen can
      be copied out of it. `replaceState` rather than `pushState`: flipping
      through themes is looking, not navigating, and it should not take
-     seventeen presses of Back to leave the page.
+     nineteen presses of Back to leave the page.
 
      Only ever called from a click or a keypress — a page that quietly rewrote
      its own URL on load would turn every link into a link to today's stored

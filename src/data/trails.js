@@ -217,6 +217,7 @@ export const trailCardsOverlay = [
   {
     name: "Panorama Boulder Trail",
     slug: "panorama-boulder-trail",
+    href: "#",
     photo: cover("fc5014a8-e4b4-4351-a590-ca78b721f356", 1200),
     alt: "Boulders and the plain from the panorama trail",
     grade: "Easy–mod",
@@ -242,6 +243,7 @@ export const trailCardsOverlay = [
   {
     name: "Coconut Rock Caves",
     slug: "coconut-rock-caves",
+    href: "#",
     photo: cover("a667125d-70ba-438d-88f2-0d182442f49b", 1200),
     alt: "The big cave mouth under coconut rock",
     grade: "Moderate",

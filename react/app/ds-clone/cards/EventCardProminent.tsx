@@ -17,6 +17,11 @@ type Props = {
       event's routes. */
   detailsHref?: string;
   registerHref?: string;
+  /** The event page. Given, the PHOTO becomes an overlay anchor and the
+      TITLE a plain link (owner, 2026-08-10) — deliberately not the trail
+      cards' stretched .photo-link, whose whole-card cover would swallow the
+      Details/Register buttons in the foot. */
+  href?: string;
 };
 
 export default function EventCardProminent({
@@ -24,6 +29,7 @@ export default function EventCardProminent({
   tear = "ends",
   detailsHref = "/event/",
   registerHref = "#",
+  href,
 }: Props) {
   return (
     <article
@@ -42,12 +48,13 @@ export default function EventCardProminent({
         <p className="photo-meta">
           <Pill variant="on-photo" icon="location-dot">{event.where}</Pill>
         </p>
+        {href && <a className="photo-door" href={href} aria-label={event.name}></a>}
       </PhotoWrap>
       <div className="feat-body">
         <div className="feat-head">
           <DateBlock {...event.date} label={event.dateLabel} />
           <div>
-            <h3 className="title feat-title">{event.name}</h3>
+            <h3 className="title feat-title">{href ? <a className="title-link" href={href}>{event.name}</a> : event.name}</h3>
             <IconLine icon="clock" regular>
               {event.time}
             </IconLine>

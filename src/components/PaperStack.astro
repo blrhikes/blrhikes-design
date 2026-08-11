@@ -1,0 +1,15 @@
+---
+/* PaperStack — two sheets of torn paper, on purpose: a card whose content
+   rides a second torn sheet inset within the first. Born as an accident on
+   the app's trail page (2026-08-10) — StatBand's torn backing stacked inside
+   the stats card — kept as a deliberate mechanism. Use sparingly: one per
+   page, if that. */
+interface Props {
+  class?: string;
+}
+const { class: klass } = Astro.props;
+---
+
+<section class:list={["card", "paper-stack", klass]}>
+  <div class="paper-sheet"><slot /></div>
+</section>

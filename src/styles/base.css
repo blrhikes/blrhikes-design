@@ -1286,6 +1286,42 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
   color: var(--ink-faint);
 }
 
+/* The plain band: no paper of its own, for a band already sitting ON a card.
+   Cells keep their hairline dividers — separation without a second surface.
+   The torn themes' backing opts out in torn-paper.css (`:not(.stats-plain)`). */
+.stats-plain {
+  border: none;
+  background: transparent;
+  gap: 0;
+  overflow: visible;
+}
+
+.stats-plain .stat {
+  background: transparent;
+  border-inline-start: 1px solid var(--line-soft);
+}
+
+.stats-plain .stat:first-child {
+  border-inline-start: none;
+}
+
+/* ------------------------------------------------------------ paper stack -- */
+/* Two sheets on purpose (PaperStack.astro): the outer is the ordinary .card;
+   the inner sheet paints a second surface. Flat themes tint it (--surface-2 —
+   no tear to sell the layer); the torn themes move the paint to a ::before
+   backing through #cut-2 in torn-paper.css, the same split every torn
+   surface uses. `isolation` keeps the backing's z-index inside the sheet. */
+.paper-stack {
+  padding: 1.5rem;
+}
+
+.paper-sheet {
+  position: relative;
+  isolation: isolate;
+  padding: 1.25rem;
+  background: var(--surface-2);
+}
+
 /* --------------------------------------------------------------- trails -- */
 
 .trail-grid {
@@ -2354,6 +2390,47 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
   position: relative;
 }
 
+/* The overlay card's door: with an href the title anchor stretches over the
+   whole photo (its positioned ancestor is .photo-wrap), so the picture is the
+   link and the name is its text. The .trail-link rail sits outside the wrap
+   and keeps its own, independent anchors. */
+.photo-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.photo-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.photo-link:hover,
+.photo-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* The prominent EVENT card's two doors (owner, 2026-08-10): the photo, as a
+   full-bleed overlay anchor inside the wrap, and the title, as a plain link
+   — deliberately NOT the stretched .photo-link, whose whole-card cover
+   would swallow the Details/Register buttons in the foot. */
+.photo-door {
+  position: absolute;
+  inset: 0;
+}
+
+.title-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.title-link:hover,
+.title-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .photo-title {
   position: absolute;
   inset-inline: 0;
@@ -3008,6 +3085,269 @@ body:has(.flush-top) .topbar:not(:has(.themepicker:not([hidden])))
   .pagenav-list {
     min-width: 11rem;
   }
+}
+
+/* ------------------------------------------------- trail card, prominent -- */
+/* The owner's sketch (2026-08-10): feat-card's two flanks carry the photo
+   and the words on the TOP ROW only; under both runs one full-width band of
+   facts. The tear machinery is untouched — the photo still owns the card's
+   torn top-left corner; its own fine bottom tear now ends mid-card, a photo
+   pasted on the sheet. */
+.trail-card-prominent {
+  grid-template-rows: auto auto;
+}
+
+/* Row 1 only — the inherited min-height keeps the photo and the words
+   ending on one line, now against the band's top edge. */
+.trail-card-prominent .photo-wrap {
+  grid-row: 1;
+}
+
+.tcp-band {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.4rem;
+  padding: 0.9rem clamp(1.25rem, 3vw, 1.75rem) 1.1rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+@media (max-width: 46rem) {
+  .trail-card-prominent {
+    grid-template-rows: auto auto auto;
+  }
+}
+
+/* ---------------------------------------------------------- trail detail -- */
+/* The trail page's furniture, ported FROM blrhikes-app (2026-08-10): the
+   secondary stat strip, the gated location tiles, the members gate and the
+   eatery list. The hero (TrailHero.astro) rides EventCover's classes in
+   event.css and adds nothing here. */
+
+.stat-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem 3rem;
+  padding-block: 1.25rem;
+  border-block: 1px solid var(--line-soft);
+}
+
+.sstat {
+  display: grid;
+  gap: 0.25rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.sstat-n {
+  font-family: var(--font-display);
+  font-weight: var(--w-strong);
+  font-size: 1.5rem;
+  line-height: 1.1;
+}
+
+.sstat-u {
+  font-size: 0.6em;
+}
+
+.sstat-l {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: var(--label-case);
+  letter-spacing: var(--label-track);
+  color: var(--ink-faint);
+}
+
+/* The actions as a RAIL, not a card grid (owner, 2026-08-10): the trail
+   card's own idiom — quiet entries split by dotted rules — scaled up to
+   carry a note line. One row of equals however many tiles render (auto-flow
+   column), a stack with horizontal rules on narrow screens. The rule colour
+   is TrailLinks' own mix, so the two rails darken together in every theme. */
+.action-tiles {
+  --rule: color-mix(in srgb, var(--ink) 45%, transparent);
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+}
+
+/* An <a>, or a <button disabled> when inert — same tile either way, which is
+   why the button resets its own chrome here rather than trusting the reset. */
+.action-tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+  color: var(--ink);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.action-tile:hover .tile-label,
+.action-tile:focus-visible .tile-label {
+  color: var(--accent-type);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.action-tile > i,
+.action-tile > svg {
+  color: var(--accent-type);
+  font-size: 1.15rem;
+}
+
+.action-tile:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* The divider belongs to the gap, drawn exactly as .trail-link draws its own
+   (a gradient, not `dotted`, which packs its dots one gap-width apart). */
+.action-tile + .action-tile::before {
+  content: "";
+  position: absolute;
+  inset-block: 0.35rem;
+  inset-inline-start: 0;
+  width: 2px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--rule) 0 5px,
+    transparent 5px 12px
+  );
+}
+
+@media (max-width: 46rem) {
+  .action-tiles {
+    grid-auto-flow: row;
+  }
+
+  .action-tile + .action-tile::before {
+    inset-block: 0 auto;
+    inset-inline: 0.35rem;
+    width: auto;
+    height: 2px;
+    background: repeating-linear-gradient(
+      to right,
+      var(--rule) 0 5px,
+      transparent 5px 12px
+    );
+  }
+}
+
+.tile-copy {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 0.1rem;
+}
+
+.tile-label {
+  font-weight: var(--w-medium);
+}
+
+.tile-note {
+  font-size: 0.78rem;
+  color: var(--ink-hint);
+}
+
+.tile-go i,
+.tile-go svg {
+  font-size: 0.7rem;
+  color: var(--ink-hint);
+}
+
+.gate-note {
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+  background: var(--surface-2);
+  border: 1px dashed var(--line);
+  border-radius: var(--ctl-radius);
+}
+
+.gate-note > i,
+.gate-note > svg {
+  color: var(--accent-type);
+  font-size: 1.3rem;
+}
+
+.gate-copy {
+  max-width: 44ch;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--ink-faint);
+}
+
+.gate-cta {
+  margin-top: 0.35rem;
+}
+
+.eateries {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.eatery > * + * {
+  margin-top: 0.35rem;
+}
+
+.eatery-name {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: var(--w-medium);
+}
+
+.diet {
+  display: inline-flex;
+}
+
+.diet i,
+.diet svg {
+  font-size: 0.55em;
+}
+
+.diet-veg {
+  color: var(--ok);
+}
+
+.diet-nonveg {
+  color: var(--danger);
+}
+
+.eatery-addr {
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+}
+
+.eatery-addr i,
+.eatery-addr svg {
+  font-size: 0.8em;
+}
+
+.eatery-addr a {
+  margin-inline-start: 0.35em;
+  color: var(--accent-type);
+}
+
+.eatery-blurb {
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--ink-hint);
 }
 
 /* ---------------------------------------------------------- page header -- */

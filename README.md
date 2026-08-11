@@ -2,7 +2,7 @@
 
 Theme explorations for the BLR Hikes rebuild (`../blrhikes-app`). An Astro
 site that renders the same set of real components — hero, palette, type ramp,
-buttons, forms, event cards, trail cards, stats, table — under seventeen
+buttons, forms, event cards, trail cards, stats, table — under nineteen
 interchangeable themes.
 
 ## Run it
@@ -16,7 +16,7 @@ pnpm preview
 
 Switch themes with the paint-roller button in the top bar (an mxb.dev-style
 picker: each theme is a button showing its name over a row of colour dots) or
-the keys `1`–`0` and `-` `=` `[` `]` `\`. The choice is stored in
+the keys `1`–`0` and `-` `=` `[` `]` `\` `;` `'` `,` `.`. The choice is stored in
 `localStorage` and applied before first paint (no flash), and the picker
 closes on Escape or a click anywhere outside it. The same panel carries the
 **shadow override** (`s`), which applies across every theme — see below.
@@ -110,7 +110,7 @@ src/styles/
                       tokens of a block scoped to the pair: milestone-soft.css
                       over milestone.css, kraft-gold.css over kraft.css)
   torn-paper.css      the hand-torn edge — geometry only, painted from the
-                      contract, worn by seven themes through one :is() scope
+                      contract, worn by nine themes through one :is() scope
   shadow-toggle.css   the shadow override (see below); imported last of all,
                       so it outranks every theme on order, not specificity
   event.css           page-scoped layout for the event surface
@@ -223,6 +223,8 @@ single light+dark theme.
 | \\ | **Milestone Night** | dark | Milestone Soft after dark, transcribed from the app's own `dark:` classes: stone-900 ground, stone-800 cards, yellow-500 still the one accent |
 | ; | **Kraft Gold** | light | Kraft with Milestone's accent: same paper, tear and type, but the dark warm neutral becomes yellow-400 (fills) / yellow-900 (type). Shares kraft.css; the variant file is only the four accent tokens |
 | ' | **Kraft Canopy** | light | Kraft's paper scan and torn edges carrying Canopy Day's forest palette: the leaf wash and green dapple laid over the grain, deep-green ink and accent, Kraft's type kept |
+| , | **Stargazing** | dark | A clear night away from the city: indigo-black under a Milky Way haze, starlight gold as the one accent, cool pale-blue hairlines, Kraft's type — and the hand-torn edge, worn flat and with no paper in the palette |
+| . | **Solstice Stars** | dark | The crossover: Solstice Night's purple-and-pink palette taken out to Stargazing's darkness — a ground between the two, Solstice's purple glows with Kraft Gold's yellow-400 in the fill slot instead of the pink, the amber both parents share on the type, Stargazing's cool hairlines, and the same hand-torn edge |
 
 Icons are Font Awesome 6 (CDN), matching the app's own icon names
 (`location-dot`, `clock`, `mountain-sun`, `fish`, `car-side`, `star`).
@@ -236,7 +238,7 @@ change — the comparison it exists for is a theme against *itself*.
 | | |
 |---|---|
 | **Theme** | the default. No attribute is written; every theme lifts exactly as it means to |
-| **On** | supplies a plain two-layer drop shadow to the six themes that ship flat (the four Krafts, Contour, Mono). A no-op on the other eleven, deliberately: overriding Poster's hard stamp with a generic shadow would answer a question nobody asked |
+| **On** | supplies a plain two-layer drop shadow to the seven themes that ship flat (the four Krafts, Contour, Mono, Stargazing). A no-op on the other twelve, deliberately: overriding Poster's hard stamp with a generic shadow would answer a question nobody asked |
 | **Off** | flattens everything, on any theme — cards, popovers, dropdowns and CTAs at once |
 
 `data-shadows` on `<html>`, alongside `data-theme`, applied in the same
@@ -252,7 +254,7 @@ Left alone in every state: focus rings and the avatar stack's `drop-shadow`
 reads as a paper edge's thickness, the white type shadows over photographs, and
 the dark themes' `drop-shadow` glows, which are light sources.
 
-Themes 6–7, 12–13 and 16–17 all keep Kraft's typography — Fraunces over DM Sans,
+Themes 6–7, 12–13 and 16–19 all keep Kraft's typography — Fraunces over DM Sans,
 weights capped at 500 — so that a theme switch reads as a change of colour
 rather than a change of voice, and the palettes can be compared on equal
 terms.

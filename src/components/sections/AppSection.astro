@@ -5,8 +5,19 @@
 import SectionHead from "../ui/SectionHead.astro";
 import Spec from "../ui/Spec.astro";
 import Btn from "../ui/Btn.astro";
+import Pill from "../ui/Pill.astro";
 import PageHeader from "../PageHeader.astro";
 import CtaPanel from "../CtaPanel.astro";
+import TrailHero from "../TrailHero.astro";
+import StatBand from "../ui/StatBand.astro";
+import PaperStack from "../PaperStack.astro";
+import StatStrip from "../StatStrip.astro";
+import ActionTile from "../ActionTile.astro";
+import GateNote from "../GateNote.astro";
+import EateryList from "../EateryList.astro";
+import TrailCardProminent from "../cards/TrailCardProminent.astro";
+import { cover } from "../../data/images.js";
+import { trailCardsOverlay } from "../../data/trails.js";
 ---
 
 <section class="section" id="app">
@@ -37,5 +48,89 @@ import CtaPanel from "../CtaPanel.astro";
       cta="What membership unlocks"
       href="#"
     />
+
+    <Spec gap doc="TrailHero">TrailHero — the trail page's opening, EventCover's family</Spec>
+    <TrailHero
+      photo={cover("63972ac0-b799-418f-991f-0fd3c921601e")}
+      alt="Mouth of the immovable rock cave"
+      backHref="#"
+      backLabel="All trails"
+      title="Immovable Rock Cave"
+      sub="Ramanagara · south-west of Bengaluru"
+      flush={false}
+    >
+      <p><Pill variant="on-photo">draft</Pill></p>
+    </TrailHero>
+
+    <Spec gap doc="StatStrip">StatStrip — the secondary numbers, one quiet row</Spec>
+    <StatStrip
+      stats={[
+        { n: "2.4", u: "km", l: "Trail length" },
+        { n: "124", u: "m", l: "Elevation gain" },
+        { n: "1–2 h", l: "Hiking time" },
+        { n: "1 h 08 · 54 km", l: "Drive from the city" },
+      ]}
+    />
+
+    <Spec gap doc="ActionTile">ActionTile — the ways into the field, one inert</Spec>
+    <div class="action-tiles">
+      <ActionTile label="Trek start" icon="location-dot" note="Opens in Google Maps" href="#" />
+      <ActionTile label="Trail map" icon="map-location-dot" note="Route, with a note on offline use" href="#" />
+      <ActionTile label="GPX file" icon="download" note="Not uploaded for this trail yet." disabled />
+      <ActionTile label="Check the weather" icon="cloud-sun-rain" note="Forecast for this spot" href="#" />
+    </div>
+
+    <Spec gap doc="GateNote">GateNote — the members gate, kept warm</Spec>
+    <GateNote>
+      The trek start location, trail map and weather link are member perks — they keep fragile places from getting mobbed.
+      <Fragment slot="cta"><Btn variant="primary" size="sm" href="#">What membership unlocks</Btn></Fragment>
+    </GateNote>
+
+    <Spec gap doc="EateryList">EateryList — food stops, addresses open</Spec>
+    <EateryList
+      eateries={[
+        {
+          name: "Sri Ganesha Tiffin Room",
+          veg: true,
+          toilet: "Usable toilet",
+          address: "SH-17, opposite the bus stand, Harohalli",
+          addressHref: "#",
+          blurb: "Idli–vada from six; the filter coffee is the reason to stop.",
+        },
+        {
+          name: "Highway Dhaba",
+          veg: false,
+          toilet: "No toilet",
+          blurb: "Late breakfast on the way back.",
+        },
+      ]}
+    />
+
+    <Spec gap doc="EateryList">EateryList — the same stops behind the gate</Spec>
+    <EateryList
+      locked
+      eateries={[
+        {
+          name: "Sri Ganesha Tiffin Room",
+          veg: true,
+          toilet: "Usable toilet",
+          address: "SH-17, opposite the bus stand, Harohalli",
+          addressHref: "#",
+        },
+      ]}
+    />
+
+    <Spec gap doc="StatBand">StatBand — `plain`, riding a card that is the paper</Spec>
+    <section class="card" style="padding:1.5rem">
+      <StatBand plain stats={[["Open access", "No permit required"], ["Easy", "Difficulty"], ["4.5/5", "Rating"]]} />
+    </section>
+
+    <Spec gap doc="PaperStack">PaperStack — two torn sheets, on purpose</Spec>
+    <PaperStack>
+      <StatBand plain stats={[["48", "Documented trails"], ["12", "With caves"], ["31", "Under 2 h away"]]} />
+    </PaperStack>
+
+    <Spec gap doc="TrailCardProminent">TrailCardProminent — the trail at the lead event's size</Spec>
+    <TrailCardProminent trail={trailCardsOverlay[0]} />
   </div>
 </section>

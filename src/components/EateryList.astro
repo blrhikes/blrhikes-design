@@ -1,0 +1,36 @@
+---
+/* EateryList — food stops on the way: name keyed by a diet dot, the toilet
+   verdict as a tag, the address line the members gate may withhold, and an
+   optional line of blurb. The list only — the section heading and its anchor
+   belong to the page. `locked` swaps every address for the lock line: the
+   gate holds per page, not per row. Ported FROM blrhikes-app (2026-08-10). */
+interface Props {
+  eateries: {
+    name: string;
+    veg: boolean;
+    toilet: string;
+    address?: string;
+    addressHref?: string;
+    blurb?: string;
+  }[];
+  locked?: boolean;
+}
+const { eateries, locked } = Astro.props;
+---
+
+<ul class="eateries">{eateries.map((e) => (
+  <li class="eatery">
+    <p class="eatery-name"><span class:list={["diet", e.veg ? "diet-veg" : "diet-nonveg"]} title={e.veg ? "Vegetarian" : "Serves non-veg"}><i class="fa-solid fa-circle" aria-hidden="true"></i></span>{e.name}</p>
+    <p class="eatery-tags"><span class="htag"><i class="fa-solid fa-restroom" aria-hidden="true"></i>{e.toilet}</span></p>
+    {locked ? (
+      <p class="eatery-addr">Address for members <i class="fa-solid fa-lock" aria-hidden="true"></i></p>
+    ) : (
+      e.address && (
+        <p class="eatery-addr">{e.address}{e.addressHref && <a href={e.addressHref}>map <i class="fa-solid fa-up-right-from-square" aria-hidden="true"></i></a>}</p>
+      )
+    )}
+    {/* A div, not a <p>: the app renders markdown into this slot, and block
+        elements inside a <p> are invalid HTML the browser un-nests. */}
+    {e.blurb && <div class="eatery-blurb">{e.blurb}</div>}
+  </li>
+))}</ul>

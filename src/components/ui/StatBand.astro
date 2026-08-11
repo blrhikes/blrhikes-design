@@ -2,14 +2,19 @@
 /* StatBand — the claims, as numbers. Each stat is a [number, label] pair; the
    sentence around them belongs to the page, not the band. Componentised from
    the showcase's Trails section (2026-08-08) because the app's home page
-   carries the same band and wants to adopt it. */
+   carries the same band and wants to adopt it.
+
+   `plain` drops the band's own paper — the border grid, and under the torn
+   themes the torn backing — for a band that already sits ON a card. Paper on
+   paper reads as a mistake, not as depth (the app's trail page, 2026-08-10). */
 interface Props {
   stats: [string, string][];
+  plain?: boolean;
 }
-const { stats } = Astro.props;
+const { stats, plain } = Astro.props;
 ---
 
-<div class="stats">
+<div class:list={["stats", plain && "stats-plain"]}>
   {stats.map(([n, l]) => (
     <div class="stat"><span class="stat-n">{n}</span><span class="stat-l">{l}</span></div>
   ))}

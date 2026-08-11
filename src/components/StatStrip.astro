@@ -1,0 +1,18 @@
+---
+/* StatStrip — the secondary numbers (length, climb, hiking time, drive) as
+   one centered row between hairlines. The primary trio is StatBand's job;
+   this is the quieter band under it. Each fact is {n, u?, l}: a display
+   numeral, an optional unit riding small beside it, a mono label under.
+   Ported FROM blrhikes-app (2026-08-10). */
+interface Props {
+  stats: { n: string; u?: string; l: string }[];
+}
+const { stats } = Astro.props;
+---
+
+<div class="stat-strip">{stats.map(({ n, u, l }) => (
+  <div class="sstat">
+    <span class="sstat-n">{n}{u && <span class="sstat-u"> {u}</span>}</span>
+    <span class="sstat-l">{l}</span>
+  </div>
+))}</div>

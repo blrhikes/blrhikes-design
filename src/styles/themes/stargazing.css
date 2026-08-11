@@ -1,0 +1,111 @@
+/* ===========================================================================
+   THEME 18 · "Stargazing" — dark
+   ---------------------------------------------------------------------------
+   A clear night away from the city. Midnight-indigo ground under a Milky Way
+   haze, with starlight gold (#FFD166) carrying both the fills and the accent
+   type, and cool pale-blue hairlines so the structure reads as night rather
+   than as lamplight.
+
+   Next to Solstice Night on purpose, and different where it counts: that one
+   is purple-and-pink with amber type; this one is blue-black with a single
+   gold accent, and its cards are torn. The grain underneath is Solstice
+   Night's, verbatim, copied rather than shared so each file reads on its own.
+
+   Typography is Kraft's, unchanged. It wears the hand-torn edge (the :is()
+   scope at the top of torn-paper.css) — the first theme to do so with no
+   paper anywhere in its palette.
+   =========================================================================== */
+
+[data-theme="stargazing"] {
+  color-scheme: dark;
+
+  --ground: #070b18;
+  /* The Milky Way haze, the cold glow, then the grain. No drawn stars: a
+     tiled star field repeats, and a repeating sky is a wallpaper rather than
+     a sky — the theme is the looking, not the dots. Solstice Stars, which
+     started from this file, draws none either. */
+  --ground-img:
+    radial-gradient(circle at 75% 10%, rgb(124 140 255 / 0.14), transparent 70%),
+    radial-gradient(circle at 15% 85%, rgb(60 110 190 / 0.16), transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+
+  /* Translucent enough that the sky carries faintly through a card, opaque
+     enough to read as a sheet — which the torn edge needs. At the 0.18 this
+     started on, the rip was distorting a fill nobody could see; Kraft Night
+     sits at the same 0.72/0.82 for the same reason. */
+  --surface: rgb(38 52 96 / 0.72);
+  --surface-2: rgb(30 42 80 / 0.82);
+  /* opaque — popovers and dropdowns must not show sky */
+  --surface-raise: #111a30;
+
+  --ink: #eef2fb;
+  --ink-soft: #c9d2e8;
+  --ink-faint: #97a3c2; /* 7.4:1 on the ground */
+  --ink-hint: #6b7799;
+
+  --accent: #ffd166;
+  --on-accent: #1a1405; /* 12.9:1 on the gold fill */
+  --accent-type: #ffd166; /* 13.1:1 on the ground — the same gold as type */
+  --accent-tint: rgb(255 209 102 / 0.13);
+
+  --ok: #8fd3a8;
+  --ok-tint: rgb(143 211 168 / 0.14);
+  --danger: #f2707a;
+  --danger-tint: rgb(242 112 122 / 0.15);
+
+  /* pale-blue hairlines, not gold — where this theme parts from Solstice
+     Night's habit of bordering everything in the accent */
+  --line: rgb(169 200 255 / 0.16);
+  --line-soft: rgb(169 200 255 / 0.08);
+
+  /* Square, like every other torn theme: a rounded corner and a ragged edge
+     are two different claims about how the sheet was made, and the tear wins.
+     The controls and pills keep their radius — they are not torn. */
+  --card-radius: 0;
+  --ctl-radius: 0.5rem;
+  --pill-radius: 999px;
+  --card-border: 1px solid rgb(169 200 255 / 0.14);
+  /* Flat, like the other torn themes: a shadow under a night-blue sheet on a
+     near-black ground is barely an event, and what it does register reads as
+     grime around the rip rather than as lift. The theme is named in the
+     :is() list in shadow-toggle.css, so the picker's Shadows · On still has
+     something to supply. */
+  --card-shadow: none;
+  --pop-shadow: none;
+  /* The hand-torn edge, shared from torn-paper.css — the geometry is paper's,
+     the sheet is night. */
+  --cut: url(#cut-1);
+
+  /* --- typography: Kraft's, verbatim -------------------------------------- */
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 500;
+  --display-case: none;
+  --display-track: 0;
+  --w-medium: 500;
+  --w-strong: 500;
+  --label-case: uppercase;
+  --label-track: 0.08em;
+}
+
+/* Pin the sky so it holds still while the page scrolls past it. */
+[data-theme="stargazing"] body {
+  background-attachment: fixed;
+}
+
+/* The sun in the ridges becomes the moon: pale, high, haloed. */
+[data-theme="stargazing"] .ridges .sun {
+  fill: #e8eeff;
+  filter: drop-shadow(0 0 18px rgb(232 238 255 / 0.55));
+}
+
+/* The numerals read as the brightest things on the page. */
+[data-theme="stargazing"] .stat-n {
+  text-shadow: 0 0 14px rgb(255 209 102 / 0.35);
+}
+
+/* Indigo climbing to gold — night into starlight. */
+[data-theme="stargazing"] .meter-fill {
+  background: linear-gradient(90deg, #3c4e8a, #ffd166);
+}

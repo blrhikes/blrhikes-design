@@ -1,0 +1,37 @@
+---
+/* ActionTile — one way out of the page and into the field: a leading icon,
+   a label over a line of fine print, the arrow that says it goes somewhere.
+   `disabled` renders the same tile as an inert button — a tile that looks
+   navigable and goes nowhere is worse than one that says it isn't ready.
+   The page composes tiles in an `.action-tiles` grid; the tile is the
+   component. Ported FROM blrhikes-app (2026-08-10). */
+interface Props {
+  label: string;
+  icon: string;
+  note?: string;
+  href?: string;
+  download?: boolean;
+  disabled?: boolean;
+}
+const { label, icon, note, href, download, disabled } = Astro.props;
+---
+
+{disabled ? (
+  <button type="button" class="action-tile" disabled>
+    <i class={`fa-solid fa-${icon}`} aria-hidden="true"></i>
+    <span class="tile-copy">
+      <span class="tile-label">{label}</span>
+      {note && <span class="tile-note">{note}</span>}
+    </span>
+    <span class="tile-go"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+  </button>
+) : (
+  <a class="action-tile" href={href} download={download}>
+    <i class={`fa-solid fa-${icon}`} aria-hidden="true"></i>
+    <span class="tile-copy">
+      <span class="tile-label">{label}</span>
+      {note && <span class="tile-note">{note}</span>}
+    </span>
+    <span class="tile-go"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+  </a>
+)}

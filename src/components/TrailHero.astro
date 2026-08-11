@@ -1,0 +1,34 @@
+---
+/* TrailHero — the trail page's opening: the EventCover family (same backing
+   tear, same copy stack) with the copy a trail needs — a subtitle of place
+   instead of when/where rows, and a slot for the app's admin badge pills.
+   Its own component rather than an EventCover mode: the shared classes are
+   structural, the copy stack is not. Ported FROM blrhikes-app (2026-08-10). */
+interface Props {
+  photo: string;
+  alt: string;
+  backHref: string;
+  backLabel: string;
+  eyebrow?: string;
+  title: string;
+  sub?: string;
+  /** The showcase exhibit passes false — `.flush-top` sends the whole page's
+      top bar transparent, which an exhibit must not do. */
+  flush?: boolean;
+}
+const { photo, alt, backHref, backLabel, eyebrow, title, sub, flush = true } = Astro.props;
+---
+
+<header class:list={["ev-cover", flush && "flush-top"]} style={`--photo:url('${photo}')`}>
+  <div class="ev-cover-backing" aria-hidden="true"></div>
+  <img class="photo" src={photo} alt={alt} />
+  <div class="container">
+    <div class="ev-cover-copy">
+      <a class="ev-back" href={backHref}><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> {backLabel}</a>
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h1 class="display-1">{title}</h1>
+      {sub && <p class="ev-sub">{sub}</p>}
+      <slot />
+    </div>
+  </div>
+</header>

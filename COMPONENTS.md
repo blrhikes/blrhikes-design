@@ -444,6 +444,16 @@ None. No JS touches this card.
 
 ---
 
+### The doors (added 2026-08-10)
+
+An optional `href` (the event page) gives the card two scoped doors: the
+photo, as a full-bleed overlay anchor inside the wrap (`.photo-door`,
+`aria-label` = the event name), and the title as a plain link
+(`.title-link`, inherit colour, hover underline). Deliberately NOT the trail
+cards' stretched `.photo-link`: its whole-card cover would swallow the
+Details/Register buttons in the foot. Without `href`, no anchors — the demo
+cards render exactly as before.
+
 ## EventPage
 
 Not a component — the **surface** the event components compose into, and the
@@ -1597,8 +1607,13 @@ from the panorama trail"`). Every decorative `<i>` is `aria-hidden="true"`.
 
 ### Open questions
 
-- Should the whole card be a link to the trail page, with `.trail-link` as
-  nested actions? Currently nothing navigates to the trail itself.
+- ~~Should the whole card be a link to the trail page?~~ **Resolved
+  2026-08-10 (owner): the PHOTO is the link.** An optional `trail.href` wraps
+  the overlay title in `.photo-link`, whose `::after` stretches over the
+  whole `.photo-wrap` — the picture is the door, the name is its link text,
+  and the `.trail-link` rail below stays a row of independent actions
+  outside the stretch. No `href`, no anchor: the demo cards without a page
+  render exactly as before.
 - The blurb is unclamped here (unlike `TrailCard`'s `.clamp-2`), so two cards
   in a row can differ in height. `margin-top: auto` on the link rail absorbs
   it, but a long blurb still stretches the row.
@@ -2223,6 +2238,11 @@ the app's home page carries the same band.
 
 - Three or four `[number, label]` pairs, one row. The sentence around them
   belongs to the page; the band carries no prose of its own.
+- `plain` (2026-08-10) drops the band's own paper — the border grid, and the
+  torn themes' `::before` backing — for a band that already sits ON a card.
+  Cells keep their hairline dividers. Paper on paper reads as a mistake, not
+  as depth: the app's trail page found the stacked tears by accident, and the
+  deliberate version of that effect is PaperStack's job, not this band's.
 
 ### Open questions
 
@@ -2242,6 +2262,227 @@ inside a real `<form method="post">` and works with JavaScript off.
 - `.mode-row` / `.mode-card` — the radio cards; checked state paints from the
   accent pair.
 - `Field` rows; `.field-row` for the two-up pair; `.check` for the checkbox.
+
+### Open questions
+
+- None yet.
+
+## TrailHero
+
+The trail page's opening: the EventCover family — full-bleed photograph,
+backing tear, the copy stack bottom-left — with the copy saying what a trail
+needs said. Where an event says when and where it happens, a trail says where
+it is (area · bearing from the city) in one quiet line, and carries an
+optional pill row for the app's admin badges (draft, restricted). Ported FROM
+blrhikes-app alongside the trail page's adoption (2026-08-10).
+
+### What it's for
+
+- `/trail/:slug` — a page that opens ON its photograph. Coverless trail pages
+  don't exist; the app falls back to a satellite image before it falls back to
+  no hero.
+- Built as its own component rather than optioning EventCover (owner-flagged
+  taste call): the two share every structural class, but EventCover's
+  when/where rows carry calendar/location icons that read wrong for a place
+  that has no date, and a two-mode component would make both pages' markup
+  conditional.
+
+### Parts
+
+- `.ev-cover` (+ `.flush-top` unless `flush={false}`, for a showcase exhibit
+  that must not send the top bar transparent), `.ev-cover-backing`, `.photo`,
+  `.ev-cover-copy`, `.ev-back`, `.eyebrow`, `.display-1` — all EventCover's;
+  the tear rules bind to the classes, so the hero tears for free.
+- `.ev-sub` — the one new class: the subtitle line, body voice over the
+  photograph. Lives in event.css beside `.ev-when`.
+- The default slot renders after the subtitle — the app rides its admin
+  badge pills there; the exhibit shows one.
+
+### Open questions
+
+- None yet.
+
+## StatStrip
+
+The secondary numbers — length, climb, hiking time, drive from the city — as
+one centered row between hairlines. The primary trio (access, difficulty,
+rating) is StatBand's job; this is the quieter band under it. Ported FROM
+blrhikes-app with the trail page (2026-08-10).
+
+### What it's for
+
+- Two to four `{n, u?, l}` facts: a display numeral, an optional unit that
+  rides small beside it, a mono label under. The strip draws its own
+  top/bottom hairlines because it sits inside a card between other blocks —
+  it separates itself rather than asking the page to.
+- The app's info bubbles ("length includes the walk back") are app chrome
+  riding beside the label, not part of the strip.
+
+### Parts
+
+- `.stat-strip` — centered flex row, wraps, hairlines block-start/end.
+- `.sstat` / `.sstat-n` / `.sstat-u` / `.sstat-l` — one fact: numeral in the
+  display voice, unit at 0.6em, label in the data voice (mono, tracked).
+
+### Open questions
+
+- None yet.
+
+## ActionTile
+
+One way out of the trail page and into the field: a leading icon, a label
+over a line of fine print, and an arrow that says it goes somewhere. The
+trail page draws four — trek start, map, GPX, weather — behind its members
+gate. Ported FROM blrhikes-app (2026-08-10); reworked the same day (owner):
+no borders — the tiles sit as a RAIL split by TrailLinks' dotted rules, the
+trail card's own idiom scaled up to carry the note line.
+
+### What it's for
+
+- A link that deserves more than a text link and less than a card: the label
+  names the destination, the note manages expectations, the icon keys it.
+- `disabled` renders the same tile as an inert button at reduced opacity —
+  the GPX tile on a trail with no file yet. A tile that looks navigable and
+  goes nowhere is worse than one that says it isn't ready.
+- The page composes tiles in an `.action-tiles` rail — one row of equals
+  however many tiles render (auto-flow column), stacking with horizontal
+  rules on narrow screens. The rail class is the page's, the tile is the
+  component.
+
+### Parts
+
+- `.action-tile` — an `<a>`, or a `<button disabled>` when inert. Flex row,
+  no chrome of its own; hover/focus accents and underlines the label. The
+  divider is `.action-tile + .action-tile::before`, TrailLinks' gradient at
+  TrailLinks' rule mix, so the two rails darken together per theme.
+- Leading icon: a direct child (`.action-tile > i, .action-tile > svg`),
+  accent-painted. `.tile-copy` / `.tile-label` / `.tile-note` — the stacked
+  words. `.tile-go` — the trailing arrow, faint.
+
+### Open questions
+
+- None yet.
+
+## GateNote
+
+The members gate, kept warm: a dashed boundary, a lock in the accent, one
+short paragraph of why, and room for a single CTA. An invitation rather than
+an error — it pairs with CtaPanel's voice, not Notice-danger's. Ported FROM
+blrhikes-app (2026-08-10).
+
+### What it's for
+
+- Standing where gated content would be: the trail page's location actions
+  and its members-only write-up sections. The copy says why the thing is
+  gated (fragile places, member perks), the CTA says what to do about it.
+- One per gated block. It is a stand-in, not a banner — it occupies the
+  gated thing's place at roughly its size.
+
+### Parts
+
+- `.gate-note` — centered column, dashed `--line` border, `--surface-2`
+  ground, control radius.
+- The lock: a direct-child icon (`.gate-note > i, .gate-note > svg`),
+  accent-painted. `.gate-copy` — the paragraph, faint ink, measured. The
+  `cta` slot renders last with its own breathing room.
+
+### Open questions
+
+- None yet.
+
+## EateryList
+
+Food stops on the way to a trail: name keyed by a diet dot (green veg, red
+non-veg), the toilet verdict as a tag, the address line — which the members
+gate may withhold — and an optional line of blurb. Ported FROM blrhikes-app
+(2026-08-10).
+
+### What it's for
+
+- The trail page's "Eateries on the way" section body. The heading, its
+  anchor and the section chrome belong to the page; this is the list.
+- `locked` swaps every address for "Address for members" and a lock — the
+  gate holds per page, not per row.
+
+### Parts
+
+- `.eateries` — a `<ul>`, auto-fit grid (2-up, collapsing), list chrome
+  stripped.
+- `.eatery-name` — body-weight name; `.diet` / `.diet-veg` / `.diet-nonveg`
+  — the dot, an icon at 0.55em painted `--ok` or `--danger`.
+- The toilet tag is an `.htag` (HighlightTags' shell) with the restroom icon.
+- `.eatery-addr` — fine print; carries the map link when open, the lock line
+  when `locked`. `.eatery-blurb` — fine print, softer, the one-liner.
+
+### Open questions
+
+- None yet.
+
+## PaperStack
+
+Two sheets of torn paper, on purpose: a card whose content rides a second
+torn sheet inset within the first. Born as an accident on the app's trail
+page (2026-08-10) — the canon StatBand's torn backing stacked inside the
+page's stats card — which the owner liked enough to keep as a deliberate
+mechanism while the band itself went `plain`.
+
+### What it's for
+
+- Depth as material, where the flat system allows it: a block the page wants
+  to read as "a note pinned on the sheet" rather than another region of the
+  same sheet. Use sparingly — one per page, if that; two stacks near each
+  other read as clutter, exactly as the accidental version did.
+- The inner sheet paints `--surface` over the card's `--surface`, so the
+  translucency stacking does the darkening — the same alpha arithmetic that
+  made the accident visible. Flat themes get `--surface-2` instead: no tear
+  to sell the layer, so the tint carries it.
+
+### Parts
+
+- `.paper-stack` — a `.card` (the outer sheet is the ordinary card; tear,
+  border and shadow all inherited).
+- `.paper-sheet` — the inner sheet: isolated, padded; under the torn themes
+  its paint moves to a `::before` backing through `#cut-2`, the same split
+  every torn surface uses.
+
+### Open questions
+
+- None yet.
+
+## TrailCardProminent
+
+The trail, at the lead event's size: EventCardProminent-TornEnds' bones —
+`feat-card`'s photo flank and ends-rip — restructured to the owner's sketch
+(2026-08-10): photo left and the words right on the TOP ROW, then one
+full-width band of facts under both. Built for the event detail page's
+"We're going here" slot, where the overlay card's on-photo type competed
+with the event cover directly above it.
+
+### What it's for
+
+- One trail given prominence on a page that is ABOUT something else — the
+  event page names the destination without a second hero. Only the rating
+  badge rides the photo; every other fact speaks from the card.
+- Top row, the two flanks: the photo, and beside it the title (the
+  `photo-link` door when `trail.href` is set), the blurb clamped to two
+  lines, and the highlight tags.
+- The band, full width under both flanks: grade pill, area, direction, the
+  mono stats — hairline top rule, one wrapping row.
+- **No `TrailLinks` rail** (owner, 2026-08-10): trek start, map and GPX are
+  the trail page's gated actions, and this card's one door is the trail
+  page itself.
+- No `tear: "sides"` variant: the ends rip is the point of the borrowed
+  layout; a sides variant can join when a page wants it.
+
+### Parts
+
+- `.card.feat-card.trail-card-prominent` — EventCardProminent's grid and
+  tear rules inherited by class; the modifier adds the second row, pins
+  `.photo-wrap` to row 1 (its own fine bottom tear now ends mid-card — a
+  photo pasted on the sheet), and draws `.tcp-band` across both columns.
+- With `trail.href` the title's `.photo-link` stretch covers the whole card
+  (`.card` is the positioned ancestor here, unlike the overlay card's
+  photo-wrap) — the entire card is the door to the trail page.
 
 ### Open questions
 

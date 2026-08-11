@@ -20,7 +20,10 @@ export default function TrailCardOverlay({ trail }: { trail: Trail }) {
             <Pill variant="on-photo" icon="compass">{trail.compass}</Pill>
             <Pill variant="on-photo" icon="location-dot">{trail.place}</Pill>
           </div>
-          <h3 className="title">{trail.name}</h3>
+          {/* With an href the PHOTO is the card's door to the trail page: the
+              anchor's ::after stretches over the whole photo-wrap, the name is
+              the link text, and the .trail-link rail below stays independent. */}
+          <h3 className="title">{trail.href ? <a className="photo-link" href={trail.href}>{trail.name}</a> : trail.name}</h3>
         </div>
       </PhotoWrap>
       <div className="photo-body">

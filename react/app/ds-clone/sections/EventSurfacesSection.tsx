@@ -95,7 +95,7 @@ export default function EventSurfacesSection() {
           <Spec doc="EventCardProminent-TornEnds">
             EventCardProminent-TornEnds · DateBlock — the rip runs along the top and bottom
           </Spec>
-          <EventCardProminent event={graniteGauntlet} tear="ends" />
+          <EventCardProminent event={graniteGauntlet} tear="ends" href="/event/" />
 
           <Spec gap doc="EventCardProminent-TornEnds">
             EventCardProminent-TornSides · DateBlock — the rip runs down the left and right

@@ -17,7 +17,7 @@
 
    "On" is the awkward one, and the awkwardness is real rather than a shortcut:
    CSS cannot ask "does this theme's --card-shadow happen to be none?", so the
-   themes that need supplying are named. Eleven of the seventeen already lift,
+   themes that need supplying are named. Twelve of the nineteen already lift,
    and for those "on" is what they were already doing — the state is a no-op,
    deliberately, because overriding Poster's hard stamp or Monsoon's deep glow
    with a generic drop shadow would answer a question nobody asked. Only the
@@ -54,14 +54,15 @@
 
 /* ------------------------------------------------------------------- on -- */
 
-/* The six themes that ship flat. Everything else already lifts. */
+/* The seven themes that ship flat. Everything else already lifts. */
 [data-shadows="on"]:is(
     [data-theme="kraft"],
     [data-theme="kraft-gold"],
     [data-theme="kraft-night"],
     [data-theme="kraft-canopy"],
     [data-theme="contour"],
-    [data-theme="mono"]
+    [data-theme="mono"],
+    [data-theme="stargazing"]
   ) {
   /* Cast straight down, no sideways offset, in two layers: a contact shadow
      that keeps the sheet's edge on the ground, and a wide ambient pulled in at
@@ -75,7 +76,7 @@
      different one, and on paper stock it reads as the card hovering above the
      page rather than resting on it.
 
-     Four of these six wear the hand-torn edge, where the shadow rides
+     Five of these seven wear the hand-torn edge, where the shadow rides
      `.card::before` and is displaced by the tear filter along with the paper,
      so it frays with the edge instead of outlining the rectangle. A short
      shadow keeps that fraying legible; a long blur washes it out. */
@@ -90,9 +91,9 @@
 }
 
 /* Black on a dark ground is barely an event — the card is LIGHTER than what is
-   behind it, so there is little for a shadow to darken. The one dark theme in
-   the list above gets the alphas raised to compensate. */
-[data-shadows="on"][data-theme="kraft-night"] {
+   behind it, so there is little for a shadow to darken. The two dark themes in
+   the list above get the alphas raised to compensate. */
+[data-shadows="on"]:is([data-theme="kraft-night"], [data-theme="stargazing"]) {
   --lift-near: 0.5;
   --lift-far: 0.55;
 }

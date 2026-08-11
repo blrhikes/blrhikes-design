@@ -113,6 +113,13 @@
   color: rgb(255 255 255 / 0.9);
 }
 
+/* The trail hero's one line of place (TrailHero.astro) — body voice over the
+   photograph, where the event cover has its when/where rows. */
+.ev-sub {
+  font-size: 1rem;
+  color: rgb(255 255 255 / 0.9);
+}
+
 /* ---- the two columns ---- */
 .ev-main {
   display: grid;

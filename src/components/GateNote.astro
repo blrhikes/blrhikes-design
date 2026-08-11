@@ -1,0 +1,12 @@
+---
+/* GateNote — the members gate, kept warm: a dashed boundary, a lock in the
+   accent, one short paragraph of why, room for a single CTA. An invitation
+   rather than an error — it pairs with CtaPanel's voice, not Notice-danger's.
+   Ported FROM blrhikes-app (2026-08-10). */
+---
+
+<div class="gate-note">
+  <i class="fa-solid fa-lock" aria-hidden="true"></i>
+  <p class="gate-copy"><slot /></p>
+  {Astro.slots.has("cta") && <p class="gate-cta"><slot name="cta" /></p>}
+</div>

@@ -1,0 +1,113 @@
+/* ===========================================================================
+   THEME 19 · "Solstice Stars" — dark
+   ---------------------------------------------------------------------------
+   The crossover: Solstice Night's palette taken out to Stargazing's darkness.
+   The ground sits between the two parents — #150F22, purple-black rather than
+   either the plum #1A1625 or the ink-blue #070B18 — and Solstice Night's two
+   glows sit on it — the pink among them. The fills, though, are Kraft Gold's
+   yellow-400 rather than Solstice Night's pink, and the amber (#FAC67A) both
+   parents already share carries the accent type: three warm voices at three
+   distances, where pink-on-pink-glow was one. Neither theme draws stars: a
+   tiled field repeats, and a repeating sky is wallpaper.
+
+   Where the two parents disagree, it picks one and says which:
+     · hairlines — Stargazing's cool blue-violet, not Solstice Night's amber,
+       which pulls the whole page towards the pink-and-gold it came from
+     · surfaces  — heavier than Solstice Night's, because they sit on a darker
+       ground, and heavier again because a torn sheet has to be a sheet
+     · the edge  — Stargazing's tear, not Solstice Night's smooth card, so the
+       two crossover themes differ on colour alone: blue-black and gold there,
+       purple and yellow here
+     · the sun   — Solstice Night's low amber sun, kept
+
+   Typography is Kraft's, unchanged.
+   =========================================================================== */
+
+[data-theme="solstice-stars"] {
+  color-scheme: dark;
+
+  --ground: #150f22;
+  /* Solstice Night's two glows on the grain both parents use. No drawn stars
+     in either theme now: a tiled field repeats, and a repeating sky is
+     wallpaper. The stargazing here is the darkness and the depth, not dots. */
+  --ground-img:
+    radial-gradient(circle at top right, rgb(121 68 154 / 0.15), transparent 80%),
+    radial-gradient(circle at 20% 80%, rgb(218 73 141 / 0.15), transparent 50%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+
+  /* Solstice Night's purple, at an alpha that reads as a sheet rather than as
+     a tint — which the torn edge needs: at the 0.24 this started on, the rip
+     was distorting a fill nobody could see. Kraft Night and Stargazing tear at
+     the same 0.7-ish for the same reason. */
+  --surface: rgb(105 36 124 / 0.62);
+  --surface-2: rgb(105 36 124 / 0.75);
+  --surface-raise: #201830; /* opaque — popovers must not show sky */
+
+  --ink: #f3eef7;
+  --ink-soft: #d5cce0;
+  --ink-faint: #a896bd;
+  --ink-hint: #7d6b93;
+
+  /* Kraft Gold's yellow-400 in the fill slot, verbatim, in place of Solstice
+     Night's pink — the purple keeps its warm counterweight but the CTAs stop
+     competing with the ground's own pink glow. --on-accent is Kraft Gold's
+     too, and for its reason: white on this yellow fails badly. */
+  --accent: #facc15; /* 11.7:1 on this ground */
+  --on-accent: #1c1917; /* stone-900 — 12.2:1 on the yellow */
+  --accent-type: #fac67a; /* the softer amber both parents share, 11.6:1 */
+  --accent-tint: rgb(250 204 21 / 0.14);
+
+  --ok: #9fd98b;
+  --ok-tint: rgb(159 217 139 / 0.14);
+  --danger: #f2707a;
+  --danger-tint: rgb(242 112 122 / 0.15);
+
+  /* Stargazing's cool hairlines rather than Solstice Night's amber ones */
+  --line: rgb(176 168 255 / 0.18);
+  --line-soft: rgb(176 168 255 / 0.09);
+
+  /* Square, as every torn theme is: a rounded corner and a ragged edge are two
+     different claims about how the sheet was made, and the tear wins. The
+     controls and pills keep their radius — they are not torn. */
+  --card-radius: 0;
+  --ctl-radius: 0.5rem;
+  --pill-radius: 999px;
+  --card-border: 1px solid rgb(176 168 255 / 0.16);
+  --card-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.6);
+  --pop-shadow: 0 0 20px rgb(250 204 21 / 0.28);
+  --cut: url(#cut-1); /* the hand-torn edge, shared from torn-paper.css */
+
+  /* --- typography: Kraft's, verbatim -------------------------------------- */
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 500;
+  --display-case: none;
+  --display-track: 0;
+  --w-medium: 500;
+  --w-strong: 500;
+  --label-case: uppercase;
+  --label-track: 0.08em;
+}
+
+/* Pin the sky so the stars and the glows hold still while the page scrolls. */
+[data-theme="solstice-stars"] body {
+  background-attachment: fixed;
+}
+
+/* The midwinter sun, still low, with the stars already out above it. */
+[data-theme="solstice-stars"] .ridges .sun {
+  fill: #fac67a;
+  filter: drop-shadow(0 0 16px rgb(250 198 122 / 0.6));
+}
+
+/* Numerals glow like the amber headings both parents lead with. */
+[data-theme="solstice-stars"] .stat-n {
+  text-shadow: 0 0 14px rgb(250 198 122 / 0.35);
+}
+
+/* Purple into yellow — Solstice Night's gradient, ending where the fills now
+   do. The pink it used to land on is still on the page, in the glow. */
+[data-theme="solstice-stars"] .meter-fill {
+  background: linear-gradient(90deg, #69247c, #facc15);
+}

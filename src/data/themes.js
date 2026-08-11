@@ -112,6 +112,23 @@ export const themes = [
     key: "'",
     dots: ["#cfd9ac", "#d8e9a8", "#1e5128", "#4e9f3d"],
   },
+  {
+    /* The number row and its punctuation are spent; `,` is the next free
+       unshifted key, and collides with neither `s` nor Shift+D. */
+    id: "stargazing",
+    label: "Stargazing",
+    key: ",",
+    dots: ["#070b18", "#1b2340", "#ffd166", "#a9c8ff"],
+  },
+  {
+    /* Solstice Night's palette out in Stargazing's dark — the dots are the
+       crossover: this ground, Solstice's purple, Kraft Gold's yellow in the
+       fill slot, and the amber both parents already shared. */
+    id: "solstice-stars",
+    label: "Solstice Stars",
+    key: ".",
+    dots: ["#150f22", "#69247c", "#facc15", "#fac67a"],
+  },
 ];
 
 export const defaultTheme = "kraft";
